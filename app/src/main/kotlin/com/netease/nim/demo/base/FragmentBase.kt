@@ -7,4 +7,5 @@ import com.zhuzichu.android.mvvm.base.BaseViewModel
 
 abstract class FragmentBase<TBinding : ViewDataBinding, TViewModel : BaseViewModel<TArg>, TArg : BaseArg> :
     BaseFragment<TBinding, TViewModel, TArg>() {
+
 }

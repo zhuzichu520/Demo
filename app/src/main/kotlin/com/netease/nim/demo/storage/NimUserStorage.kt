@@ -15,4 +15,13 @@ object NimUserStorage {
     var account by StringPreference(prefs, null)
     var token by StringPreference(prefs, null)
     var notifyToggle by BooleanPreference(prefs, true)
+
+    fun logout() {
+        account = null
+        token = null
+    }
+
+    fun isLogin(): Boolean {
+        return !account.isNullOrEmpty() && !token.isNullOrEmpty()
+    }
 }

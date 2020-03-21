@@ -2,7 +2,7 @@ package com.netease.nim.demo.nim.config
 
 import android.content.Context
 import android.text.TextUtils
-import com.netease.nim.demo.ActivityMain
+import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nim.demo.nim.provider.NimUserInfoProvider
 import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.ServerAddresses

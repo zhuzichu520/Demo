@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_launcher"
+    app:startDestination="@id/fragmentLauncher">
+
+    <fragment
+        android:id="@+id/fragmentLauncher"
+        android:name="com.netease.nim.demo.ui.launcher.fragment.FragmentLauncher"
+        android:label="FragmentLauncher"
+        tools:layout="@layout/fragment_launcher" >
+        <action
+            android:id="@+id/action_fragmentLauncher_to_activityMain"
+            app:destination="@id/activityMain" />
+        <action
+            android:id="@+id/action_fragmentLauncher_to_activityLogin"
+            app:destination="@id/activityLogin" />
+    </fragment>
+
+    <activity
+        android:id="@+id/activityMain"
+        android:name="com.netease.nim.demo.ui.main.ActivityMain"
+        android:label="ActivityMain" />
+
+    <activity
+        android:id="@+id/activityLogin"
+        android:name="com.netease.nim.demo.ui.login.ActivityLogin"
+        android:label="ActivityLogin" />
+
+</navigation>
