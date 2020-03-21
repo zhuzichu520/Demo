@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_tab_session"
+        android:enabled="true"
+        android:icon="@drawable/ic_main_session"
+        android:title="@string/session" />
+
+    <item
+        android:id="@+id/main_tab_contact"
+        android:enabled="true"
+        android:icon="@drawable/ic_main_contact"
+        android:title="@string/contact" />
+
+
+</menu>
