@@ -13,4 +13,9 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelContact, A
 
     override fun setLayoutId(): Int = R.layout.fragment_contact
 
+    override fun initView() {
+        super.initView()
+
+    }
+
 }
