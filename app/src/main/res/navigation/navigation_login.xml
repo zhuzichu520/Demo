@@ -9,5 +9,13 @@
         android:id="@+id/fragmentLogin"
         android:name="com.netease.nim.demo.ui.login.main.fragment.FragmentLogin"
         android:label="FragmentLogin"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_fragmentLogin_to_navigation_main"
+            app:destination="@id/navigation_main"
+            app:launchSingleTop="false" />
+    </fragment>
+
+    <include app:graph="@navigation/navigation_main" />
+
 </navigation>

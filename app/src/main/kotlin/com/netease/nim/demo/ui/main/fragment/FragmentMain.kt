@@ -37,7 +37,7 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
         content.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments, titles)
         bottom.setupWithViewPager(content)
-        initBackListener()
+//        initBackListener()
     }
 
     private fun initBackListener() {

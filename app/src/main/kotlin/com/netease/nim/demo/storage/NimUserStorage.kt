@@ -1,5 +1,6 @@
 package com.netease.nim.demo.storage
 
+import com.netease.nimlib.sdk.auth.LoginInfo
 import com.tencent.mmkv.MMKV
 import com.zhuzichu.android.shared.storage.BooleanPreference
 import com.zhuzichu.android.shared.storage.StringPreference
@@ -24,4 +25,11 @@ object NimUserStorage {
     fun isLogin(): Boolean {
         return !account.isNullOrEmpty() && !token.isNullOrEmpty()
     }
+
+    fun login(loginInfo: LoginInfo) {
+        account = loginInfo.account
+        token = loginInfo.token
+    }
+
+
 }

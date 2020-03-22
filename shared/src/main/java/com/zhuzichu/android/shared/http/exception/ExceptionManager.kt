@@ -24,10 +24,10 @@ object ExceptionManager {
     const val TIMEOUT_ERROR = 1006
 
 
-    fun handleException(throwable: Throwable): ResponseThrowable {
-        val ex: ResponseThrowable
+    fun handleException(throwable: Throwable): BusinessThrowable {
+        val ex: BusinessThrowable
         if (throwable is HttpException) {
-            ex = ResponseThrowable(UNKNOWN, "未知错误")
+            ex = BusinessThrowable(UNKNOWN, "未知错误")
             when (throwable.code()) {
                 UNAUTHORIZED -> ex.message = "操作未授权"
                 FORBIDDEN -> ex.message = "请求被拒绝"
@@ -39,29 +39,32 @@ object ExceptionManager {
             }
             ex.code = throwable.code()
             return ex
+        } else if (throwable is NimThrowable) {
+            ex = BusinessThrowable(throwable.code, throwable.message)
+            return ex
         } else if (throwable is JsonParseException
             || throwable is JSONException
             || throwable is ParseException || throwable is MalformedJsonException
         ) {
-            ex = ResponseThrowable(PARSE_ERROR, "解析错误")
+            ex = BusinessThrowable(PARSE_ERROR, "解析错误")
             return ex
         } else if (throwable is ConnectException) {
-            ex = ResponseThrowable(NETWORD_ERROR, "连接失败")
+            ex = BusinessThrowable(NETWORD_ERROR, "连接失败")
             return ex
         } else if (throwable is javax.net.ssl.SSLException) {
-            ex = ResponseThrowable(SSL_ERROR, "证书验证失败")
+            ex = BusinessThrowable(SSL_ERROR, "证书验证失败")
             return ex
         } else if (throwable is java.net.SocketTimeoutException) {
-            ex = ResponseThrowable(TIMEOUT_ERROR, "连接超时")
+            ex = BusinessThrowable(TIMEOUT_ERROR, "连接超时")
             return ex
         } else if (throwable is java.net.UnknownHostException) {
-            ex = ResponseThrowable(TIMEOUT_ERROR, "主机地址未知")
+            ex = BusinessThrowable(TIMEOUT_ERROR, "主机地址未知")
             return ex
-        } else if (throwable is ResponseThrowable) {
+        } else if (throwable is BusinessThrowable) {
             ex = throwable
             return ex
         } else {
-            ex = ResponseThrowable(UNKNOWN, "未知错误")
+            ex = BusinessThrowable(UNKNOWN, "未知错误")
             return ex
         }
     }

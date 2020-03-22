@@ -9,23 +9,17 @@
         android:id="@+id/fragmentLauncher"
         android:name="com.netease.nim.demo.ui.launcher.fragment.FragmentLauncher"
         android:label="FragmentLauncher"
-        tools:layout="@layout/fragment_launcher" >
+        tools:layout="@layout/fragment_launcher">
         <action
-            android:id="@+id/action_fragmentLauncher_to_activityMain"
-            app:destination="@id/activityMain" />
+            android:id="@+id/action_fragmentLauncher_to_navigation_login"
+            app:destination="@id/navigation_login" />
         <action
-            android:id="@+id/action_fragmentLauncher_to_activityLogin"
-            app:destination="@id/activityLogin" />
+            android:id="@+id/action_fragmentLauncher_to_navigation_main"
+            app:destination="@id/navigation_main" />
     </fragment>
 
-    <activity
-        android:id="@+id/activityMain"
-        android:name="com.netease.nim.demo.ui.main.ActivityMain"
-        android:label="ActivityMain" />
+    <include app:graph="@navigation/navigation_login" />
 
-    <activity
-        android:id="@+id/activityLogin"
-        android:name="com.netease.nim.demo.ui.login.ActivityLogin"
-        android:label="ActivityLogin" />
+    <include app:graph="@navigation/navigation_main" />
 
 </navigation>

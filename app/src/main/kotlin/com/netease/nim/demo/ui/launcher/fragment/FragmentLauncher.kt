@@ -19,21 +19,25 @@ class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, Ar
     override fun initView() {
         super.initView()
         MainHandler.postDelayed {
-            requireActivity().finish()
             if (!NimUserStorage.isLogin()) {
-                start(R.id.action_fragmentLauncher_to_activityLogin, animBuilder = getAnimaton())
+                start(R.id.action_fragmentLauncher_to_navigation_login)
             } else {
-                start(R.id.action_fragmentLauncher_to_activityMain, animBuilder = getAnimaton())
+                start(R.id.action_fragmentLauncher_to_navigation_main)
             }
         }
     }
 
-    private fun getAnimaton(): AnimBuilder {
-        return AnimBuilder().apply {
-            enter = R.anim.no_anim
-            exit = R.anim.no_anim
-            popEnter = R.anim.no_anim
-            popExit = R.anim.no_anim
-        }
+    private fun start(actionId: Int) {
+        start(
+            actionId,
+            animBuilder = AnimBuilder().apply {
+                enter = R.anim.no_anim
+                exit = R.anim.no_anim
+                popEnter = R.anim.no_anim
+                popExit = R.anim.no_anim
+            },
+            popUpTo = R.id.fragmentLauncher,
+            inclusive = true
+        )
     }
 }

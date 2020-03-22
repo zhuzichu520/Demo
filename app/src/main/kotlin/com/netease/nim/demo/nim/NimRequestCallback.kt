@@ -1,18 +1,32 @@
 package com.netease.nim.demo.nim
 
+import com.zhuzichu.android.shared.http.exception.NimError
+import com.zhuzichu.android.shared.http.exception.NimThrowable
 import com.netease.nimlib.sdk.RequestCallback
+import io.reactivex.FlowableEmitter
 
-abstract class NimRequestCallback<T> : RequestCallback<T> {
+class NimRequestCallback<T>(
+    private val emitter: FlowableEmitter<T>
+) : RequestCallback<T> {
 
     override fun onSuccess(any: T) {
-
+        emitter.onNext(any)
+        emitter.onComplete()
     }
 
     override fun onFailed(code: Int) {
-
+        emitter.onError(
+            NimThrowable(
+                code,
+                NimError.toMessage(code)
+            )
+        )
+        emitter.onComplete()
     }
 
     override fun onException(throwable: Throwable) {
+        emitter.onError(throwable)
+        emitter.onComplete()
     }
 
 }
