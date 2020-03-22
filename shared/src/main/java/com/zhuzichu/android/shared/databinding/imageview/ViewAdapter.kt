@@ -1,6 +1,7 @@
 package com.zhuzichu.android.shared.databinding.imageview
 
 import android.graphics.Bitmap
+import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.ColorInt
@@ -11,10 +12,14 @@ import com.zhuzichu.android.widget.sharp.Sharp
 @BindingAdapter(value = ["url"], requireAll = false)
 fun bindSimpleDraweeView(
     simpleDraweeView: SimpleDraweeView,
-    url: String?
+    url: Any?
 ) {
     url?.let {
-        simpleDraweeView.setImageURI(url)
+        if (it is String) {
+            simpleDraweeView.setImageURI(it)
+        } else if (it is Int) {
+            simpleDraweeView.setActualImageResource(it)
+        }
     }
 }
 
