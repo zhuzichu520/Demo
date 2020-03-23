@@ -1,25 +1,36 @@
 package com.zhuzichu.android.shared.databinding.imageview
 
 import android.graphics.Bitmap
-import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
-import com.facebook.drawee.view.SimpleDraweeView
+import com.bumptech.glide.request.RequestOptions
+import com.zhuzichu.android.shared.glide.GlideApp
 import com.zhuzichu.android.widget.sharp.Sharp
 
-@BindingAdapter(value = ["url"], requireAll = false)
+@BindingAdapter(value = ["url", "isCircle", "placeholder", "error"], requireAll = false)
 fun bindSimpleDraweeView(
-    simpleDraweeView: SimpleDraweeView,
-    url: Any?
+    imageView: ImageView,
+    url: Any?,
+    isCircle: Boolean?,
+    placeholder: Int?,
+    error: Int?
 ) {
-    url?.let {
-        if (it is String) {
-            simpleDraweeView.setImageURI(it)
-        } else if (it is Int) {
-            simpleDraweeView.setActualImageResource(it)
+    url?.apply {
+        val requestOptions = RequestOptions()
+        val glide = GlideApp.with(imageView).load(url)
+        if (true == isCircle) {
+            requestOptions.circleCrop().autoClone()
         }
+        placeholder?.let {
+            glide.thumbnail(GlideApp.with(imageView).load(placeholder).apply(requestOptions))
+        }
+        error?.let {
+            glide.thumbnail(GlideApp.with(imageView).load(error).apply(requestOptions))
+        }
+        glide.apply(requestOptions)
+        glide.into(imageView)
     }
 }
 

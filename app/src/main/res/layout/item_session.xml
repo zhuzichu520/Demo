@@ -14,29 +14,65 @@
         android:layout_width="match_parent"
         android:layout_height="68dp">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/header"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="14dp"
+            app:error="@{item.error}"
+            app:isCircle="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:placeholder="@{item.placeholder}"
             app:url="@{item.avatar}"
-            tools:background="@mipmap/ic_launcher" />
+            tools:src="@mipmap/ic_launcher" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="@{item.name}"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/color_font_primary"
             android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/date"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="强安小助手" />
+            tools:text="强安小助手强安小助手强安小助手强安小助手强安小助手强安小助手强安小助手强手强手强安小助手强安小助手" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@{item.content}"
+            android:textColor="@color/color_font_tertiary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/header"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="这节课你学到哪里啦？" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{item.date}"
+            android:textColor="@color/color_font_tertiary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="上午 10:32" />
 
         <View
             android:layout_width="0dp"
@@ -45,6 +81,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/name" />
+
+        <com.nex3z.notificationbadge.NotificationBadge
+            android:id="@+id/badge"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:nbMaxTextLength="2"
+            app:number="@{item.number}"
+            tools:background="@color/red" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

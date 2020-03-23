@@ -6,7 +6,7 @@ import java.io.File
 
 object CacheGlobal {
 
-    const val CACHE_FRESCO_FILE_NAME = "cache_fresco"
+    private const val CACHE_GLIDE_FILE_NAME = "cache_glide"
 
     private const val CACHE_MMKV_FILE_NAME = "cache_mmkv"
 
@@ -27,14 +27,14 @@ object CacheGlobal {
     }
 
     fun getGlideCacheDir(): String {
-        return getDiskCacheDir(CACHE_FRESCO_FILE_NAME).absolutePath
+        return getDiskCacheDir(CACHE_GLIDE_FILE_NAME).absolutePath
     }
 
     fun getNimCacheDir(): String {
         return getDiskCacheDir(CACHE_NIM_FILE_NAME).absolutePath
     }
 
-    fun getBaseDiskCacheDir(): File {
+    private fun getBaseDiskCacheDir(): File {
         return if (isExternalStorageWriteable()) {
             context.externalCacheDir!!
         } else {

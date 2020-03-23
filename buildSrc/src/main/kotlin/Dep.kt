@@ -51,6 +51,9 @@ object Dep {
         const val fastJson = "1.1.60.android"
         const val fresco = "2.1.0"
         const val nimlib = "7.4.2"
+        const val glide = "4.10.0"
+        const val glideTransformations = "4.1.0"
+        const val badge = "1.0.2"
     }
 
     const val nimlibBasesdk = "com.netease.nimlib:basesdk:${Version.nimlib}"
@@ -241,4 +244,18 @@ object Dep {
 
     const val agentweb =
         "com.just.agentweb:agentweb:${Version.agentweb}"
+
+    const val glideIntegration =
+        "com.github.bumptech.glide:okhttp3-integration:${Version.glide}"
+
+    const val glide =
+        "com.github.bumptech.glide:glide:${Version.glide}"
+
+    const val glideTransformations =
+        "jp.wasabeef:glide-transformations:${Version.glideTransformations}"
+
+    const val kaptGlide =
+        "com.github.bumptech.glide:compiler:${Version.glide}"
+
+    const val badge= "com.nex3z:notification-badge:${Version.badge}"
 }

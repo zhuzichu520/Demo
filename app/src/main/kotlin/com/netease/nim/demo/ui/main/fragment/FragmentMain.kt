@@ -1,12 +1,14 @@
 package com.netease.nim.demo.ui.main.fragment
 
+import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.databinding.FragmentMainBinding
-import com.netease.nim.demo.ui.main.viewmodel.ViewModelMain
+import com.netease.nim.demo.nim.event.NimEventManager
 import com.netease.nim.demo.ui.contact.fragment.FragmentContact
+import com.netease.nim.demo.ui.main.viewmodel.ViewModelMain
 import com.netease.nim.demo.ui.session.fragment.FragmentSession
 import com.zhuzichu.android.mvvm.base.ArgDefault
 import com.zhuzichu.android.mvvm.base.BaseFragment
@@ -38,6 +40,16 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
         content.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments, titles)
         bottom.setupWithViewPager(content)
 //        initBackListener()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        NimEventManager.regist()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        NimEventManager.unRegist()
     }
 
     private fun initBackListener() {
