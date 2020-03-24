@@ -5,16 +5,31 @@ import android.view.ViewGroup
 import androidx.core.view.forEachIndexed
 import androidx.databinding.BindingAdapter
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.view.longClicks
 import com.zhuzichu.android.mvvm.databinding.BindingCommand
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 
-@BindingAdapter(value = ["onClickCommand", "isThrottleFirst"], requireAll = false)
-fun onClickCommand(view: View, clickCommand: BindingCommand<*>?, isThrottleFirst: Boolean?) {
+@BindingAdapter(
+    value = ["onClickCommand", "onLongClickCommand", "isThrottleFirst"],
+    requireAll = false
+)
+fun onClickCommand(
+    view: View,
+    clickCommand: BindingCommand<*>?,
+    longClickCommand: BindingCommand<*>?,
+    isThrottleFirst: Boolean?
+) {
     clickCommand?.apply {
         view.clicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
-            execute()
+            execute(view)
+        }
+    }
+
+    longClickCommand?.apply {
+        view.longClicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
+            execute(view)
         }
     }
 }

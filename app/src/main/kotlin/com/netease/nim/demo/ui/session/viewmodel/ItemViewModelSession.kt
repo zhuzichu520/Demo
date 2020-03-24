@@ -1,5 +1,7 @@
 package com.netease.nim.demo.ui.session.viewmodel
 
+import android.view.View
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.MutableLiveData
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ItemViewModelBase
@@ -8,6 +10,7 @@ import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.zhuzichu.android.mvvm.base.BaseViewModel
+import com.zhuzichu.android.shared.ext.createTypeCommand
 import com.zhuzichu.android.shared.tools.ToolDate
 
 data class ItemViewModelSession(
@@ -25,6 +28,14 @@ data class ItemViewModelSession(
     val content = MutableLiveData<String>()
     val number = MutableLiveData<Int>()
     val date = MutableLiveData<String>()
+
+    val onLongClickCommand = createTypeCommand<View> {
+        this?.let {
+            val popup = PopupMenu(it.context, it)
+            popup.menuInflater.inflate(R.menu.session, popup.menu)
+            popup.show()
+        }
+    }
 
     init {
         val contactId = contact.contactId
