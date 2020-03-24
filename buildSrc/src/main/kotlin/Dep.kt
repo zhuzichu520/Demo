@@ -18,7 +18,7 @@ object Dep {
         const val rxbinding = "3.1.0"
         const val rxhttp = "1.4.4"
         const val autodispose = "1.4.0"
-        const val adapter = "3.1.1"
+        const val adapter = "4.0.0"
         const val timber = "4.7.1"
         const val swiperefreshlayout = "1.1.0-beta01"
         const val libs = "1.0.5"
@@ -54,7 +54,10 @@ object Dep {
         const val glide = "4.10.0"
         const val glideTransformations = "4.1.0"
         const val badge = "1.0.2"
+        const val guava="27.0.1-android"
     }
+
+    const val guava = "com.google.guava:guava:${Version.guava}"
 
     const val nimlibBasesdk = "com.netease.nimlib:basesdk:${Version.nimlib}"
 
@@ -257,5 +260,5 @@ object Dep {
     const val kaptGlide =
         "com.github.bumptech.glide:compiler:${Version.glide}"
 
-    const val badge= "com.nex3z:notification-badge:${Version.badge}"
+    const val badge = "com.nex3z:notification-badge:${Version.badge}"
 }

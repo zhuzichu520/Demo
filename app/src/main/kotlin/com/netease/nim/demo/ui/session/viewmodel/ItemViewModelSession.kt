@@ -10,12 +10,13 @@ import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.zhuzichu.android.mvvm.base.BaseViewModel
 import com.zhuzichu.android.shared.tools.ToolDate
 
-class ItemViewModelSession(
-    viewModel: BaseViewModel<*>,
-    contact: RecentContact
+data class ItemViewModelSession(
+    val viewModel: BaseViewModel<*>,
+    val contact: RecentContact
 ) : ItemViewModelBase(viewModel) {
 
     private val contactId = contact.contactId
+    val time = contact.time
 
     val avatar = MutableLiveData<Any>()
     val name = MutableLiveData<String>()

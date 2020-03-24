@@ -107,6 +107,7 @@ dependencies {
     api(Dep.widget)
     api(Dep.mvvm)
     api(Dep.badge)
+    api(Dep.guava)
 //    api(project(":libs"))
 //    api(project(":widget"))
 //    api(project(":mvvm"))

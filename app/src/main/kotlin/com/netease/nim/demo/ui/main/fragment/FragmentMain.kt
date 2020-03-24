@@ -10,17 +10,21 @@ import com.netease.nim.demo.nim.event.NimEventManager
 import com.netease.nim.demo.ui.contact.fragment.FragmentContact
 import com.netease.nim.demo.ui.main.viewmodel.ViewModelMain
 import com.netease.nim.demo.ui.session.fragment.FragmentSession
+import com.nex3z.notificationbadge.NotificationBadge
 import com.zhuzichu.android.mvvm.base.ArgDefault
 import com.zhuzichu.android.mvvm.base.BaseFragment
 import com.zhuzichu.android.shared.base.DefaultIntFragmentPagerAdapter
+import com.zhuzichu.android.shared.ext.plusBadge
 import com.zhuzichu.android.shared.ext.setupWithViewPager
 import com.zhuzichu.android.shared.ext.toast
 import kotlinx.android.synthetic.main.fragment_main.*
+
 
 class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault>() {
 
     private val waitTime = 2000L
     private var touchTime: Long = 0
+    private var badge: NotificationBadge? = null
 
     override fun setLayoutId(): Int = R.layout.fragment_main
 
@@ -28,7 +32,9 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
     override fun initView() {
         val fragments = listOf<Fragment>(
-            FragmentSession(),
+            FragmentSession {
+                updateBadgeNumber(this)
+            },
             FragmentContact()
         )
 
@@ -39,7 +45,11 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
         content.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments, titles)
         bottom.setupWithViewPager(content)
-//        initBackListener()
+        badge = bottom.plusBadge(0)
+    }
+
+    private fun updateBadgeNumber(number: Int) {
+        badge?.setNumber(number)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -3,18 +3,23 @@ package com.zhuzichu.android.shared.ext
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.core.view.forEachIndexed
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.WebChromeClient
 import com.just.agentweb.WebViewClient
+import com.nex3z.notificationbadge.NotificationBadge
 import com.zhuzichu.android.libs.tool.showKeyboard
+import com.zhuzichu.android.libs.tool.toCast
 import com.zhuzichu.android.shared.R
 import com.zhuzichu.android.shared.global.AppGlobal.context
 import com.zhuzichu.android.widget.toast.toast
@@ -83,3 +88,14 @@ fun String?.getAgentWeb(
     .createAgentWeb()//
     .ready()
     .go(this)
+
+
+fun BottomNavigationView.plusBadge(index: Int): NotificationBadge {
+    val menuView: BottomNavigationMenuView = this.getChildAt(0).toCast()
+    val itemView: BottomNavigationItemView = menuView.getChildAt(index).toCast()
+    val badgeView: View =
+        LayoutInflater.from(this.context).inflate(R.layout.layout_badge, itemView, false)
+    val badge = badgeView.findViewById<NotificationBadge>(R.id.badge)
+    itemView.addView(badgeView)
+    return badge
+}
