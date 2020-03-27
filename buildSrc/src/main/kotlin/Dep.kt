@@ -21,9 +21,9 @@ object Dep {
         const val adapter = "4.0.0"
         const val timber = "4.7.1"
         const val swiperefreshlayout = "1.1.0-beta01"
-        const val libs = "1.0.5"
-        const val mvvm = "1.0.5"
-        const val widget = "1.0.5"
+        const val libs = "1.0.6"
+        const val mvvm = "1.0.6"
+        const val widget = "1.0.6"
         const val room = "2.2.3"
         const val umengCommon = "2.0.0"
         const val umengAnalytics = "8.0.0"
@@ -53,9 +53,15 @@ object Dep {
         const val nimlib = "7.4.2"
         const val glide = "4.10.0"
         const val glideTransformations = "4.1.0"
-        const val badge = "1.0.2"
-        const val guava="27.0.1-android"
+        const val guava = "27.0.1-android"
+        const val popupMenu = "4.0.1"
+        const val popupWindow = "2.2.2.2"
     }
+
+    const val popupWindow = "com.github.razerdp:BasePopup:${Version.popupWindow}";
+
+    const val popupMenu =
+        "com.github.zawadz88.materialpopupmenu:material-popup-menu:${Version.popupMenu}"
 
     const val guava = "com.google.guava:guava:${Version.guava}"
 
@@ -260,5 +266,4 @@ object Dep {
     const val kaptGlide =
         "com.github.bumptech.glide:compiler:${Version.glide}"
 
-    const val badge = "com.nex3z:notification-badge:${Version.badge}"
 }

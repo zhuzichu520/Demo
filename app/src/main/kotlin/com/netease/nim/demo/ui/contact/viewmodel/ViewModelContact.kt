@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class ViewModelContact @Inject constructor() : ViewModelBase<ArgDefault>() {
 
-    val onClickExit = createCommand {
+    val onClickExitCommand = createCommand {
         NimUserStorage.logout()
     }
 

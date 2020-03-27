@@ -13,7 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="68dp"
-        app:onLongClickCommand="@{item.onLongClickCommand}">
+        app:onLongClickViewCommand="@{item.onLongClickCommand}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/header"
@@ -83,18 +83,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/name" />
 
-        <com.nex3z.notificationbadge.NotificationBadge
+        <View
             android:id="@+id/badge"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:nbMaxTextLength="2"
-            app:number="@{item.number}"
-            tools:background="@color/red" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:currentView="@{item.initItemViewCommand}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

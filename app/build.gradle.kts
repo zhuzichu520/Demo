@@ -30,8 +30,8 @@ android {
         targetSdkVersion(Config.targetSdkVersion())
         versionCode = Config.versionCode()
         versionName = Config.versionName()
-//        renderscriptTargetApi = 18
-//        renderscriptSupportModeEnabled = true
+        renderscriptTargetApi = 18
+        renderscriptSupportModeEnabled = true
         resValue("string", "app_name_new", Config.appName())
         val fields = Config.getBuildConfigFields()
         fields.forEach {

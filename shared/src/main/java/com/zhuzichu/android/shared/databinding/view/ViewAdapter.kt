@@ -12,22 +12,36 @@ import java.util.concurrent.TimeUnit
 
 
 @BindingAdapter(
-    value = ["onClickCommand", "onLongClickCommand", "isThrottleFirst"],
+    value = ["onClickCommand", "onLongClickCommand", "onClickViewCommand", "onLongClickViewCommand", "isThrottleFirst"],
     requireAll = false
 )
 fun onClickCommand(
     view: View,
     clickCommand: BindingCommand<*>?,
     longClickCommand: BindingCommand<*>?,
+    onClickViewCommand: BindingCommand<View>?,
+    onLongClickViewCommand: BindingCommand<View>?,
     isThrottleFirst: Boolean?
 ) {
     clickCommand?.apply {
         view.clicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
-            execute(view)
+            execute()
         }
     }
 
     longClickCommand?.apply {
+        view.longClicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
+            execute()
+        }
+    }
+
+    onClickViewCommand?.apply {
+        view.longClicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
+            execute(view)
+        }
+    }
+
+    onLongClickViewCommand?.apply {
         view.longClicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
             execute(view)
         }
