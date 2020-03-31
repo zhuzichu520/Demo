@@ -1,7 +1,6 @@
 package com.zhuzichu.android.shared.http.entity
 import com.google.gson.annotations.SerializedName
 
-
 data class ResponsePageList<T>(
     @SerializedName("curPage")
     var curPage: Int? = null,

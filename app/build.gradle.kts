@@ -40,6 +40,7 @@ android {
         manifestPlaceholders.apply {
             put("ic_launcher_new", "@mipmap/ic_launcher")
             put("ic_launcher_round_new", "@mipmap/ic_launcher_round")
+            put("NIM_KEY", Config.appKeyNim())
         }
     }
 
@@ -54,13 +55,13 @@ android {
                 "proguard-rules.pro"
             )
             manifestPlaceholders.apply {
-                put("AMAP_KEY", "ee20324fba1c7f4ad7a4a207e7f08e8d")
+                put("AMAP_KEY", Config.appKeyAmapRelease())
             }
         }
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
             manifestPlaceholders.apply {
-                put("AMAP_KEY", "09fd4efd3e28e9bf1f449ecec7d34bfe")
+                put("AMAP_KEY", Config.appKeyAmapDebug())
             }
         }
     }
@@ -94,5 +95,6 @@ dependencies {
     api(project(path = ":shared"))
     kapt(Dep.kaptDaggerCompiler)
     kapt(Dep.kaptDaggerProcessor)
+    kapt(Dep.kaptRxhttp)
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-beta-3")
 }

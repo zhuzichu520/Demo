@@ -2,6 +2,7 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="180dp"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
@@ -20,7 +21,7 @@
             android:layout_height="40dp"
             android:foreground="@drawable/ripple_light_with_border"
             android:gravity="center"
-            android:text="置顶"
+            tools:text="置顶"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

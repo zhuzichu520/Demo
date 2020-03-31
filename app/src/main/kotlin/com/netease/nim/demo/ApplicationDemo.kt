@@ -15,6 +15,11 @@ import com.zhuzichu.android.shared.global.AppGlobal
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import jonathanfinerty.once.Once
+import okhttp3.OkHttpClient
+import rxhttp.wrapper.param.RxHttp
+import rxhttp.wrapper.ssl.SSLSocketFactoryImpl
+import rxhttp.wrapper.ssl.X509TrustManagerImpl
+import java.util.concurrent.TimeUnit
 
 
 class ApplicationDemo : DaggerApplication() {
@@ -22,6 +27,7 @@ class ApplicationDemo : DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
         AppGlobal.init(this)
+        RxHttp.init(getDefaultOkHttpClient(), BuildConfig.DEBUG)
         Once.initialise(this)
         CrashConfig.Builder.create().apply()
         Mvvm.setAnimBuilder(
@@ -38,6 +44,17 @@ class ApplicationDemo : DaggerApplication() {
         if (NIMUtil.isMainProcess(this)) {
             NIMClient.toggleNotification(NimUserStorage.notifyToggle)
         }
+    }
+
+    private fun getDefaultOkHttpClient(): OkHttpClient {
+        val trustAllCert = X509TrustManagerImpl()
+        val sslSocketFactory = SSLSocketFactoryImpl(trustAllCert)
+        return OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .sslSocketFactory(sslSocketFactory, trustAllCert) //添加信任证书
+            .build()
     }
 
     private fun loginInfo(): LoginInfo? {

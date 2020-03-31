@@ -7,7 +7,9 @@ import com.google.common.primitives.Longs
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
+import com.netease.nim.demo.ui.session.Constants.SESSION_ON_TOP
 import com.netease.nim.demo.ui.session.domain.UseCaseGetSessionList
+import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.uber.autodispose.autoDispose
 import com.zhuzichu.android.libs.tool.replaceAt
@@ -19,7 +21,8 @@ import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
 
 class ViewModelSession @Inject constructor(
-    private val useCaseGetSessionList: UseCaseGetSessionList
+    private val useCaseGetSessionList: UseCaseGetSessionList,
+    val msgService: MsgService
 ) : ViewModelBase<ArgDefault>() {
 
     val sessionList = MutableLiveData<List<ItemViewModelSession>>()
@@ -35,11 +38,12 @@ class ViewModelSession @Inject constructor(
         map<ItemViewModelSession>(BR.item, R.layout.item_session)
     }
 
-    private val comparator: Comparator<ItemViewModelSession> = Comparator { left, right ->
+    private
+    val comparator: Comparator<ItemViewModelSession> = Comparator { left, right ->
         val mapRight = right.contact.extension ?: mapOf()
         val mapLeft = left.contact.extension ?: mapOf()
-        val longRight: Long = (mapRight["session_on_top"] ?: Long.MIN_VALUE).toCast()
-        val longLeft: Long = (mapLeft["session_on_top"] ?: Long.MIN_VALUE).toCast()
+        val longRight: Long = (mapRight[SESSION_ON_TOP] ?: Long.MIN_VALUE).toCast()
+        val longLeft: Long = (mapLeft[SESSION_ON_TOP] ?: Long.MIN_VALUE).toCast()
         //先比较置顶 后 比较时间
         if (longLeft != Long.MIN_VALUE && longRight == Long.MIN_VALUE) {
             -1
@@ -84,6 +88,21 @@ class ViewModelSession @Inject constructor(
             sessionList.value = list.map { item ->
                 ItemViewModelSession(this@ViewModelSession, item)
             }.sortedWith(comparator)
+        }
+    }
+
+    fun refresh() {
+        sessionList.value?.let {
+            sessionList.value = it.sortedWith(comparator)
+        }
+    }
+
+
+    fun refresh(item: ItemViewModelSession) {
+        sessionList.value?.let {
+            sessionList.value = it.replaceAt(it.indexOf(item)) { item ->
+                item.copy(viewModel = item.viewModel, contact = item.contact)
+            }
         }
     }
 

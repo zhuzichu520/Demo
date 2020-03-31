@@ -8,6 +8,7 @@ import com.zhuzichu.android.shared.http.exception.BusinessThrowable
 abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>() {
 
     fun handleThrowable(throwable: Throwable) {
+        throwable.printStackTrace()
         if (throwable is BusinessThrowable) {
             throwable.message.toast()
         } else {

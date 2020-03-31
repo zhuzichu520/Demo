@@ -58,6 +58,7 @@ fun <T> Observable<T>.bindToException(): Observable<T> =
         it.onErrorResumeNext(ErrorObservableResponseFunc<T>())
     }
 
+fun <T> Observable<T>.toFlowable(): Flowable<T> = this.toFlowable(BackpressureStrategy.ERROR)
 
 fun <T> Flowable<T>.bindToSchedulers(): Flowable<T> =
     this.compose<T> {

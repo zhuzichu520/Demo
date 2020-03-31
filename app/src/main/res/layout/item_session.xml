@@ -13,6 +13,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="68dp"
+        android:foreground="@drawable/ripple_light_with_border"
+        app:onClickCommand="@{item.onClickCommand}"
         app:onLongClickViewCommand="@{item.onLongClickCommand}">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -52,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
+            android:layout_marginEnd="50dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="@{item.content}"
@@ -60,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            tools:text="这节课你学到哪里啦？" />
+            tools:text="这节课你学到哪里啦这节课你学到哪里啦这节课你学到哪里啦这节课你学到哪里啦这节课你学到哪里啦？" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/date"
@@ -83,11 +86,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/name" />
 
-        <View
-            android:id="@+id/badge"
+        <com.netease.nim.demo.ui.session.view.ViewSessionBadge
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:currentView="@{item.initItemViewCommand}" />
+            app:number="@{item.number}"
+            app:onDragStateChangedCommamnd="@{item.onDragStateChangedCommamnd}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_margin="4dp"
+            android:alpha="0.5"
+            android:src="@mipmap/ic_session_top"
+            android:tint="?attr/colorPrimary"
+            app:isShown="@{item.isTop}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

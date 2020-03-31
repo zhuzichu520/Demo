@@ -58,7 +58,6 @@ dependencies {
 
     kapt(Dep.kaptDaggerCompiler)
     kapt(Dep.kaptDaggerProcessor)
-    kapt(Dep.kaptRxhttp)
     kapt(Dep.kaptGlide)
     api(Dep.daggerAndroid)
     api(Dep.daggerAndroidSupport)

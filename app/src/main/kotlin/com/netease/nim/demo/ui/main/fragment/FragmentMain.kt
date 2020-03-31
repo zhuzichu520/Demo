@@ -9,7 +9,9 @@ import com.netease.nim.demo.databinding.FragmentMainBinding
 import com.netease.nim.demo.nim.event.NimEventManager
 import com.netease.nim.demo.ui.contact.fragment.FragmentContact
 import com.netease.nim.demo.ui.main.viewmodel.ViewModelMain
+import com.netease.nim.demo.ui.me.main.fragment.FragmentMe
 import com.netease.nim.demo.ui.session.fragment.FragmentSession
+import com.netease.nimlib.sdk.msg.MsgService
 import com.zhuzichu.android.mvvm.base.ArgDefault
 import com.zhuzichu.android.mvvm.base.BaseFragment
 import com.zhuzichu.android.shared.base.DefaultIntFragmentPagerAdapter
@@ -18,6 +20,7 @@ import com.zhuzichu.android.shared.ext.setupWithViewPager
 import com.zhuzichu.android.shared.ext.toast
 import com.zhuzichu.android.widget.badge.Badge
 import kotlinx.android.synthetic.main.fragment_main.*
+import javax.inject.Inject
 
 
 class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault>() {
@@ -25,6 +28,9 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
     private val waitTime = 2000L
     private var touchTime: Long = 0
     private var badge: Badge? = null
+
+    @Inject
+    lateinit var msgService: MsgService
 
     override fun setLayoutId(): Int = R.layout.fragment_main
 
@@ -35,18 +41,24 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
             FragmentSession {
                 updateBadgeNumber(this)
             },
-            FragmentContact()
+            FragmentContact(),
+            FragmentMe()
         )
 
         val titles = listOf(
             R.string.session,
-            R.string.contact
+            R.string.contact,
+            R.string.me
         )
 
         content.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments, titles)
         bottom.setupWithViewPager(content)
         badge = bottom.plusBadge(0)
-        badge?.setOnDragStateChangedListener { _, _, _ -> }
+        badge?.setOnDragStateChangedListener { dragState, _, _ ->
+            if (Badge.OnDragStateChangedListener.STATE_SUCCEED == dragState) {
+                msgService.clearAllUnreadCount()
+            }
+        }
     }
 
     private fun updateBadgeNumber(number: Int) {

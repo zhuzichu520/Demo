@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_message"
+    app:startDestination="@id/fragmentMessage">
+
+    <fragment
+        android:id="@+id/fragmentMessage"
+        android:name="com.netease.nim.demo.ui.message.main.fragment.FragmentMessage"
+        android:label="FragmentMessage"
+        tools:layout="@layout/fragment_message" />
+</navigation>

@@ -35,6 +35,14 @@ object Config {
         SIGN_STORE_PASSWORD("SIGN_STORE_PASSWORD");
     }
 
+    private enum class BuildKey(val key: String) {
+        STRING_UMENG_APPKEY("STRING_UMENG_APPKEY"),
+        STRING_NIM_APPKEY("STRING_NIM_APPKEY"),
+        STRING_AMAP_APPKEY_DEBUG("STRING_AMAP_APPKEY_DEBUG"),
+        STRING_AMAP_APPKEY_RELEASE("STRING_AMAP_APPKEY_RELEASE");
+    }
+
+
     lateinit var parentProject: Project
 
     lateinit var rootPath: String
@@ -44,20 +52,6 @@ object Config {
         parentProject = project
         rootPath = parentProject.projectDir.toString().plus(File.separator)
         Log.init(parentProject)
-//        parentProject.subprojects {
-//            this.afterEvaluate {
-//                val fields = getBuildConfigFields()
-//                val android: VariantAwareProperties =
-//                    if (this.name == "app") {
-//                        extensions.getByType(AppExtension::class.java)
-//                    } else {
-//                        extensions.getByType(LibraryExtension::class.java)
-//                    }
-//                fields.forEach {
-//                    android.buildConfigField(it[0], it[1], it[2])
-//                }
-//            }
-//        }
     }
 
     private val resourcesPath by lazy {
@@ -220,6 +214,44 @@ object Config {
             Log.l("versionCode", this)
         }
     }
+
+    @JvmStatic
+    fun appKeyUmeng(): String {
+        return buildConfigProperties.getPropertyByKey(
+            BuildKey.STRING_UMENG_APPKEY.key
+        ).apply {
+            Log.l("appKeyUmeng", this)
+        }
+    }
+
+    @JvmStatic
+    fun appKeyNim(): String {
+        return buildConfigProperties.getPropertyByKey(
+            BuildKey.STRING_NIM_APPKEY.key
+        ).apply {
+            Log.l("appKeyNim", this)
+        }
+    }
+
+
+    @JvmStatic
+    fun appKeyAmapDebug(): String {
+        return buildConfigProperties.getPropertyByKey(
+            BuildKey.STRING_AMAP_APPKEY_DEBUG.key
+        ).apply {
+            Log.l("appKeyAmapDebug", this)
+        }
+    }
+
+    @JvmStatic
+    fun appKeyAmapRelease(): String {
+        return buildConfigProperties.getPropertyByKey(
+            BuildKey.STRING_AMAP_APPKEY_RELEASE.key
+        ).apply {
+            Log.l("appKeyAmapRelease", this)
+        }
+    }
+
 
     @JvmStatic
     fun versionName(): String {

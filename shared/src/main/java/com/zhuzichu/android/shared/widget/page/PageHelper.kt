@@ -6,11 +6,11 @@ import com.zhuzichu.android.mvvm.base.BaseArg
 import com.zhuzichu.android.mvvm.base.BaseViewModel
 import com.zhuzichu.android.shared.BR
 import com.zhuzichu.android.shared.R
-import com.zhuzichu.android.shared.http.entity.ResponsePageList
 import com.zhuzichu.android.shared.ext.createCommand
 import com.zhuzichu.android.shared.ext.createTypeCommand
 import com.zhuzichu.android.shared.ext.map
 import com.zhuzichu.android.shared.ext.toast
+import com.zhuzichu.android.shared.http.entity.ResponsePageList
 import me.tatarka.bindingcollectionadapter2.collections.DiffObservableList
 import me.tatarka.bindingcollectionadapter2.collections.MergeObservableList
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass

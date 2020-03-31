@@ -6,7 +6,16 @@
     <string name="login">登录</string>
     <string name="session">会话</string>
     <string name="contact">通讯录</string>
+    <string name="me">我的</string>
+    <string name="register">注册</string>
+    <string name="message">消息</string>
 
+    <string name="register_account">请输入帐号，限20位字母或者数字</string>
+    <string name="register_nickname">请输入昵称，限10位汉字、字母或者数字</string>
+    <string name="register_password">请输入密码，6~20位字母或者数字</string>
+    <string name="register_account_tip">帐号限20位字母或者数字</string>
+    <string name="register_nickname_tip">昵称限10位汉字、字母或者数字</string>
+    <string name="register_password_tip">密码必须为6~20位字母或者数字</string>
 
 
 </resources>

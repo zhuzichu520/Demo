@@ -1,8 +1,8 @@
 package com.netease.nim.demo.nim
 
+import com.netease.nimlib.sdk.RequestCallback
 import com.zhuzichu.android.shared.http.exception.NimError
 import com.zhuzichu.android.shared.http.exception.NimThrowable
-import com.netease.nimlib.sdk.RequestCallback
 import io.reactivex.FlowableEmitter
 
 class NimRequestCallback<T>(

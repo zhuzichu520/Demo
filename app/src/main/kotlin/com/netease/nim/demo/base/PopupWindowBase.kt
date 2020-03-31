@@ -11,4 +11,5 @@ abstract class PopupWindowBase(context: Context) : BasePopupWindow(context) {
     override fun onCreateContentView(): View {
         return createPopupById(setLayoutId())
     }
+
 }

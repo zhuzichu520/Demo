@@ -9,13 +9,25 @@
         android:id="@+id/fragmentLogin"
         android:name="com.netease.nim.demo.ui.login.main.fragment.FragmentLogin"
         android:label="FragmentLogin"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_fragmentLogin_to_navigation_main"
             app:destination="@id/navigation_main"
             app:launchSingleTop="false" />
+        <action
+            android:id="@+id/action_fragmentLogin_to_fragmentRegister"
+            app:destination="@id/fragmentRegister" />
     </fragment>
 
     <include app:graph="@navigation/navigation_main" />
+    <fragment
+        android:id="@+id/fragmentRegister"
+        android:name="com.netease.nim.demo.ui.login.register.fragment.FragmentRegister"
+        android:label="FragmentRegister"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_fragmentRegister_self"
+            app:destination="@id/fragmentRegister" />
+    </fragment>
 
 </navigation>

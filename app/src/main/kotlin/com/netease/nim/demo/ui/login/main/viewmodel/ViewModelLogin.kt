@@ -3,11 +3,8 @@ package com.netease.nim.demo.ui.login.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
-import com.netease.nim.demo.nim.NimRequestCallback
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.login.main.domain.UseCaseLogin
-import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.uber.autodispose.autoDispose
 import com.zhuzichu.android.libs.internal.MainHandler
@@ -25,7 +22,7 @@ class ViewModelLogin @Inject constructor(
     val account = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
-    val onClickLogin = createCommand {
+    val onClickLoginCommand = createCommand {
         val account = account.value
         val password = password.value
         if (account.isNullOrEmpty()) {
@@ -48,6 +45,10 @@ class ViewModelLogin @Inject constructor(
                     handleThrowable(it)
                 }
             )
+    }
+
+    val onClickRegisterCommand = createCommand {
+        start(R.id.action_fragmentLogin_to_fragmentRegister)
     }
 
     private fun showMainPage() {

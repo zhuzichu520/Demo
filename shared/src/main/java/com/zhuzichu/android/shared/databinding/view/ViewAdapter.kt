@@ -71,13 +71,22 @@ fun bindViewGroup(viewGroup: ViewGroup, position: Int?) {
     }
 }
 
-@BindingAdapter(value = ["visibility"], requireAll = false)
-fun bindViewVisibility(view: View, visibility: Int) {
-    view.visibility = visibility
+@BindingAdapter(value = ["visibility", "isShown"], requireAll = false)
+fun bindViewVisibility(view: View, visibility: Int?, isShown: Boolean?) {
+    visibility?.let {
+        view.visibility = visibility
+    }
+
+    isShown?.let {
+        if (isShown) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }
 }
 
 @BindingAdapter(value = ["currentView"], requireAll = false)
 fun replyCurrentView(currentView: View, bindingCommand: BindingCommand<*>?) {
     bindingCommand?.execute(currentView)
 }
-

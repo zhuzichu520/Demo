@@ -9,5 +9,13 @@
         android:id="@+id/fragmentMain"
         android:name="com.netease.nim.demo.ui.main.fragment.FragmentMain"
         android:label="FragmentMain"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_fragmentMain_to_navigation_message"
+            app:destination="@id/navigation_message" />
+    </fragment>
+
+    <include app:graph="@navigation/navigation_message" />
+
+
 </navigation>

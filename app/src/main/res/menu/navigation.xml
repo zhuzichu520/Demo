@@ -13,5 +13,10 @@
         android:icon="@drawable/ic_main_contact"
         android:title="@string/contact" />
 
+    <item
+        android:id="@+id/main_tab_me"
+        android:enabled="true"
+        android:icon="@drawable/ic_main_me"
+        android:title="@string/me" />
 
 </menu>
