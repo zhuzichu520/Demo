@@ -21,14 +21,15 @@
             android:id="@+id/header"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="14dp"
             app:error="@{item.error}"
             app:isCircle="@{true}"
+            app:placeholder="@{item.placeholder}"
+            app:url="@{item.avatar}"
+            android:layout_marginStart="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:placeholder="@{item.placeholder}"
-            app:url="@{item.avatar}"
+
             tools:src="@mipmap/ic_launcher" />
 
         <androidx.appcompat.widget.AppCompatTextView

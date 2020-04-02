@@ -3,6 +3,7 @@ package com.zhuzichu.android.shared.databinding.recycler
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.zhuzichu.android.mvvm.databinding.BindingCommand
 import com.zhuzichu.android.shared.rxbinding.scrollBottom
 import com.zhuzichu.android.shared.widget.recycler.LineManager
@@ -37,7 +38,30 @@ fun bindSwipeRefreshLayout(
 @BindingAdapter("lineManager")
 fun setLineManager(
     recyclerView: RecyclerView,
-    factory: LineManager.Factory
+    factory: LineManager.Factory?
 ) {
-    recyclerView.addItemDecoration(factory.create(recyclerView))
+    factory?.let {
+        recyclerView.addItemDecoration(it.create(recyclerView))
+    }
+}
+
+@BindingAdapter(value = ["onSmartRefreshCommand", "onSmartLoadMoreCommand"], requireAll = false)
+fun bindSmartRefreshLayout(
+    smartRefreshLayout: SmartRefreshLayout,
+    onSmartRefreshCommand: BindingCommand<SmartRefreshLayout>?,
+    onSmartLoadMoreCommand: BindingCommand<SmartRefreshLayout>?
+) {
+
+    onSmartRefreshCommand?.apply {
+        smartRefreshLayout.setOnRefreshListener {
+            execute(it)
+        }
+    }
+
+    onSmartLoadMoreCommand?.apply {
+        smartRefreshLayout.setOnLoadMoreListener {
+            execute(it)
+        }
+    }
+
 }

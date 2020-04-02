@@ -19,3 +19,10 @@ fun bindingHtmlText(textView: TextView, string: String?) {
         textView.text = HtmlCompat.fromHtml(string, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 }
+
+@BindingAdapter(value = ["textColor"], requireAll = false)
+fun bindingTextView(textView: TextView, color: Int?) {
+    color?.let {
+        textView.setTextColor(it)
+    }
+}

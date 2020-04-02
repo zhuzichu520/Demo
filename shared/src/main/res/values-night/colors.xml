@@ -7,10 +7,11 @@
     <color name="color_secondary_variant">#018786</color>
 
     <color name="color_background">#000000</color>
+    <color name="color_background_primary">#121212</color>
+
     <color name="color_surface">#121212</color>
     <color name="color_error">#cf6679</color>
 
-    <color name="color_background_primary">#121212</color>
 
     <color name="color_on_primary">#000000</color>
     <color name="color_on_secondary">#000000</color>

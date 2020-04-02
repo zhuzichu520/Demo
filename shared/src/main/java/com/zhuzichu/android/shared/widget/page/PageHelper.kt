@@ -2,7 +2,6 @@ package com.zhuzichu.android.shared.widget.page
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zhuzichu.android.libs.internal.MainHandler
-import com.zhuzichu.android.mvvm.base.BaseArg
 import com.zhuzichu.android.mvvm.base.BaseViewModel
 import com.zhuzichu.android.shared.BR
 import com.zhuzichu.android.shared.R
@@ -17,7 +16,7 @@ import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import java.lang.ref.WeakReference
 
 class PageHelper(
-    val viewModel: BaseViewModel<BaseArg>,
+    val viewModel: BaseViewModel<*>,
     private val items: DiffObservableList<Any>,
     private var isFirstLoad: Boolean = true,
     private val onLoadMore: (Int.() -> Unit)? = null,

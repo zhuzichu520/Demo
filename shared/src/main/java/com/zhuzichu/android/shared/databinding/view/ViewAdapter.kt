@@ -1,7 +1,9 @@
 package com.zhuzichu.android.shared.databinding.view
 
+import android.util.LayoutDirection
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.core.view.forEachIndexed
 import androidx.databinding.BindingAdapter
 import com.jakewharton.rxbinding3.view.clicks
@@ -60,14 +62,20 @@ private fun <T> Observable<T>.isThrottleFirst(
     }
 }
 
-@BindingAdapter(value = ["displayedChild"], requireAll = false)
-fun bindViewGroup(viewGroup: ViewGroup, position: Int?) {
-    viewGroup.forEachIndexed { index, view ->
-        if (position == index) {
-            view.visibility = View.VISIBLE
-        } else {
-            view.visibility = View.GONE
+@BindingAdapter(value = ["displayedChild", "layoutDirection"], requireAll = false)
+fun bindViewGroup(viewGroup: ViewGroup, position: Int?, layoutDirection: Int?) {
+    position?.let {
+        viewGroup.forEachIndexed { index, view ->
+            if (it == index) {
+                view.visibility = View.VISIBLE
+            } else {
+                view.visibility = View.GONE
+            }
         }
+    }
+
+    layoutDirection?.let {
+        viewGroup.layoutDirection = layoutDirection
     }
 }
 
@@ -76,7 +84,6 @@ fun bindViewVisibility(view: View, visibility: Int?, isShown: Boolean?) {
     visibility?.let {
         view.visibility = visibility
     }
-
     isShown?.let {
         if (isShown) {
             view.visibility = View.VISIBLE
@@ -89,4 +96,14 @@ fun bindViewVisibility(view: View, visibility: Int?, isShown: Boolean?) {
 @BindingAdapter(value = ["currentView"], requireAll = false)
 fun replyCurrentView(currentView: View, bindingCommand: BindingCommand<*>?) {
     bindingCommand?.execute(currentView)
+}
+
+@BindingAdapter(value = ["backgroundColor", "background"], requireAll = false)
+fun bindViewColor(view: View, backgroundColor: Int?, @DrawableRes background: Int?) {
+    backgroundColor?.let {
+        view.setBackgroundColor(it)
+    }
+    background?.let {
+        view.setBackgroundResource(it)
+    }
 }

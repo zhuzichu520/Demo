@@ -35,8 +35,9 @@ class NimModule {
     fun providesNimRepository(
         teamService: TeamService,
         userService: UserService,
-        authService: AuthService
+        authService: AuthService,
+        msgService: MsgService
     ): NimRepository =
-        NimRepositoryImpl(teamService, userService,authService)
+        NimRepositoryImpl(teamService, userService, authService,msgService)
 
 }

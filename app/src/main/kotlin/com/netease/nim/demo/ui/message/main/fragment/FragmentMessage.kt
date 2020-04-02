@@ -1,13 +1,16 @@
 package com.netease.nim.demo.ui.message.main.fragment
 
+import androidx.lifecycle.Observer
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMeBinding
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
+import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
+import kotlinx.android.synthetic.main.fragment_message.*
 import javax.inject.Inject
 
 class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMessage>() {
@@ -29,6 +32,7 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
     override fun initLazyData() {
         super.initLazyData()
         loadData(sessionType)
+        viewModel.loadMessage(MessageBuilder.createEmptyMessage(arg.contactId, sessionType, 0))
     }
 
     private fun loadData(sessionType: SessionTypeEnum) {
@@ -39,7 +43,17 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
             SessionTypeEnum.Team -> {
                 viewModel.loadTeamInfo()
             }
+            else -> {
+
+            }
         }
+    }
+
+    override fun initViewObservable() {
+        super.initViewObservable()
+        viewModel.messageList.observe(viewLifecycleOwner, Observer {
+//            scrollToBottom(it.size - 1)
+        })
     }
 
     override fun onResume() {
@@ -53,4 +67,9 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
         msgService.setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None)
     }
 
+    private fun scrollToBottom(position: Int) {
+        if (position >= 0) {
+            recycler.scrollToPosition(position)
+        }
+    }
 }

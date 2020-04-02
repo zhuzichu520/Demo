@@ -3,6 +3,9 @@ package com.netease.nim.demo.nim.repository
 import com.netease.nim.demo.nim.NimRequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
+import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.msg.model.IMMessage
+import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
@@ -29,12 +32,20 @@ interface NimRepository {
      */
     fun getUserInfoById(accid: String): Flowable<NimUserInfo>
 
+
+    /**
+     * 获取消息列表
+     * @param anchor
+     */
+    fun getMessageList(anchor: IMMessage, pageSize: Int): Flowable<List<IMMessage>>
+
 }
 
 class NimRepositoryImpl(
     private val teamService: TeamService,
     private val userService: UserService,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val msgService: MsgService
 ) : NimRepository {
 
     override fun login(loginInfo: LoginInfo): Flowable<LoginInfo> {
@@ -66,6 +77,13 @@ class NimRepositoryImpl(
             }
         }.map {
             it[0]
+        }
+    }
+
+    override fun getMessageList(anchor: IMMessage, pageSize: Int): Flowable<List<IMMessage>> {
+        return createFlowable {
+            msgService.queryMessageListEx(anchor, QueryDirectionEnum.QUERY_OLD, pageSize, true)
+                .setCallback(NimRequestCallback(this))
         }
     }
 

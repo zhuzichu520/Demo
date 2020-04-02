@@ -9,8 +9,12 @@ import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.util.NIMUtil
+import com.scwang.smart.refresh.footer.ClassicsFooter
+import com.scwang.smart.refresh.header.ClassicsHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.zhuzichu.android.mvvm.Mvvm
 import com.zhuzichu.android.shared.crash.CrashConfig
+import com.zhuzichu.android.shared.ext.toColorByResId
 import com.zhuzichu.android.shared.global.AppGlobal
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
@@ -23,6 +27,23 @@ import java.util.concurrent.TimeUnit
 
 
 class ApplicationDemo : DaggerApplication() {
+
+    init {
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ ->
+            ClassicsHeader(context).apply {
+                setPrimaryColor(R.color.color_background_primary.toColorByResId())
+                setAccentColor(R.color.color_font_primary.toColorByResId())
+            } //.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
+        }
+        //设置全局的Footer构建器
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ ->
+            ClassicsFooter(context).apply {
+                setPrimaryColor(R.color.color_background_primary.toColorByResId())
+                setAccentColor(R.color.color_font_primary.toColorByResId())
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()

@@ -20,14 +20,12 @@
     </fragment>
 
     <include app:graph="@navigation/navigation_main" />
+
     <fragment
         android:id="@+id/fragmentRegister"
         android:name="com.netease.nim.demo.ui.login.register.fragment.FragmentRegister"
         android:label="FragmentRegister"
-        tools:layout="@layout/fragment_register" >
-        <action
-            android:id="@+id/action_fragmentRegister_self"
-            app:destination="@id/fragmentRegister" />
-    </fragment>
+        tools:layout="@layout/fragment_register" />
+
 
 </navigation>

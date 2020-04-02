@@ -56,7 +56,12 @@ object Dep {
         const val guava = "27.0.1-android"
         const val popupMenu = "4.0.1"
         const val popupWindow = "2.2.2.2"
+        const val refresh = "2.0.0"
     }
+
+    const val refresh = "com.scwang.smart:refresh-layout-kernel:${Version.refresh}";
+
+    const val headerClassics = "com.scwang.smart:refresh-header-classics:${Version.refresh}";
 
     const val popupWindow = "com.github.razerdp:BasePopup:${Version.popupWindow}";
 
