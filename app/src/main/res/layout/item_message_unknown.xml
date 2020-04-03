@@ -9,8 +9,89 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        app:layoutDirection="@{item.layoutDirection}">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/header"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:error="@{item.error}"
+            app:isCircle="@{true}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholder="@{item.placeholder}"
+            app:url="@{item.avatar}"
+            tools:background="@mipmap/ic_launcher" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@{item.name}"
+            app:layout_constraintStart_toEndOf="@+id/header"
+            app:layout_constraintTop_toTopOf="@+id/header"
+            app:visibility="@{item.displayName}"
+            tools:text="哈哈哈哈哈" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="50dp"
+            android:gravity="center|start"
+            app:background="@{item.background}"
+            app:layout_constraintStart_toEndOf="@+id/header"
+            app:layout_constraintTop_toBottomOf="@+id/name">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/message_item_unsupport_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/nim_unsupport_mime_type" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="4dp"
+                android:layout_toEndOf="@id/message_item_unsupport_image"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/message_item_unsupport_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:text="@string/unsupport_title"
+                    android:textColor="@color/color_font_primary"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/message_item_unsupport_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:text="@string/unsupport_desc"
+                    android:textColor="@color/color_font_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

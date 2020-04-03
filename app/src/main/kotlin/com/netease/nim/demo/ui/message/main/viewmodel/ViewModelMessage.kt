@@ -4,6 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.recyclerview.widget.DiffUtil
+import com.hiwitech.android.mvvm.event.SingleLiveEvent
+import com.hiwitech.android.shared.ext.createTypeCommand
+import com.hiwitech.android.shared.ext.itemDiffOf
+import com.hiwitech.android.shared.ext.map
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
@@ -15,10 +19,6 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.uber.autodispose.autoDispose
-import com.hiwitech.android.mvvm.event.SingleLiveEvent
-import com.hiwitech.android.shared.ext.createTypeCommand
-import com.hiwitech.android.shared.ext.itemDiffOf
-import com.hiwitech.android.shared.ext.map
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
 
@@ -28,7 +28,9 @@ class ViewModelMessage @Inject constructor(
     private val useCaseGetMessageList: UseCaseGetMessageList
 ) : ViewModelBase<ArgMessage>() {
 
-    private val pageSize = 20
+    private val pageSize = 40
+
+    val onScrollPositionsEvent = SingleLiveEvent<Int>()
 
     val title = MutableLiveData<String>()
 
@@ -51,8 +53,6 @@ class ViewModelMessage @Inject constructor(
         itemDiffOf<ItemViewModelBaseMessage> { oldItem, newItem ->
             oldItem.sessionId == newItem.sessionId
         }
-
-    val onScrollEvent = SingleLiveEvent<Int>()
 
     val onSmartRefreshCommand = createTypeCommand<SmartRefreshLayout> {
         messageList.value?.let {
@@ -89,7 +89,8 @@ class ViewModelMessage @Inject constructor(
 
     fun loadMessage(
         anchor: IMMessage,
-        refreshLayout: SmartRefreshLayout? = null
+        refreshLayout: SmartRefreshLayout? = null,
+        isFirst: Boolean? = false
     ) {
         useCaseGetMessageList.execute(UseCaseGetMessageList.Parameters(anchor, pageSize))
             .autoDispose(this)
@@ -108,7 +109,13 @@ class ViewModelMessage @Inject constructor(
                             }
                         }
                     }
-                    messageList.value = list.plus(messageList.value ?: listOf())
+                    val data = list.plus(messageList.value ?: listOf())
+                    messageList.value = data
+                    if (true == isFirst) {
+                        onScrollPositionsEvent.value = data.size - 1
+                    } else {
+                        onScrollPositionsEvent.value=list.size
+                    }
                     refreshLayout?.finishRefresh()
                 },
                 {

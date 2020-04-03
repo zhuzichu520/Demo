@@ -18,4 +18,6 @@
     <string name="register_password_tip">密码必须为6~20位字母或者数字</string>
 
 
+    <string name="unsupport_title">无法显示该内容</string>
+    <string name="unsupport_desc">客户端版本不支持该内容</string>
 </resources>

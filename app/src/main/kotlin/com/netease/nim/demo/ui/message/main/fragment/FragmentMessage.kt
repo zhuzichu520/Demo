@@ -1,6 +1,7 @@
 package com.netease.nim.demo.ui.message.main.fragment
 
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
@@ -32,7 +33,10 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
     override fun initLazyData() {
         super.initLazyData()
         loadData(sessionType)
-        viewModel.loadMessage(MessageBuilder.createEmptyMessage(arg.contactId, sessionType, 0))
+        viewModel.loadMessage(
+            MessageBuilder.createEmptyMessage(arg.contactId, sessionType, 0),
+            isFirst = true
+        )
     }
 
     private fun loadData(sessionType: SessionTypeEnum) {
@@ -51,8 +55,8 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
 
     override fun initViewObservable() {
         super.initViewObservable()
-        viewModel.messageList.observe(viewLifecycleOwner, Observer {
-//            scrollToBottom(it.size - 1)
+        viewModel.onScrollPositionsEvent.observe(viewLifecycleOwner, Observer {
+            scrollToBottom(it)
         })
     }
 
@@ -69,7 +73,7 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
 
     private fun scrollToBottom(position: Int) {
         if (position >= 0) {
-            recycler.scrollToPosition(position)
+            (recycler.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position,0)
         }
     }
 }

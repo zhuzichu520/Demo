@@ -53,7 +53,7 @@
             app:background="@{item.background}"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            app:textColor="@{item.textColor}"
+            android:textColor="@color/color_font_primary"
             tools:text="哈哈哈哈哈哈哈哈哈哈哈" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
