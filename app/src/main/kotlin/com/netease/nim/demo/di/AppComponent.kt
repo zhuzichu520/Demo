@@ -1,7 +1,7 @@
 package com.netease.nim.demo.di
 
 import com.netease.nim.demo.ApplicationDemo
-import com.zhuzichu.android.mvvm.di.ViewModelModule
+import com.hiwitech.android.mvvm.di.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector

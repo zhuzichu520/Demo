@@ -2,10 +2,10 @@ package com.netease.nim.demo.ui.login.register.domain
 
 import com.google.common.base.Optional
 import com.netease.nim.demo.repository.RemoteRepository
-import com.zhuzichu.android.libs.tool.md5
-import com.zhuzichu.android.mvvm.domain.UseCase
-import com.zhuzichu.android.shared.ext.bindToException
-import com.zhuzichu.android.shared.ext.bindToSchedulers
+import com.hiwitech.android.libs.tool.md5
+import com.hiwitech.android.mvvm.domain.UseCase
+import com.hiwitech.android.shared.ext.bindToException
+import com.hiwitech.android.shared.ext.bindToSchedulers
 import io.reactivex.Observable
 import javax.inject.Inject
 

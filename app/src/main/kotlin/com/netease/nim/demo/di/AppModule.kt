@@ -4,7 +4,7 @@ import android.content.Context
 import com.netease.nim.demo.ApplicationDemo
 import com.netease.nim.demo.repository.RemoteRepository
 import com.netease.nim.demo.repository.RemoteRepositoryImpl
-import com.zhuzichu.android.widget.notify.NotifyManager
+import com.hiwitech.android.widget.notify.NotifyManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

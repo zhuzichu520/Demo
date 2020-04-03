@@ -3,10 +3,10 @@ package com.netease.nim.demo.ui.session.domain
 import com.netease.nim.demo.nim.NimRequestCallback
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.model.RecentContact
-import com.zhuzichu.android.mvvm.domain.UseCase
-import com.zhuzichu.android.shared.ext.bindToException
-import com.zhuzichu.android.shared.ext.bindToSchedulers
-import com.zhuzichu.android.shared.ext.createFlowable
+import com.hiwitech.android.mvvm.domain.UseCase
+import com.hiwitech.android.shared.ext.bindToException
+import com.hiwitech.android.shared.ext.bindToSchedulers
+import com.hiwitech.android.shared.ext.createFlowable
 import io.reactivex.Flowable
 import javax.inject.Inject
 

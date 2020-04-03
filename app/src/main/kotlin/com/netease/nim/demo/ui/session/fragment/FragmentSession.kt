@@ -8,9 +8,9 @@ import com.netease.nim.demo.databinding.FragmentSessionBinding
 import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.ui.session.viewmodel.ViewModelSession
 import com.uber.autodispose.autoDispose
-import com.zhuzichu.android.mvvm.base.ArgDefault
-import com.zhuzichu.android.shared.bus.RxBus
-import com.zhuzichu.android.shared.ext.bindToSchedulers
+import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.ext.bindToSchedulers
 
 class FragmentSession(
     private val closure: Int.() -> Unit

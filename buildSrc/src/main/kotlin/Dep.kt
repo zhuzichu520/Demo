@@ -21,9 +21,7 @@ object Dep {
         const val adapter = "4.0.0"
         const val timber = "4.7.1"
         const val swiperefreshlayout = "1.1.0-beta01"
-        const val libs = "1.0.6"
-        const val mvvm = "1.0.6"
-        const val widget = "1.0.6"
+        const val developer = "1.0.1"
         const val room = "2.2.3"
         const val umengCommon = "2.0.0"
         const val umengAnalytics = "8.0.0"
@@ -194,13 +192,13 @@ object Dep {
         "androidx.navigation:navigation-ui-ktx:${Version.androidxNavigation}"
 
     const val widget =
-        "com.github.zhuzichu520.MvvmSmart:widget:${Version.widget}"
+        "com.github.zhuzichu520.Developer:widget:${Version.developer}"
 
     const val libs =
-        "com.github.zhuzichu520.MvvmSmart:libs:${Version.libs}"
+        "com.github.zhuzichu520.Developer:libs:${Version.developer}"
 
     const val mvvm =
-        "com.github.zhuzichu520.MvvmSmart:mvvm:${Version.mvvm}"
+        "com.github.zhuzichu520.Developer:mvvm:${Version.developer}"
 
     const val kotlinStadlibJdk8 =
         "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Version.kotlin}"

@@ -12,13 +12,13 @@ import com.netease.nim.demo.ui.main.viewmodel.ViewModelMain
 import com.netease.nim.demo.ui.me.main.fragment.FragmentMe
 import com.netease.nim.demo.ui.session.fragment.FragmentSession
 import com.netease.nimlib.sdk.msg.MsgService
-import com.zhuzichu.android.mvvm.base.ArgDefault
-import com.zhuzichu.android.mvvm.base.BaseFragment
-import com.zhuzichu.android.shared.base.DefaultIntFragmentPagerAdapter
-import com.zhuzichu.android.shared.ext.plusBadge
-import com.zhuzichu.android.shared.ext.setupWithViewPager
-import com.zhuzichu.android.shared.ext.toast
-import com.zhuzichu.android.widget.badge.Badge
+import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.mvvm.base.BaseFragment
+import com.hiwitech.android.shared.base.DefaultIntFragmentPagerAdapter
+import com.hiwitech.android.shared.ext.plusBadge
+import com.hiwitech.android.shared.ext.setupWithViewPager
+import com.hiwitech.android.shared.ext.toast
+import com.hiwitech.android.widget.badge.Badge
 import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
 

@@ -2,9 +2,9 @@ package com.netease.nim.demo.ui.message.main.domain
 
 import com.netease.nim.demo.nim.repository.NimRepository
 import com.netease.nimlib.sdk.team.model.Team
-import com.zhuzichu.android.mvvm.domain.UseCase
-import com.zhuzichu.android.shared.ext.bindToException
-import com.zhuzichu.android.shared.ext.bindToSchedulers
+import com.hiwitech.android.mvvm.domain.UseCase
+import com.hiwitech.android.shared.ext.bindToException
+import com.hiwitech.android.shared.ext.bindToSchedulers
 import io.reactivex.Flowable
 import javax.inject.Inject
 

@@ -3,8 +3,8 @@ package com.netease.nim.demo.ui.login.register.module
 import androidx.lifecycle.ViewModel
 import com.netease.nim.demo.ui.login.register.fragment.FragmentRegister
 import com.netease.nim.demo.ui.login.register.viewmodel.ViewModelRegister
-import com.zhuzichu.android.mvvm.di.FragmentScoped
-import com.zhuzichu.android.mvvm.di.ViewModelKey
+import com.hiwitech.android.mvvm.di.FragmentScoped
+import com.hiwitech.android.mvvm.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

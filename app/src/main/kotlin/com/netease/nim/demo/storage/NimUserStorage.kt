@@ -2,8 +2,8 @@ package com.netease.nim.demo.storage
 
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.tencent.mmkv.MMKV
-import com.zhuzichu.android.shared.storage.BooleanPreference
-import com.zhuzichu.android.shared.storage.StringPreference
+import com.hiwitech.android.shared.storage.BooleanPreference
+import com.hiwitech.android.shared.storage.StringPreference
 
 object NimUserStorage {
 

@@ -5,10 +5,10 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
 import com.netease.nim.demo.ui.login.register.domain.UseCaseRegister
 import com.uber.autodispose.autoDispose
-import com.zhuzichu.android.mvvm.base.ArgDefault
-import com.zhuzichu.android.shared.ext.autoLoading
-import com.zhuzichu.android.shared.ext.createCommand
-import com.zhuzichu.android.shared.ext.toast
+import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.shared.ext.autoLoading
+import com.hiwitech.android.shared.ext.createCommand
+import com.hiwitech.android.shared.ext.toast
 import javax.inject.Inject
 
 class ViewModelRegister @Inject constructor(

@@ -13,7 +13,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.netease.nimlib.sdk.uinfo.UserServiceObserve
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
-import com.zhuzichu.android.shared.bus.RxBus
+import com.hiwitech.android.shared.bus.RxBus
 
 object NimEventManager {
 

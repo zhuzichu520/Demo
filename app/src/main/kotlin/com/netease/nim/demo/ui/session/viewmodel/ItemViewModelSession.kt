@@ -13,10 +13,10 @@ import com.netease.nim.demo.ui.session.popup.PopupSession
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.P2P
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.Team
 import com.netease.nimlib.sdk.msg.model.RecentContact
-import com.zhuzichu.android.shared.ext.createCommand
-import com.zhuzichu.android.shared.ext.createTypeCommand
-import com.zhuzichu.android.shared.tools.ToolDate
-import com.zhuzichu.android.widget.badge.Badge
+import com.hiwitech.android.shared.ext.createCommand
+import com.hiwitech.android.shared.ext.createTypeCommand
+import com.hiwitech.android.shared.tools.ToolDate
+import com.hiwitech.android.widget.badge.Badge
 
 data class ItemViewModelSession(
     val viewModel: ViewModelSession,

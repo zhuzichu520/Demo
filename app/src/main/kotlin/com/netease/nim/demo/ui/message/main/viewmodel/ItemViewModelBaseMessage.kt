@@ -8,7 +8,7 @@ import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
-import com.zhuzichu.android.shared.ext.toColorByResId
+import com.hiwitech.android.shared.ext.toColorByResId
 
 open class ItemViewModelBaseMessage(
     val message: IMMessage

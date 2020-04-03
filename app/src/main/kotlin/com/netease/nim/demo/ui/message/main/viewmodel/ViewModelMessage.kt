@@ -15,10 +15,10 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.uber.autodispose.autoDispose
-import com.zhuzichu.android.mvvm.event.SingleLiveEvent
-import com.zhuzichu.android.shared.ext.createTypeCommand
-import com.zhuzichu.android.shared.ext.itemDiffOf
-import com.zhuzichu.android.shared.ext.map
+import com.hiwitech.android.mvvm.event.SingleLiveEvent
+import com.hiwitech.android.shared.ext.createTypeCommand
+import com.hiwitech.android.shared.ext.itemDiffOf
+import com.hiwitech.android.shared.ext.map
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
 

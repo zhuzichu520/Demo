@@ -10,9 +10,9 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
 import com.netease.nimlib.sdk.msg.MessageNotifierCustomization
 import com.netease.nimlib.sdk.msg.model.IMMessage
-import com.zhuzichu.android.libs.tool.getScreenWidth
-import com.zhuzichu.android.libs.tool.toCast
-import com.zhuzichu.android.shared.global.CacheGlobal
+import com.hiwitech.android.libs.tool.getScreenWidth
+import com.hiwitech.android.libs.tool.toCast
+import com.hiwitech.android.shared.global.CacheGlobal
 
 object NimSDKOptionConfig {
     fun getSDKOptions(context: Context): SDKOptions {

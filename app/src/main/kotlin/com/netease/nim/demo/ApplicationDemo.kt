@@ -12,10 +12,10 @@ import com.netease.nimlib.sdk.util.NIMUtil
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import com.zhuzichu.android.mvvm.Mvvm
-import com.zhuzichu.android.shared.crash.CrashConfig
-import com.zhuzichu.android.shared.ext.toColorByResId
-import com.zhuzichu.android.shared.global.AppGlobal
+import com.hiwitech.android.mvvm.Mvvm
+import com.hiwitech.android.shared.crash.CrashConfig
+import com.hiwitech.android.shared.ext.toColorByResId
+import com.hiwitech.android.shared.global.AppGlobal
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import jonathanfinerty.once.Once

@@ -1,9 +1,9 @@
 package com.netease.nim.demo.rxhttp.parser
 
 import com.google.common.base.Optional
-import com.zhuzichu.android.shared.http.entity.Response
-import com.zhuzichu.android.shared.http.exception.BusinessThrowable
-import com.zhuzichu.android.shared.http.exception.ExceptionManager
+import com.hiwitech.android.shared.http.entity.Response
+import com.hiwitech.android.shared.http.exception.BusinessThrowable
+import com.hiwitech.android.shared.http.exception.ExceptionManager
 import rxhttp.wrapper.annotation.Parser
 import rxhttp.wrapper.entity.ParameterizedTypeImpl
 import rxhttp.wrapper.parse.AbstractParser

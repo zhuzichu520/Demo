@@ -10,7 +10,7 @@ import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
-import com.zhuzichu.android.shared.ext.createFlowable
+import com.hiwitech.android.shared.ext.createFlowable
 import io.reactivex.Flowable
 
 interface NimRepository {

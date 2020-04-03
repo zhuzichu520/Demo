@@ -5,7 +5,7 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentContactBinding
 import com.netease.nim.demo.ui.contact.viewmodel.ViewModelContact
-import com.zhuzichu.android.mvvm.base.ArgDefault
+import com.hiwitech.android.mvvm.base.ArgDefault
 
 class FragmentContact : FragmentBase<FragmentContactBinding, ViewModelContact, ArgDefault>() {
 

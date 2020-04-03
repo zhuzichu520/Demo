@@ -7,12 +7,12 @@ import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.login.main.domain.UseCaseLogin
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.uber.autodispose.autoDispose
-import com.zhuzichu.android.libs.internal.MainHandler
-import com.zhuzichu.android.libs.tool.md5
-import com.zhuzichu.android.mvvm.base.ArgDefault
-import com.zhuzichu.android.shared.ext.autoLoading
-import com.zhuzichu.android.shared.ext.createCommand
-import com.zhuzichu.android.shared.ext.toast
+import com.hiwitech.android.libs.internal.MainHandler
+import com.hiwitech.android.libs.tool.md5
+import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.shared.ext.autoLoading
+import com.hiwitech.android.shared.ext.createCommand
+import com.hiwitech.android.shared.ext.toast
 import javax.inject.Inject
 
 class ViewModelLogin @Inject constructor(

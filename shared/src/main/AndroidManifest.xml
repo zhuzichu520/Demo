@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zhuzichu.android.shared">
+    package="com.hiwitech.android.shared">
 
     <application>
 
@@ -8,11 +8,11 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".crash.DefaultErrorActivity"
+            android:name="com.hiwitech.android.shared.crash.DefaultErrorActivity"
             android:process=":error_activity" />
 
         <provider
-            android:name=".crash.CrashInitProvider"
+            android:name="com.hiwitech.android.shared.crash.CrashInitProvider"
             android:authorities="${applicationId}.crashinitprovider"
             android:exported="false"
             android:initOrder="101" />

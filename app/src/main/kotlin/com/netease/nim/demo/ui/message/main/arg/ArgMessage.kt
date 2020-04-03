@@ -1,6 +1,6 @@
 package com.netease.nim.demo.ui.message.main.arg
 
-import com.zhuzichu.android.mvvm.base.BaseArg
+import com.hiwitech.android.mvvm.base.BaseArg
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

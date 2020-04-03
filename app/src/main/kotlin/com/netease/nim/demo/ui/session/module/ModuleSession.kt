@@ -3,8 +3,8 @@ package com.netease.nim.demo.ui.session.module
 import androidx.lifecycle.ViewModel
 import com.netease.nim.demo.ui.session.fragment.FragmentSession
 import com.netease.nim.demo.ui.session.viewmodel.ViewModelSession
-import com.zhuzichu.android.mvvm.di.ChildFragmentScoped
-import com.zhuzichu.android.mvvm.di.ViewModelKey
+import com.hiwitech.android.mvvm.di.ChildFragmentScoped
+import com.hiwitech.android.mvvm.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

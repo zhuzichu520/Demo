@@ -12,11 +12,11 @@ import com.netease.nim.demo.ui.session.domain.UseCaseGetSessionList
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.uber.autodispose.autoDispose
-import com.zhuzichu.android.libs.tool.replaceAt
-import com.zhuzichu.android.libs.tool.toCast
-import com.zhuzichu.android.mvvm.base.ArgDefault
-import com.zhuzichu.android.shared.ext.autoLoading
-import com.zhuzichu.android.shared.ext.map
+import com.hiwitech.android.libs.tool.replaceAt
+import com.hiwitech.android.libs.tool.toCast
+import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.shared.ext.autoLoading
+import com.hiwitech.android.shared.ext.map
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
 

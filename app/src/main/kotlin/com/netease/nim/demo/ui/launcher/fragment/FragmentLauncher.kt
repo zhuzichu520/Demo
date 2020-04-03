@@ -7,8 +7,8 @@ import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMainBinding
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.launcher.viewmodel.ViewModelLauncher
-import com.zhuzichu.android.libs.internal.MainHandler
-import com.zhuzichu.android.mvvm.base.ArgDefault
+import com.hiwitech.android.libs.internal.MainHandler
+import com.hiwitech.android.mvvm.base.ArgDefault
 
 class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, ArgDefault>() {
 

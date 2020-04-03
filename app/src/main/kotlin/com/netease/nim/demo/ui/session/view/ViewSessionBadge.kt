@@ -6,8 +6,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.netease.nim.demo.R
-import com.zhuzichu.android.widget.badge.Badge
-import com.zhuzichu.android.widget.badge.QBadgeView
+import com.hiwitech.android.widget.badge.Badge
+import com.hiwitech.android.widget.badge.QBadgeView
 
 class ViewSessionBadge @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

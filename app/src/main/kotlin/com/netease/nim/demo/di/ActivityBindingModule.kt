@@ -1,6 +1,7 @@
 package com.netease.nim.demo.di
 
 
+import com.hiwitech.android.mvvm.di.ActivityScoped
 import com.netease.nim.demo.ui.contact.module.ModuleContact
 import com.netease.nim.demo.ui.launcher.ActivityLauncher
 import com.netease.nim.demo.ui.launcher.module.ModuleLauncher
@@ -10,7 +11,6 @@ import com.netease.nim.demo.ui.main.module.ModuleMain
 import com.netease.nim.demo.ui.me.main.module.ModuleMe
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.session.module.ModuleSession
-import com.zhuzichu.android.mvvm.di.ActivityScoped
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

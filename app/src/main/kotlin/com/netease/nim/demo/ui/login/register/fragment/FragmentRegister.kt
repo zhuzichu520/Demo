@@ -5,7 +5,7 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentRegisterBinding
 import com.netease.nim.demo.ui.login.register.viewmodel.ViewModelRegister
-import com.zhuzichu.android.mvvm.base.ArgDefault
+import com.hiwitech.android.mvvm.base.ArgDefault
 
 class FragmentRegister : FragmentBase<FragmentRegisterBinding, ViewModelRegister, ArgDefault>() {
 
