@@ -21,7 +21,7 @@ object Dep {
         const val adapter = "4.0.0"
         const val timber = "4.7.1"
         const val swiperefreshlayout = "1.1.0-beta01"
-        const val developer = "1.0.1"
+        const val developer = "1.0.2"
         const val room = "2.2.3"
         const val umengCommon = "2.0.0"
         const val umengAnalytics = "8.0.0"
@@ -54,12 +54,7 @@ object Dep {
         const val guava = "27.0.1-android"
         const val popupMenu = "4.0.1"
         const val popupWindow = "2.2.2.2"
-        const val refresh = "2.0.0"
     }
-
-    const val refresh = "com.scwang.smart:refresh-layout-kernel:${Version.refresh}";
-
-    const val headerClassics = "com.scwang.smart:refresh-header-classics:${Version.refresh}";
 
     const val popupWindow = "com.github.razerdp:BasePopup:${Version.popupWindow}";
 

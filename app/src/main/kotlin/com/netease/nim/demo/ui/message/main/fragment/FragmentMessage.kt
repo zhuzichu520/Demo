@@ -73,7 +73,7 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
 
     private fun scrollToBottom(position: Int) {
         if (position >= 0) {
-            (recycler.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position,0)
+            (recycler.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
         }
     }
 }

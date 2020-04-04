@@ -7,8 +7,9 @@ import com.hiwitech.android.mvvm.databinding.BindingCommand
 
 class ItemViewModelNetwork(
     viewModel: BaseViewModel<*>,
-    val onClickRetry: BindingCommand<Any>
+    val onClickRetryCommand: BindingCommand<*>?
 ) : BaseItemViewModel(viewModel) {
+
     companion object {
         const val STATE_LOADING = 0
         const val STATE_ERROR = 1

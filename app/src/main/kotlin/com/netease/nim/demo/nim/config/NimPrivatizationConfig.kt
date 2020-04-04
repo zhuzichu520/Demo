@@ -244,7 +244,7 @@ object NimPrivatizationConfig {
 
     private fun parse(json: String?): JSONObject? {
         return try {
-            JSONObject(json)
+            JSONObject(json.toString())
         } catch (e: JSONException) {
             null
         }

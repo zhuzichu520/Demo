@@ -108,9 +108,4 @@ dependencies {
     api(Dep.guava)
     api(Dep.popupMenu)
     api(Dep.popupWindow)
-    api(Dep.refresh)
-    api(Dep.headerClassics)
-//    api(project(":libs"))
-//    api(project(":widget"))
-//    api(project(":mvvm"))
 }
