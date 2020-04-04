@@ -5,7 +5,7 @@ import com.hiwitech.android.mvvm.base.BaseItemViewModel
 import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.mvvm.databinding.BindingCommand
 
-class ItemViewModelNetwork(
+class ItemViewModelNetworkHeader(
     viewModel: BaseViewModel<*>,
     val onClickRetryCommand: BindingCommand<*>?
 ) : BaseItemViewModel(viewModel) {

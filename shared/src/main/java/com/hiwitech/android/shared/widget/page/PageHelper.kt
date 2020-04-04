@@ -21,27 +21,30 @@ class PageHelper<T>(
     onRetry: (() -> Unit)? = null
 ) {
 
-    private var itemHeader: ItemViewModelNetwork? = null
-    private var itemFooter: ItemViewModelNetwork? = null
-
+    private var itemHeader: ItemViewModelNetworkHeader? = null
+    private var itemFooter: ItemViewModelNetworkFooter? = null
 
     val onLoadMoreCommand = createCommand {
-        if (ItemViewModelNetwork.STATE_END == getFooterState()) {
+        if (ItemViewModelNetworkFooter.STATE_END == getFooterState()) {
             return@createCommand
         }
-        setFooterState(ItemViewModelNetwork.STATE_LOADING)
-        if (ItemViewModelNetwork.STATE_LOADING == getFooterState()) {
-            MainHandler.postDelayed { onLoadMore?.invoke() }
+        setFooterState(ItemViewModelNetworkFooter.STATE_LOADING)
+        if (ItemViewModelNetworkFooter.STATE_LOADING == getFooterState()) {
+            MainHandler.postDelayed(50){
+                onLoadMore?.invoke()
+            }
         }
     }
 
     val onRefreshCommand = createCommand {
-        if (ItemViewModelNetwork.STATE_END == getHeaderState()) {
+        if (ItemViewModelNetworkFooter.STATE_END == getHeaderState()) {
             return@createCommand
         }
-        setHeaderState(ItemViewModelNetwork.STATE_LOADING)
-        if (ItemViewModelNetwork.STATE_LOADING == getHeaderState()) {
-            MainHandler.postDelayed { onRefresh?.invoke() }
+        setHeaderState(ItemViewModelNetworkFooter.STATE_LOADING)
+        if (ItemViewModelNetworkFooter.STATE_LOADING == getHeaderState()) {
+            MainHandler.postDelayed(50){
+                onRefresh?.invoke()
+            }
         }
     }
 
@@ -51,10 +54,10 @@ class PageHelper<T>(
 
     init {
         onLoadMore?.let {
-            itemFooter = ItemViewModelNetwork(viewModel, onRetryCommand)
+            itemFooter = ItemViewModelNetworkFooter(viewModel, onRetryCommand)
         }
         onRefresh?.let {
-            itemHeader = ItemViewModelNetwork(viewModel, onRetryCommand)
+            itemHeader = ItemViewModelNetworkHeader(viewModel, onRetryCommand)
         }
     }
 
@@ -72,23 +75,23 @@ class PageHelper<T>(
     }
 
     val pageItemBinding = OnItemBindClass<Any>().apply {
-        map<ItemViewModelNetwork>(BR.item, R.layout.item_network)
-        map<ItemViewModelNull>(BR.item, R.layout.item_null)
+        map<ItemViewModelNetworkFooter>(BR.item, R.layout.item_network_footer)
+        map<ItemViewModelNetworkHeader>(BR.item, R.layout.item_network_header)
     }
 
     fun <T> add(list: List<T>, isReverse: Boolean = true): List<T> {
         if (isReverse) {
             if (list.size < pageSize) {
-                setHeaderState(ItemViewModelNetwork.STATE_END)
+                setHeaderState(ItemViewModelNetworkFooter.STATE_END)
             } else {
-                setHeaderState(ItemViewModelNetwork.STATE_FINISH)
+                setHeaderState(ItemViewModelNetworkFooter.STATE_FINISH)
             }
             items.value = list.plus(items.value ?: listOf()).toCast()
         } else {
             if (list.size < pageSize) {
-                setFooterState(ItemViewModelNetwork.STATE_END)
+                setFooterState(ItemViewModelNetworkFooter.STATE_END)
             } else {
-                setFooterState(ItemViewModelNetwork.STATE_FINISH)
+                setFooterState(ItemViewModelNetworkFooter.STATE_FINISH)
             }
             items.value = (items.value ?: listOf()).plus(list).toCast()
         }
@@ -104,10 +107,10 @@ class PageHelper<T>(
     }
 
     private fun getHeaderState(): Int {
-        return itemHeader?.state?.value ?: ItemViewModelNetwork.STATE_DEFAULT
+        return itemHeader?.state?.value ?: ItemViewModelNetworkFooter.STATE_DEFAULT
     }
 
     private fun getFooterState(): Int {
-        return itemFooter?.state?.value ?: ItemViewModelNetwork.STATE_DEFAULT
+        return itemFooter?.state?.value ?: ItemViewModelNetworkFooter.STATE_DEFAULT
     }
 }

@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.core.view.forEachIndexed
 import androidx.databinding.BindingAdapter
+import com.hiwitech.android.mvvm.databinding.BindingCommand
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
-import com.hiwitech.android.mvvm.databinding.BindingCommand
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -61,14 +61,29 @@ private fun <T> Observable<T>.isThrottleFirst(
     }
 }
 
-@BindingAdapter(value = ["displayedChild", "layoutDirection"], requireAll = false)
-fun bindViewGroup(viewGroup: ViewGroup, position: Int?, layoutDirection: Int?) {
-    position?.let {
+@BindingAdapter(value = ["displayChild", "displayChild2", "layoutDirection"], requireAll = false)
+fun bindViewGroup(
+    viewGroup: ViewGroup,
+    displayChild: Int?,
+    displayChild2: Int?,
+    layoutDirection: Int?
+) {
+    displayChild?.let {
         viewGroup.forEachIndexed { index, view ->
             if (it == index) {
                 view.visibility = View.VISIBLE
             } else {
                 view.visibility = View.GONE
+            }
+        }
+    }
+
+    displayChild2?.let {
+        viewGroup.forEachIndexed { index, view ->
+            if (it == index) {
+                view.visibility = View.VISIBLE
+            } else {
+                view.visibility = View.INVISIBLE
             }
         }
     }
