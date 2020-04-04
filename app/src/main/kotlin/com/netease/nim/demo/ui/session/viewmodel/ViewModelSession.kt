@@ -4,6 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.common.primitives.Longs
+import com.hiwitech.android.libs.tool.replaceAt
+import com.hiwitech.android.libs.tool.toCast
+import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.shared.ext.autoLoading
+import com.hiwitech.android.shared.ext.map
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
@@ -12,21 +17,28 @@ import com.netease.nim.demo.ui.session.domain.UseCaseGetSessionList
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.uber.autodispose.autoDispose
-import com.hiwitech.android.libs.tool.replaceAt
-import com.hiwitech.android.libs.tool.toCast
-import com.hiwitech.android.mvvm.base.ArgDefault
-import com.hiwitech.android.shared.ext.autoLoading
-import com.hiwitech.android.shared.ext.map
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
 
+/**
+ * desc 消息列表ViewModel
+ * author: 朱子楚
+ * time: 2020/4/4 11:48 PM
+ * since: v 1.0.0
+ */
 class ViewModelSession @Inject constructor(
     private val useCaseGetSessionList: UseCaseGetSessionList,
     val msgService: MsgService
 ) : ViewModelBase<ArgDefault>() {
 
+    /**
+     * 会话列表的会话数据
+     */
     val sessionList = MutableLiveData<List<ItemViewModelSession>>()
 
+    /**
+     * 会话列表所有数据
+     */
     val items: LiveData<List<Any>> =
         Transformations.map<List<ItemViewModelSession>, List<Any>>(sessionList) { input ->
             val list = ArrayList<Any>()
@@ -34,12 +46,17 @@ class ViewModelSession @Inject constructor(
             list
         }
 
+    /**
+     * 注册布局
+     */
     val itemBinding = OnItemBindClass<Any>().apply {
         map<ItemViewModelSession>(BR.item, R.layout.item_session)
     }
 
-    private
-    val comparator: Comparator<ItemViewModelSession> = Comparator { left, right ->
+    /**
+     * 比较器
+     */
+    private val comparator: Comparator<ItemViewModelSession> = Comparator { left, right ->
         val mapRight = right.contact.extension ?: mapOf()
         val mapLeft = left.contact.extension ?: mapOf()
         val longRight: Long = (mapRight[SESSION_ON_TOP] ?: Long.MIN_VALUE).toCast()
@@ -54,7 +71,9 @@ class ViewModelSession @Inject constructor(
         }
     }
 
-
+    /**
+     * 加载会话数据
+     */
     fun loadSessionList() {
         useCaseGetSessionList.execute(Unit)
             .autoLoading(this)
@@ -69,6 +88,10 @@ class ViewModelSession @Inject constructor(
             )
     }
 
+    /**
+     * 处理消息数据
+     * @param list 最近会话数据
+     */
     fun parseSessionList(list: List<RecentContact>) {
         sessionList.value?.apply {
             var data = this
@@ -91,18 +114,12 @@ class ViewModelSession @Inject constructor(
         }
     }
 
+    /**
+     * 重新刷新会话列表
+     */
     fun refresh() {
         sessionList.value?.let {
             sessionList.value = it.sortedWith(comparator)
-        }
-    }
-
-
-    fun refresh(item: ItemViewModelSession) {
-        sessionList.value?.let {
-            sessionList.value = it.replaceAt(it.indexOf(item)) { item ->
-                item.copy(viewModel = item.viewModel, contact = item.contact)
-            }
         }
     }
 

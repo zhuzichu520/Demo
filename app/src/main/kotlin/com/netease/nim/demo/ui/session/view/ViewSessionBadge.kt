@@ -5,10 +5,16 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.netease.nim.demo.R
 import com.hiwitech.android.widget.badge.Badge
 import com.hiwitech.android.widget.badge.QBadgeView
+import com.netease.nim.demo.R
 
+/**
+ * desc 获取最近会话列表Item的小红点
+ * author: 朱子楚
+ * time: 2020/4/4 11:48 PM
+ * since: v 1.0.0
+ */
 class ViewSessionBadge @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {

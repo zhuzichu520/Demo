@@ -21,7 +21,12 @@ import rxhttp.wrapper.ssl.SSLSocketFactoryImpl
 import rxhttp.wrapper.ssl.X509TrustManagerImpl
 import java.util.concurrent.TimeUnit
 
-
+/**
+ * desc Application
+ * author: 朱子楚
+ * time: 2020/4/4 11:48 PM
+ * since: v 1.0.0
+ */
 class ApplicationDemo : DaggerApplication() {
 
     override fun onCreate() {
@@ -46,6 +51,9 @@ class ApplicationDemo : DaggerApplication() {
         }
     }
 
+    /**
+     * 获取默认HttopClient
+     */
     private fun getDefaultOkHttpClient(): OkHttpClient {
         val trustAllCert = X509TrustManagerImpl()
         val sslSocketFactory = SSLSocketFactoryImpl(trustAllCert)
@@ -57,6 +65,9 @@ class ApplicationDemo : DaggerApplication() {
             .build()
     }
 
+    /**
+     * 获取IM登录信息
+     */
     private fun loginInfo(): LoginInfo? {
         val account = NimUserStorage.account
         val token = NimUserStorage.token
@@ -66,10 +77,16 @@ class ApplicationDemo : DaggerApplication() {
         return null
     }
 
+    /**
+     * Dagger
+     */
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerAppComponent.factory().create(this)
     }
 
+    /**
+     * MultiDex
+     */
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
