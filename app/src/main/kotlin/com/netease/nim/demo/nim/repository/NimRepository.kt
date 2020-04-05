@@ -1,5 +1,6 @@
 package com.netease.nim.demo.nim.repository
 
+import com.hiwitech.android.shared.ext.createFlowable
 import com.netease.nim.demo.nim.NimRequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
@@ -10,9 +11,14 @@ import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
-import com.hiwitech.android.shared.ext.createFlowable
 import io.reactivex.Flowable
 
+/**
+ * desc IM数据仓库
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 interface NimRepository {
     /**
      * 登录

@@ -8,9 +8,24 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 
+/**
+ * desc IM事件
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 class NimEvent {
+    /**
+     * 最近会话事件
+     */
     data class OnRecentContactEvent(val list: List<RecentContact>)
+    /**
+     * 用户在线监听
+     */
     data class OnLineStatusEvent(val statusCode: StatusCode)
+    /**
+     * 多端登录监听
+     */
     data class OnLienClientEvent(val list: List<OnlineClient>)
     data class OnMessageStatusEvent(val message: IMMessage)
     data class OnReceiveMessageEvent(val list: List<IMMessage>)

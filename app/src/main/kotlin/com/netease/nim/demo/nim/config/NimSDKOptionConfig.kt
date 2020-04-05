@@ -3,6 +3,9 @@ package com.netease.nim.demo.nim.config
 import android.app.LauncherActivity
 import android.content.Context
 import android.text.TextUtils
+import com.hiwitech.android.libs.tool.getScreenWidth
+import com.hiwitech.android.libs.tool.toCast
+import com.hiwitech.android.shared.global.CacheGlobal
 import com.netease.nim.demo.nim.provider.NimUserInfoProvider
 import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.ServerAddresses
@@ -10,10 +13,13 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig
 import com.netease.nimlib.sdk.mixpush.MixPushConfig
 import com.netease.nimlib.sdk.msg.MessageNotifierCustomization
 import com.netease.nimlib.sdk.msg.model.IMMessage
-import com.hiwitech.android.libs.tool.getScreenWidth
-import com.hiwitech.android.libs.tool.toCast
-import com.hiwitech.android.shared.global.CacheGlobal
 
+/**
+ * desc IM初始化参数
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 object NimSDKOptionConfig {
     fun getSDKOptions(context: Context): SDKOptions {
         val options = SDKOptions()

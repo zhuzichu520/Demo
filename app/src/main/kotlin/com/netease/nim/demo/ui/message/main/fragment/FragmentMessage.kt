@@ -14,6 +14,12 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import kotlinx.android.synthetic.main.fragment_message.*
 import javax.inject.Inject
 
+/**
+ * desc 消息界面Frqagment
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMessage>() {
 
     override fun bindVariableId(): Int = BR.viewModel
@@ -39,6 +45,10 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
         )
     }
 
+    /**
+     * 加载相应的会话数据
+     * @param sessionType 会话类型
+     */
     private fun loadData(sessionType: SessionTypeEnum) {
         when (sessionType) {
             SessionTypeEnum.P2P -> {
@@ -71,6 +81,9 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
         msgService.setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None)
     }
 
+    /**
+     * 滑动到置顶位置
+     */
     private fun scrollToBottom(position: Int) {
         if (position >= 0) {
             (recycler.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)

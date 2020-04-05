@@ -3,6 +3,13 @@ package com.netease.nim.demo.ui.main.fragment
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.mvvm.base.BaseFragment
+import com.hiwitech.android.shared.base.DefaultIntFragmentPagerAdapter
+import com.hiwitech.android.shared.ext.plusBadge
+import com.hiwitech.android.shared.ext.setupWithViewPager
+import com.hiwitech.android.shared.ext.toast
+import com.hiwitech.android.widget.badge.Badge
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.databinding.FragmentMainBinding
@@ -12,17 +19,15 @@ import com.netease.nim.demo.ui.main.viewmodel.ViewModelMain
 import com.netease.nim.demo.ui.me.main.fragment.FragmentMe
 import com.netease.nim.demo.ui.session.fragment.FragmentSession
 import com.netease.nimlib.sdk.msg.MsgService
-import com.hiwitech.android.mvvm.base.ArgDefault
-import com.hiwitech.android.mvvm.base.BaseFragment
-import com.hiwitech.android.shared.base.DefaultIntFragmentPagerAdapter
-import com.hiwitech.android.shared.ext.plusBadge
-import com.hiwitech.android.shared.ext.setupWithViewPager
-import com.hiwitech.android.shared.ext.toast
-import com.hiwitech.android.widget.badge.Badge
 import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
 
-
+/**
+ * desc 主Fragment
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault>() {
 
     private val waitTime = 2000L
@@ -61,6 +66,9 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
         }
     }
 
+    /**
+     * 刷新小红点
+     */
     private fun updateBadgeNumber(number: Int) {
         badge?.badgeNumber = number
     }
@@ -75,6 +83,9 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
         NimEventManager.unRegist()
     }
 
+    /**
+     * 双击退出
+     */
     private fun initBackListener() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (System.currentTimeMillis() - touchTime < waitTime) {

@@ -3,25 +3,61 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 import android.util.LayoutDirection
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.shared.ext.toColorByResId
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
-import com.hiwitech.android.shared.ext.toColorByResId
 
+/**
+ * desc 消息Item基类
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 open class ItemViewModelBaseMessage(
     val message: IMMessage
 ) {
+    /**
+     * 会话id
+     */
     val sessionId = message.sessionId
+    /**
+     * 姓名
+     */
     val name = MutableLiveData<String>()
+    /**
+     * 头像
+     */
     val avatar = MutableLiveData<String>()
+    /**
+     * 是否是我的消息
+     */
     val isMe = MutableLiveData<Boolean>()
+    /**
+     * 头像错误图
+     */
     val error = MutableLiveData<Int>()
+    /**
+     * 头像占位图
+     */
     val placeholder = MutableLiveData<Int>()
+    /**
+     * 是否显示姓名
+     */
     val displayName = MutableLiveData<Int>()
+    /**
+     * 字体颜色
+     */
     val textColor = MutableLiveData<Int>()
+    /**
+     * 类容背景
+     */
     val background = MutableLiveData<Int>()
+    /**
+     * 布局方向
+     */
     val layoutDirection = MutableLiveData<Int>()
 
     init {

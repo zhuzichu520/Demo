@@ -9,6 +9,12 @@ import rxhttp.wrapper.entity.ParameterizedTypeImpl
 import rxhttp.wrapper.parse.AbstractParser
 import java.lang.reflect.Type
 
+/**
+ * desc IM 解析器
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 @Parser(name = "NimResponse")
 class NimResponseParser<T>(type: Type) : AbstractParser<Optional<T>>(type) {
     override fun onParse(response: okhttp3.Response): Optional<T> {

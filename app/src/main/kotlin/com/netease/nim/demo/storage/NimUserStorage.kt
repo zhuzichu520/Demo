@@ -1,10 +1,16 @@
 package com.netease.nim.demo.storage
 
-import com.netease.nimlib.sdk.auth.LoginInfo
-import com.tencent.mmkv.MMKV
 import com.hiwitech.android.shared.storage.BooleanPreference
 import com.hiwitech.android.shared.storage.StringPreference
+import com.netease.nimlib.sdk.auth.LoginInfo
+import com.tencent.mmkv.MMKV
 
+/**
+ * desc IM User 存储
+ * author: 朱子楚
+ * time: 2020/4/5 7:48 PM
+ * since: v 1.0.0
+ */
 object NimUserStorage {
 
     private const val PREFS_NAME = "mmkv_user"
