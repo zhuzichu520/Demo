@@ -2,15 +2,20 @@ package com.netease.nim.demo.ui.message.main.fragment
 
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hiwitech.android.libs.internal.MainHandler
+import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMeBinding
+import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
+import com.uber.autodispose.autoDispose
 import kotlinx.android.synthetic.main.fragment_message.*
 import javax.inject.Inject
 
@@ -65,8 +70,31 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
 
     override fun initViewObservable() {
         super.initViewObservable()
+        /**
+         * recyclerview滑动到指定位置
+         */
         viewModel.onScrollPositionsEvent.observe(viewLifecycleOwner, Observer {
-            scrollToBottom(it)
+            scrollToPosition(it)
+        })
+        /**
+         * 消息接收监听
+         */
+        RxBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
+            .bindToSchedulers()
+            .autoDispose(viewModel)
+            .subscribe {
+                viewModel.addMessage(it.list)
+            }
+        /**
+         * 添加数据完成
+         */
+        viewModel.onAddMessageCompletedEvent.observe(viewLifecycleOwner, Observer {
+            if (isLastVisible()) {
+                //最后一条可见 滑动到底部
+                MainHandler.postDelayed { scrollToPosition(it.size - 1) }
+            } else {
+                //todo zhuzichu 最后一条不可见 显示提醒有新消息
+            }
         })
     }
 
@@ -84,9 +112,20 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
     /**
      * 滑动到置顶位置
      */
-    private fun scrollToBottom(position: Int) {
+    private fun scrollToPosition(position: Int) {
         if (position >= 0) {
             (recycler.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
         }
     }
+
+    /**
+     * 判断最后一条是否可见
+     */
+    private fun isLastVisible(): Boolean {
+        val position = viewModel.items.size - 1
+        val findLastPosition =
+            (recycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+        return findLastPosition == position
+    }
+
 }

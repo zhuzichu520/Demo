@@ -38,6 +38,11 @@ class ViewModelMessage @Inject constructor(
     val onScrollPositionsEvent = SingleLiveEvent<Int>()
 
     /**
+     * 添加数据完成事件
+     */
+    val onAddMessageCompletedEvent = SingleLiveEvent<List<Any>>()
+
+    /**
      * 标题
      */
     val title = MutableLiveData<String>()
@@ -131,19 +136,7 @@ class ViewModelMessage @Inject constructor(
             .autoDispose(this)
             .subscribe(
                 {
-                    val list = it.map { item ->
-                        when (item.msgType) {
-                            MsgTypeEnum.text -> {
-                                ItemViewModelTextMessage(item)
-                            }
-                            MsgTypeEnum.image -> {
-                                ItemViewModelPictureMessage(item)
-                            }
-                            else -> {
-                                ItemViewModelUnknownMessage(item)
-                            }
-                        }
-                    }
+                    val list = handleMessageList(it)
                     val data = pageHelper.add(list, true)
                     if (true == isFirst) {
                         onScrollPositionsEvent.value = data.size - 1
@@ -153,6 +146,37 @@ class ViewModelMessage @Inject constructor(
                     handleThrowable(it)
                 }
             )
+    }
+
+    /**
+     * 添加新消息
+     *
+     * @param list 消息集合
+     */
+    fun addMessage(list: List<IMMessage>) {
+        val data = handleMessageList(list)
+        messageList.update(messageList + data)
+        onAddMessageCompletedEvent.value = messageList
+    }
+
+    /**
+     * 处理消息集合返回数据模型集合
+     * @param list 消息集合
+     */
+    private fun handleMessageList(list: List<IMMessage>): List<ItemViewModelBaseMessage> {
+        return list.map { item ->
+            when (item.msgType) {
+                MsgTypeEnum.text -> {
+                    ItemViewModelTextMessage(item)
+                }
+                MsgTypeEnum.image -> {
+                    ItemViewModelPictureMessage(item)
+                }
+                else -> {
+                    ItemViewModelUnknownMessage(item)
+                }
+            }
+        }
     }
 
 }

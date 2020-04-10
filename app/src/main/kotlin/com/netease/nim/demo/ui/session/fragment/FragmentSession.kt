@@ -18,9 +18,7 @@ import com.uber.autodispose.autoDispose
  * time: 2020/4/4 11:48 PM
  * since: v 1.0.0
  */
-class FragmentSession(
-    private val closure: Int.() -> Unit
-) : FragmentBase<FragmentSessionBinding, ViewModelSession, ArgDefault>() {
+class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, ArgDefault>() {
 
     override fun bindVariableId(): Int = BR.viewModel
 
@@ -30,6 +28,8 @@ class FragmentSession(
         super.initLazyData()
         viewModel.loadSessionList()
     }
+
+    var closure: (Int.() -> Unit)? = null
 
     override fun initViewObservable() {
         super.initViewObservable()
@@ -45,7 +45,7 @@ class FragmentSession(
             it.forEach { item ->
                 number += item.contact.unreadCount
             }
-            closure.invoke(number)
+            closure?.invoke(number)
         })
 
     }

@@ -43,8 +43,10 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
     override fun initView() {
         val fragments = listOf<Fragment>(
-            FragmentSession {
-                updateBadgeNumber(this)
+            FragmentSession().apply {
+                closure = {
+                    updateBadgeNumber(this)
+                }
             },
             FragmentContact(),
             FragmentMe()
