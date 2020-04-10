@@ -30,9 +30,7 @@ class PageHelper<T>(
         }
         setFooterState(ItemViewModelNetworkFooter.STATE_LOADING)
         if (ItemViewModelNetworkFooter.STATE_LOADING == getFooterState()) {
-            MainHandler.postDelayed(50){
-                onLoadMore?.invoke()
-            }
+            onLoadMore?.invoke()
         }
     }
 
@@ -42,9 +40,7 @@ class PageHelper<T>(
         }
         setHeaderState(ItemViewModelNetworkFooter.STATE_LOADING)
         if (ItemViewModelNetworkFooter.STATE_LOADING == getHeaderState()) {
-            MainHandler.postDelayed(50){
-                onRefresh?.invoke()
-            }
+            onRefresh?.invoke()
         }
     }
 
@@ -61,9 +57,9 @@ class PageHelper<T>(
         }
     }
 
-
     val pageItems: LiveData<List<Any>> = Transformations.map<List<T>, List<Any>>(items) { input ->
         val list = mutableListOf<Any>()
+
         itemHeader?.let {
             list.add(it)
         }
@@ -79,23 +75,27 @@ class PageHelper<T>(
         map<ItemViewModelNetworkHeader>(BR.item, R.layout.item_network_header)
     }
 
-    fun <T> add(list: List<T>, isReverse: Boolean = true): List<T> {
+    fun add(list: List<T>, isReverse: Boolean = true): List<T> {
         if (isReverse) {
-            if (list.size < pageSize) {
-                setHeaderState(ItemViewModelNetworkFooter.STATE_END)
-            } else {
-                setHeaderState(ItemViewModelNetworkFooter.STATE_FINISH)
+            items.value = list.plus(items.value ?: listOf())
+            MainHandler.postDelayed {
+                if (list.size < pageSize) {
+                    setHeaderState(ItemViewModelNetworkHeader.STATE_END)
+                } else {
+                    setHeaderState(ItemViewModelNetworkHeader.STATE_FINISH)
+                }
             }
-            items.value = list.plus(items.value ?: listOf()).toCast()
         } else {
-            if (list.size < pageSize) {
-                setFooterState(ItemViewModelNetworkFooter.STATE_END)
-            } else {
-                setFooterState(ItemViewModelNetworkFooter.STATE_FINISH)
+            items.value = (items.value ?: listOf()).plus(list)
+            MainHandler.postDelayed {
+                if (list.size < pageSize) {
+                    setFooterState(ItemViewModelNetworkFooter.STATE_END)
+                } else {
+                    setFooterState(ItemViewModelNetworkFooter.STATE_FINISH)
+                }
             }
-            items.value = (items.value ?: listOf()).plus(list).toCast()
         }
-        return (items.value ?: listOf()).toCast()
+        return items.value ?: listOf()
     }
 
     private fun setHeaderState(state: Int) {
@@ -107,7 +107,7 @@ class PageHelper<T>(
     }
 
     private fun getHeaderState(): Int {
-        return itemHeader?.state?.value ?: ItemViewModelNetworkFooter.STATE_DEFAULT
+        return itemHeader?.state?.value ?: ItemViewModelNetworkHeader.STATE_DEFAULT
     }
 
     private fun getFooterState(): Int {

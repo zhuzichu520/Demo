@@ -2,6 +2,8 @@ package com.hiwitech.android.shared.ext
 
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
+import com.hiwitech.android.shared.widget.page.ItemViewModelNetworkFooter
+import com.hiwitech.android.shared.widget.page.ItemViewModelNetworkHeader
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
@@ -45,7 +47,26 @@ inline fun <reified T> itemDiffOf(crossinline closure: (oldItem: T, newItem: T) 
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return if (oldItem is T && newItem is T) {
                 closure(oldItem, newItem)
-            } else oldItem == newItem
+            } else oldItem.diffEquals(newItem)
+        }
+
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean =
+            oldItem.diffEquals(newItem)
+    }
+}
+
+inline fun <reified T> itemPageDiffOf(crossinline closure: (oldItem: T, newItem: T) -> Boolean): DiffUtil.ItemCallback<Any> {
+    return object : DiffUtil.ItemCallback<Any>() {
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is ItemViewModelNetworkHeader && newItem is ItemViewModelNetworkHeader) {
+                return true
+            }
+            if (oldItem is ItemViewModelNetworkFooter && newItem is ItemViewModelNetworkFooter) {
+                return true
+            }
+            return if (oldItem is T && newItem is T) {
+                closure(oldItem, newItem)
+            } else oldItem.diffEquals(newItem)
         }
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean =

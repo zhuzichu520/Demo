@@ -22,7 +22,7 @@ open class ItemViewModelBaseMessage(
     /**
      * 会话id
      */
-    val sessionId = message.sessionId
+    val uuid = message.uuid
     /**
      * 姓名
      */

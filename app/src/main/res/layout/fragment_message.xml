@@ -35,6 +35,7 @@
             android:overScrollMode="never"
             app:itemBinding="@{viewModel.itemBinding}"
             app:items="@{viewModel.items}"
+            app:diffConfig="@{viewModel.diff}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:onRefreshCommand="@{viewModel.onRefreshCommand}" />

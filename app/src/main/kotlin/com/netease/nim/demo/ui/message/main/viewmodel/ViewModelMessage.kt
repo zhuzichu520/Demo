@@ -1,7 +1,9 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
+import com.hiwitech.android.shared.ext.itemPageDiffOf
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.widget.page.PageHelper
 import com.netease.nim.demo.BR
@@ -56,12 +58,14 @@ class ViewModelMessage @Inject constructor(
             messageList.value?.let {
                 loadMessage(it[0].message)
             }
-        })
+        }
+    )
 
     /**
      * 刷新指令
      */
     val onRefreshCommand = pageHelper.onRefreshCommand
+
 
     /**
      * 数据列表
@@ -77,6 +81,12 @@ class ViewModelMessage @Inject constructor(
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
     }
 
+    /**
+     * 初始化diff
+     */
+    val diff = itemPageDiffOf<ItemViewModelBaseMessage> { oldItem, newItem ->
+        oldItem.uuid == newItem.uuid
+    }
 
     /**
      * 加载用户详情信息
@@ -122,24 +132,24 @@ class ViewModelMessage @Inject constructor(
             .autoDispose(this)
             .subscribe(
                 {
-                    val list = it.map { item ->
-                        when (item.msgType) {
-                            MsgTypeEnum.text -> {
-                                ItemViewModelTextMessage(item)
-                            }
-                            MsgTypeEnum.image -> {
-                                ItemViewModelPictureMessage(item)
-                            }
-                            else -> {
-                                ItemViewModelUnknownMessage(item)
+                    MainHandler.postDelayed(500) {
+                        val list = it.map { item ->
+                            when (item.msgType) {
+                                MsgTypeEnum.text -> {
+                                    ItemViewModelTextMessage(item)
+                                }
+                                MsgTypeEnum.image -> {
+                                    ItemViewModelPictureMessage(item)
+                                }
+                                else -> {
+                                    ItemViewModelUnknownMessage(item)
+                                }
                             }
                         }
-                    }
-                    val data = pageHelper.add(list, true)
-                    if (true == isFirst) {
-                        onScrollPositionsEvent.value = data.size - 1
-                    } else {
-                        onScrollPositionsEvent.value = list.size + 1
+                        val data = pageHelper.add(list, true)
+                        if (true == isFirst) {
+                            onScrollPositionsEvent.value = data.size - 1
+                        }
                     }
                 },
                 {
