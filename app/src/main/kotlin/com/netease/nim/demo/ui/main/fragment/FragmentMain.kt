@@ -80,6 +80,9 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
     override fun onDestroy() {
         super.onDestroy()
+        badge?.let {
+            badge = null
+        }
         NimEventManager.unRegist()
     }
 

@@ -66,7 +66,7 @@ inline fun <reified T> itemPageDiffOf(crossinline closure: (oldItem: T, newItem:
             }
             return if (oldItem is T && newItem is T) {
                 closure(oldItem, newItem)
-            } else oldItem.diffEquals(newItem)
+            } else oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean =

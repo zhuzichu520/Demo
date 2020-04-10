@@ -1,20 +1,21 @@
 package com.hiwitech.android.shared.widget.page
 
-import androidx.lifecycle.LiveData
+import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.hiwitech.android.libs.internal.MainHandler
-import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.BR
 import com.hiwitech.android.shared.R
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.map
+import me.tatarka.bindingcollectionadapter2.collections.AsyncDiffObservableList
+import me.tatarka.bindingcollectionadapter2.collections.DiffObservableList
+import me.tatarka.bindingcollectionadapter2.collections.MergeObservableList
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class PageHelper<T>(
+class PageHelper(
     val viewModel: BaseViewModel<*>,
-    val items: MutableLiveData<List<T>>,
+    val items: ObservableList<Any>,
     val pageSize: Int,
     onLoadMore: (() -> Unit)? = null,
     onRefresh: (() -> Unit)? = null,
@@ -23,6 +24,8 @@ class PageHelper<T>(
 
     private var itemHeader: ItemViewModelNetworkHeader? = null
     private var itemFooter: ItemViewModelNetworkFooter? = null
+
+    val isRefresh = MutableLiveData<Boolean>()
 
     val onLoadMoreCommand = createCommand {
         if (ItemViewModelNetworkFooter.STATE_END == getFooterState()) {
@@ -39,7 +42,7 @@ class PageHelper<T>(
             return@createCommand
         }
         setHeaderState(ItemViewModelNetworkFooter.STATE_LOADING)
-        if (ItemViewModelNetworkFooter.STATE_LOADING == getHeaderState()) {
+        if (ItemViewModelNetworkHeader.STATE_LOADING == getHeaderState()) {
             onRefresh?.invoke()
         }
     }
@@ -57,17 +60,11 @@ class PageHelper<T>(
         }
     }
 
-    val pageItems: LiveData<List<Any>> = Transformations.map<List<T>, List<Any>>(items) { input ->
-        val list = mutableListOf<Any>()
-
-        itemHeader?.let {
-            list.add(it)
-        }
-        list.addAll(input.toCast())
+    val pageItems: MergeObservableList<Any> = MergeObservableList<Any>().apply {
+        insertList(items)
         itemFooter?.let {
-            list.add(it)
+            insertItem(it)
         }
-        list
     }
 
     val pageItemBinding = OnItemBindClass<Any>().apply {
@@ -75,9 +72,15 @@ class PageHelper<T>(
         map<ItemViewModelNetworkHeader>(BR.item, R.layout.item_network_header)
     }
 
-    fun add(list: List<T>, isReverse: Boolean = true): List<T> {
+    fun add(list: List<Any>, isReverse: Boolean = true): List<Any> {
         if (isReverse) {
-            items.value = list.plus(items.value ?: listOf())
+            val data = list + items
+            (items as? DiffObservableList)?.let {
+                items.update(data)
+            }
+            (items as? AsyncDiffObservableList)?.let {
+                items.update(data)
+            }
             MainHandler.postDelayed {
                 if (list.size < pageSize) {
                     setHeaderState(ItemViewModelNetworkHeader.STATE_END)
@@ -86,7 +89,13 @@ class PageHelper<T>(
                 }
             }
         } else {
-            items.value = (items.value ?: listOf()).plus(list)
+            val data = items + list
+            (items as? DiffObservableList)?.let {
+                items.update(data)
+            }
+            (items as? AsyncDiffObservableList)?.let {
+                items.update(data)
+            }
             MainHandler.postDelayed {
                 if (list.size < pageSize) {
                     setFooterState(ItemViewModelNetworkFooter.STATE_END)
@@ -95,11 +104,12 @@ class PageHelper<T>(
                 }
             }
         }
-        return items.value ?: listOf()
+        return items
     }
 
     private fun setHeaderState(state: Int) {
         itemHeader?.state?.value = state
+        isRefresh.value = ItemViewModelNetworkHeader.STATE_LOADING == state
     }
 
     private fun setFooterState(state: Int) {

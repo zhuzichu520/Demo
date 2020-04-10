@@ -1,7 +1,6 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
 import com.hiwitech.android.shared.ext.itemPageDiffOf
 import com.hiwitech.android.shared.ext.map
@@ -16,6 +15,7 @@ import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
+import me.tatarka.bindingcollectionadapter2.collections.AsyncDiffObservableList
 import javax.inject.Inject
 
 /**
@@ -45,7 +45,10 @@ class ViewModelMessage @Inject constructor(
     /**
      * 消息数据
      */
-    private val messageList = MutableLiveData<List<ItemViewModelBaseMessage>>()
+    private val messageList =
+        AsyncDiffObservableList(itemPageDiffOf<ItemViewModelBaseMessage> { oldItem, newItem ->
+            oldItem.uuid == newItem.uuid
+        })
 
     /**
      * 分页
@@ -55,11 +58,14 @@ class ViewModelMessage @Inject constructor(
         items = messageList,
         pageSize = pageSize,
         onRefresh = {
-            messageList.value?.let {
-                loadMessage(it[0].message)
-            }
+            loadMessage((messageList[0] as ItemViewModelBaseMessage).message)
         }
     )
+
+    /**
+     * 上拉刷新状态
+     */
+    val isRefresh = pageHelper.isRefresh
 
     /**
      * 刷新指令
@@ -79,13 +85,6 @@ class ViewModelMessage @Inject constructor(
         map<ItemViewModelTextMessage>(BR.item, R.layout.item_message_text)
         map<ItemViewModelPictureMessage>(BR.item, R.layout.item_message_picture)
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
-    }
-
-    /**
-     * 初始化diff
-     */
-    val diff = itemPageDiffOf<ItemViewModelBaseMessage> { oldItem, newItem ->
-        oldItem.uuid == newItem.uuid
     }
 
     /**
@@ -132,24 +131,22 @@ class ViewModelMessage @Inject constructor(
             .autoDispose(this)
             .subscribe(
                 {
-                    MainHandler.postDelayed(500) {
-                        val list = it.map { item ->
-                            when (item.msgType) {
-                                MsgTypeEnum.text -> {
-                                    ItemViewModelTextMessage(item)
-                                }
-                                MsgTypeEnum.image -> {
-                                    ItemViewModelPictureMessage(item)
-                                }
-                                else -> {
-                                    ItemViewModelUnknownMessage(item)
-                                }
+                    val list = it.map { item ->
+                        when (item.msgType) {
+                            MsgTypeEnum.text -> {
+                                ItemViewModelTextMessage(item)
+                            }
+                            MsgTypeEnum.image -> {
+                                ItemViewModelPictureMessage(item)
+                            }
+                            else -> {
+                                ItemViewModelUnknownMessage(item)
                             }
                         }
-                        val data = pageHelper.add(list, true)
-                        if (true == isFirst) {
-                            onScrollPositionsEvent.value = data.size - 1
-                        }
+                    }
+                    val data = pageHelper.add(list, true)
+                    if (true == isFirst) {
+                        onScrollPositionsEvent.value = data.size - 1
                     }
                 },
                 {
@@ -157,6 +154,5 @@ class ViewModelMessage @Inject constructor(
                 }
             )
     }
-
 
 }
