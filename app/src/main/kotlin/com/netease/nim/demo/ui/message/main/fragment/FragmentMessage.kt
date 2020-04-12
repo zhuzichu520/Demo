@@ -1,13 +1,8 @@
 package com.netease.nim.demo.ui.message.main.fragment
 
-import android.view.MotionEvent
-import android.view.View
-import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
-import com.hiwitech.android.libs.tool.*
 import com.hiwitech.android.shared.bus.RxBus
 import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.netease.nim.demo.BR
@@ -15,7 +10,6 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMeBinding
 import com.netease.nim.demo.nim.event.NimEvent
-import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
 import com.netease.nimlib.sdk.msg.MessageBuilder
@@ -48,18 +42,6 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
         sessionType = SessionTypeEnum.typeOfValue(arg.sessionType)
     }
 
-    override fun initView() {
-        super.initView()
-        et_input.setOnTouchListener { _, event ->
-            if (MotionEvent.ACTION_UP == event.action) {
-                if (!isSoftKeyboardShown())
-                    viewModel.onClickCenterKeyboardCommand.execute()
-            }
-            true
-        }
-        showKeyboard(true)
-    }
-
     override fun initLazyData() {
         super.initLazyData()
         loadData(sessionType)
@@ -90,103 +72,6 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
     override fun initViewObservable() {
         super.initViewObservable()
 
-        viewModel.onKeyboardVoiceChangeEvent.observe(viewLifecycleOwner, Observer {
-            if (!viewModel.isInitLazyView)
-                return@Observer
-            when (it) {
-                ViewModelMessage.TYPE_LEFT_VOICE -> {
-                    //点击了键盘
-                    if (!isSoftKeyboardShown() && ViewModelMessage.TYPE_CENTER_EMOJI == viewModel.onKeyboardEmojiChangeEvent.value) {
-                        showKeyboard()
-                    }
-                }
-                ViewModelMessage.TYPE_LEFT_KEYBOARD -> {
-                    //点击了语音
-                    if (isSoftKeyboardShown()) {
-                        hideKeyboard()
-                    } else {
-                        hideBottom()
-                    }
-                    if (ViewModelMessage.TYPE_CENTER_KEYBOARD == viewModel.onKeyboardEmojiChangeEvent.value) {
-                        viewModel.onKeyboardEmojiChangeEvent.value =
-                            ViewModelMessage.TYPE_CENTER_EMOJI
-                    }
-                }
-            }
-            viewModel.input.value = viewModel.input.value
-        })
-
-        viewModel.onKeyboardEmojiChangeEvent.observe(viewLifecycleOwner, Observer {
-            if (!viewModel.isInitLazyView)
-                return@Observer
-            when (it) {
-                ViewModelMessage.TYPE_CENTER_EMOJI -> {
-                    //点击了键盘
-                    if (!isSoftKeyboardShown() && ViewModelMessage.TYPE_LEFT_VOICE == viewModel.onKeyboardVoiceChangeEvent.value) {
-                        showKeyboard()
-                    }
-                }
-                ViewModelMessage.TYPE_CENTER_KEYBOARD -> {
-                    showBottomEmoji()
-                    if (ViewModelMessage.TYPE_LEFT_KEYBOARD == viewModel.onKeyboardVoiceChangeEvent.value) {
-                        viewModel.onKeyboardVoiceChangeEvent.value =
-                            ViewModelMessage.TYPE_LEFT_VOICE
-                    }
-                }
-            }
-        })
-
-        viewModel.onBottomChangeEvent.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                ViewModelMessage.TYPE_BOTTOM_HIDE -> {
-                    layout_bottom.visibility = View.GONE
-                }
-                ViewModelMessage.TYPE_BOTTOM_EMOJI -> {
-                    //点击了Emoji
-                    val emojiHeight = dp2px(requireContext(), 320f)
-                    layout_bottom.layoutParams.height = emojiHeight
-                    if (isSoftKeyboardShown()) {
-                        lockRecyclerViewHeight(
-                            layout_content.bottom - recycler.top - layout_input.height +
-                                    getSoftKeyboardHeightLocalValue() - emojiHeight
-                        )
-                        hideKeyboard()
-                    } else {
-
-                    }
-                    layout_bottom.visibility = View.VISIBLE
-                    unlockRecyclerViewHeight()
-                }
-                ViewModelMessage.TYPE_BOTTOM_MORE -> {
-                    //点击了More
-                    val emojiHeight = getSoftKeyboardHeightLocalValue()
-                    layout_bottom.layoutParams.height = emojiHeight
-                    lockRecyclerViewHeight(
-                        layout_content.bottom - recycler.top - layout_input.height-emojiHeight
-                    )
-                    if (isSoftKeyboardShown()) {
-                        hideKeyboard()
-                    }
-                    layout_bottom.visibility = View.VISIBLE
-                    unlockRecyclerViewHeight()
-                }
-            }
-        })
-
-        /**
-         * 输入内容监听事件
-         */
-        viewModel.input.observe(viewLifecycleOwner, Observer {
-            if (
-                !it.isNullOrEmpty() &&
-                ViewModelMessage.TYPE_LEFT_VOICE == viewModel.onKeyboardVoiceChangeEvent.value
-            ) {
-                viewModel.onMoreSendChangeEvent.value = ViewModelMessage.TYPE_RIGHT_SEND
-            } else {
-                viewModel.onMoreSendChangeEvent.value = ViewModelMessage.TYPE_RIGHT_MORE
-            }
-        })
-
         /**
          * recyclerview滑动到指定位置
          */
@@ -215,68 +100,6 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
         })
     }
 
-    private fun hideBottom() {
-        viewModel.onBottomChangeEvent.value = ViewModelMessage.TYPE_BOTTOM_HIDE
-    }
-
-    private fun showBottomEmoji() {
-        viewModel.onBottomChangeEvent.value = ViewModelMessage.TYPE_BOTTOM_EMOJI
-        MainHandler.postDelayed {
-            scrollToPosition(viewModel.items.size - 1)
-        }
-    }
-
-    /**
-     * 释放锁定RecyclerView的高度
-     */
-    private fun lockRecyclerViewHeight(height: Int = recycler.height) {
-        val layoutParams = recycler.layoutParams as LinearLayout.LayoutParams
-        layoutParams.height = height
-        layoutParams.weight = 0f
-    }
-
-    /**
-     * 释放锁定的RecyclerView的高度
-     */
-    private fun unlockRecyclerViewHeight() {
-        MainHandler.postDelayed {
-            val layoutParams = recycler.layoutParams as LinearLayout.LayoutParams
-            layoutParams.weight = 1f
-        }
-    }
-
-    private fun showKeyboard(isSave: Boolean = false) {
-        MainHandler.postDelayed {
-            lockRecyclerViewHeight(layout_content.bottom - recycler.top - layout_input.height - getSoftKeyboardHeightLocalValue())
-            hideBottom()
-            showKeyboard(requireContext(), et_input)
-            unlockRecyclerViewHeight()
-        }
-        MainHandler.postDelayed {
-            scrollToPosition(viewModel.items.size - 1)
-        }
-    }
-
-    private fun hideKeyboard() {
-        closeKeyboard(et_input)
-    }
-
-    private fun getSoftKeyboardHeight(): Int {
-        return (getSoftKeyboardHeight(requireActivity()) + getStatusBarHeight(requireActivity())).apply {
-            if (this != 0) {
-                NimUserStorage.softKeyboardHeight = this
-            }
-        }
-    }
-
-    private fun getSoftKeyboardHeightLocalValue(): Int {
-        return NimUserStorage.softKeyboardHeight
-    }
-
-    private fun isSoftKeyboardShown(): Boolean {
-        return getSoftKeyboardHeight() != 0
-    }
-
     override fun onResume() {
         super.onResume()
         msgService.setChattingAccount(arg.contactId, sessionType)
@@ -286,7 +109,6 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
     override fun onPause() {
         super.onPause()
         msgService.setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None)
-        et_input.clearFocus()
     }
 
     /**

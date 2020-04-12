@@ -49,128 +49,14 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:onRefreshCommand="@{viewModel.onRefreshCommand}" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="8dp">
 
-                    <FrameLayout
-                        android:id="@+id/layout_left"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginBottom="12dp"
-                        app:displayChild="@{viewModel.onKeyboardVoiceChangeEvent}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:onClickCommand="@{viewModel.onClickVoiceCommand}"
-                            app:srcCompat="@mipmap/nim_input_voice" />
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:onClickCommand="@{viewModel.onClickLeftKeyboardCommand}"
-                            app:srcCompat="@mipmap/nim_input_keyboard" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/nim_input_edit"
-                        app:displayChild="@{viewModel.onKeyboardVoiceChangeEvent}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/layout_emoji"
-                        app:layout_constraintStart_toEndOf="@+id/layout_left"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/et_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:autoLink="web|email|phone"
-                            android:background="@null"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:maxLength="5000"
-                            android:maxLines="3"
-                            android:text="@={viewModel.input}"
-                            android:visibility="gone" />
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/et_audio"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@null"
-                            android:editable="false"
-                            android:gravity="center"
-                            android:text="@string/record_audio" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:id="@+id/layout_emoji"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="12dp"
-                        app:displayChild="@{viewModel.onKeyboardEmojiChangeEvent}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/layout_right">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:onClickCommand="@{viewModel.onClickEmojiCommand}"
-                            app:srcCompat="@mipmap/nim_input_emoji" />
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:onClickCommand="@{viewModel.onClickCenterKeyboardCommand}"
-                            app:srcCompat="@mipmap/nim_input_keyboard" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:id="@+id/layout_right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="12dp"
-                        app:displayChild="@{viewModel.onMoreSendChangeEvent}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            app:onClickCommand="@{viewModel.onClickMoreCommand}"
-                            app:srcCompat="@mipmap/nim_input_more" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@drawable/nim_input_send"
-                            android:text="@string/send"
-                            android:textColor="@color/white" />
-
-                    </FrameLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <include layout="@layout/layout_input" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="320dp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent" />
             </LinearLayout>
 
