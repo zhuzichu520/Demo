@@ -2,6 +2,7 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
+import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.itemPageDiffOf
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.widget.page.PageHelper
@@ -30,7 +31,72 @@ class ViewModelMessage @Inject constructor(
     private val useCaseGetMessageList: UseCaseGetMessageList
 ) : ViewModelBase<ArgMessage>() {
 
+    companion object {
+        const val TYPE_LEFT_VOICE = 0
+        const val TYPE_LEFT_KEYBOARD = 1
+
+        const val TYPE_CENTER_EMOJI = 0
+        const val TYPE_CENTER_KEYBOARD = 1
+
+        const val TYPE_RIGHT_MORE = 0
+        const val TYPE_RIGHT_SEND = 1
+
+        const val TYPE_BOTTOM_EMOJI = 0
+        const val TYPE_BOTTOM_MORE = 1
+        const val TYPE_BOTTOM_HIDE = -1
+    }
+
     private val pageSize = 30
+
+    val onKeyboardVoiceChangeEvent = MutableLiveData<Int>(TYPE_LEFT_VOICE)
+
+    val onKeyboardEmojiChangeEvent = MutableLiveData<Int>(TYPE_CENTER_EMOJI)
+
+    val onMoreSendChangeEvent = MutableLiveData<Int>(TYPE_RIGHT_MORE)
+
+    val onBottomChangeEvent = SingleLiveEvent<Int>().apply {
+        value = TYPE_BOTTOM_HIDE
+    }
+
+    /**
+     * 底部editText的输入内容 数据双向绑定
+     */
+    val input = MutableLiveData<String>()
+
+    /**
+     * 点击录音icon
+     */
+    val onClickVoiceCommand = createCommand {
+        onKeyboardVoiceChangeEvent.value = TYPE_LEFT_KEYBOARD
+    }
+
+    /**
+     * 点击左边键盘icon
+     */
+    val onClickLeftKeyboardCommand = createCommand {
+        onKeyboardVoiceChangeEvent.value = TYPE_LEFT_VOICE
+    }
+
+    /**
+     * 点击Emoji
+     */
+    val onClickEmojiCommand = createCommand {
+        onKeyboardEmojiChangeEvent.value = TYPE_CENTER_KEYBOARD
+    }
+
+    /**
+     * 点击中间键盘Icon
+     */
+    val onClickCenterKeyboardCommand = createCommand {
+        onKeyboardEmojiChangeEvent.value = TYPE_CENTER_EMOJI
+    }
+
+    /**
+     * 点击更多布局
+     */
+    val onClickMoreCommand = createCommand {
+        onBottomChangeEvent.value = TYPE_BOTTOM_MORE
+    }
 
     /**
      * 滑动事件

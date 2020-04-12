@@ -12,10 +12,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
-        android:foreground="@drawable/ripple_light_with_border"
-        app:onClickCommand="@{item.onClickCommand}"
-        app:onLongClickViewCommand="@{item.onLongClickCommand}">
+        android:layout_height="68dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/header"
@@ -91,6 +88,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:number="@{item.number}"
+            app:onClickCommand="@{item.onClickCommand}"
+            android:foreground="@drawable/ripple_light_with_border"
+            app:onLongClickViewCommand="@{item.onLongClickCommand}"
             app:onDragStateChangedCommamnd="@{item.onDragStateChangedCommamnd}" />
 
         <androidx.appcompat.widget.AppCompatImageView

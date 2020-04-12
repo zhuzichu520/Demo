@@ -1,6 +1,7 @@
 package com.netease.nim.demo.storage
 
 import com.hiwitech.android.shared.storage.BooleanPreference
+import com.hiwitech.android.shared.storage.IntPreference
 import com.hiwitech.android.shared.storage.StringPreference
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.tencent.mmkv.MMKV
@@ -22,6 +23,7 @@ object NimUserStorage {
     var account by StringPreference(prefs, null)
     var token by StringPreference(prefs, null)
     var notifyToggle by BooleanPreference(prefs, true)
+    var softKeyboardHeight by IntPreference(prefs, 0)
 
     fun logout() {
         account = null

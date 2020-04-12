@@ -1,5 +1,6 @@
 package com.hiwitech.android.shared.databinding.view
 
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
@@ -8,12 +9,21 @@ import androidx.databinding.BindingAdapter
 import com.hiwitech.android.mvvm.databinding.BindingCommand
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
+import com.jakewharton.rxbinding3.view.touches
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 
 @BindingAdapter(
-    value = ["onClickCommand", "onLongClickCommand", "onClickViewCommand", "onLongClickViewCommand", "isThrottleFirst"],
+    value =
+    [
+        "onClickCommand",
+        "onLongClickCommand",
+        "onClickViewCommand",
+        "onLongClickViewCommand",
+        "onTouchCommmand",
+        "isThrottleFirst"
+    ],
     requireAll = false
 )
 fun onClickCommand(
@@ -22,6 +32,7 @@ fun onClickCommand(
     longClickCommand: BindingCommand<*>?,
     onClickViewCommand: BindingCommand<View>?,
     onLongClickViewCommand: BindingCommand<View>?,
+    onTouchCommmand: BindingCommand<MotionEvent>?,
     isThrottleFirst: Boolean?
 ) {
     clickCommand?.apply {
@@ -45,6 +56,12 @@ fun onClickCommand(
     onLongClickViewCommand?.apply {
         view.longClicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
             execute(view)
+        }
+    }
+
+    onTouchCommmand?.apply {
+        view.touches().isThrottleFirst(isThrottleFirst ?: true).subscribe {
+            execute(it)
         }
     }
 }

@@ -20,4 +20,6 @@
 
     <string name="unsupport_title">无法显示该内容</string>
     <string name="unsupport_desc">客户端版本不支持该内容</string>
+    <string name="record_audio">按住 说话</string>
+    <string name="send">发送</string>
 </resources>
