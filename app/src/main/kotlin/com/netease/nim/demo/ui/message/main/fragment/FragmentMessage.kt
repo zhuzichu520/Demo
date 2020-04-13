@@ -57,7 +57,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         super.initView()
         message_input.apply {
             recycler.post {
-                attachContentView(recycler)
+                attachContentView(layout_content, recycler)
                 setInputType(ViewMessageInput.TYPE_DEFAULT)
             }
         }

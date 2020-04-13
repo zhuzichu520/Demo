@@ -14,11 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.*
-import com.hiwitech.android.shared.ext.toast
+import com.jakewharton.rxbinding3.view.layoutChangeEvents
 import com.netease.nim.demo.R
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.message.emoji.fragment.FragmentEmoji
 import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
+import com.uber.autodispose.android.autoDispose
 import kotlinx.android.synthetic.main.layout_input.view.*
 
 /**
@@ -53,9 +54,30 @@ class ViewMessageInput @JvmOverloads constructor(
      */
     private val moreHeight = dp2px(context, 240f)
 
+    /**
+     * 根布局
+     */
     private lateinit var contentView: View
 
+    /**
+     * 消息列表的RecyclerView
+     */
+    private lateinit var recyclerView: RecyclerView
+
+    /**
+     * contentView 的高度，当键盘弹起来，高度会变
+     */
     private var contentViewHeight: Int = 0
+
+    /**
+     * recyclerView的高度，当键盘弹起来，高度会变
+     */
+    private var recyclerViewHeight: Int = 0
+
+    /**
+     * 底部输入布局，当输入换行时高度会变
+     */
+    private var inputHeight: Int = 0
 
     companion object {
         //默认状态 无键盘
@@ -93,11 +115,20 @@ class ViewMessageInput @JvmOverloads constructor(
         }
         fragmentEmoji = FragmentEmoji()
         fragmentMore = FragmentMore()
+
+        layout_input.post {
+            layoutChangeEvents().autoDispose(layout_input).subscribe {
+                inputHeight = layout_input.height
+            }
+        }
     }
 
-    fun attachContentView(view: View) {
-        this.contentView = view
+    fun attachContentView(contentView: View, recyclerView: RecyclerView) {
+        this.contentView = contentView
+        this.recyclerView = recyclerView
         this.contentViewHeight = contentView.height
+        this.recyclerViewHeight = recyclerView.height
+        this.inputHeight= layout_input.height
     }
 
     fun getInputType(): Int {
@@ -109,53 +140,56 @@ class ViewMessageInput @JvmOverloads constructor(
      *  @param inputType
      */
     fun setInputType(inputType: Int) {
-        when (inputType) {
-            TYPE_DEFAULT -> {
-                lockRecyclerViewHeight(contentViewHeight)
-                showView(start_voice, center_emoji, center_input)
-                hideView(start_keyboard, center_keyboard, center_audio, layout_bottom)
-                closeKeyboard(center_input)
-                unlockRecyclerViewHeight()
-            }
-            TYPE_INPUT -> {
-                lockRecyclerViewHeight(contentViewHeight - getSoftKeyboardHeightLocalValue())
-                showView(start_voice, center_emoji, center_input)
-                hideView(start_keyboard, center_keyboard, center_audio, layout_bottom)
-                showSoftKeyboard()
-                unlockRecyclerViewHeight()
-            }
-            TYPE_EMOJI -> {
-                layout_bottom.layoutParams.height = emojiHeight
-                lockRecyclerViewHeight(contentViewHeight - emojiHeight)
-                showView(start_voice, center_keyboard, center_input, layout_bottom)
-                hideView(start_keyboard, center_emoji, center_audio)
-                closeKeyboard(center_input)
-                replaceFragment(fragmentEmoji)
-                unlockRecyclerViewHeight()
-            }
-            TYPE_MORE -> {
-                if (this.inputType == TYPE_MORE) {
-                    setInputType(TYPE_INPUT)
-                    return
+        layout_input.post {
+            when (inputType) {
+                TYPE_DEFAULT -> {
+                    lockRecyclerViewHeight(contentViewHeight - inputHeight)
+                    showView(start_voice, center_emoji, center_input)
+                    hideView(start_keyboard, center_keyboard, center_audio, layout_bottom)
+                    closeKeyboard(center_input)
+                    unlockRecyclerViewHeight()
                 }
-                layout_bottom.layoutParams.height = moreHeight
-                lockRecyclerViewHeight(contentViewHeight - moreHeight)
-                showView(start_voice, center_emoji, center_input, layout_bottom)
-                hideView(start_keyboard, center_keyboard, center_audio)
-                closeKeyboard(center_input)
-                replaceFragment(fragmentMore)
-                unlockRecyclerViewHeight()
+                TYPE_INPUT -> {
+                    lockRecyclerViewHeight(contentViewHeight - getSoftKeyboardHeightLocalValue() - inputHeight)
+                    showSoftKeyboard {
+                        hideView(start_keyboard, center_keyboard, center_audio, layout_bottom)
+                        showView(start_voice, center_emoji, center_input)
+                        unlockRecyclerViewHeight()
+                    }
+                }
+                TYPE_EMOJI -> {
+                    layout_bottom.layoutParams.height = emojiHeight
+                    lockRecyclerViewHeight(contentViewHeight - emojiHeight - inputHeight)
+                    showView(start_voice, center_keyboard, center_input, layout_bottom)
+                    hideView(start_keyboard, center_emoji, center_audio)
+                    closeKeyboard(center_input)
+                    replaceFragment(fragmentEmoji)
+                    unlockRecyclerViewHeight()
+                }
+                TYPE_MORE -> {
+                    if (this.inputType == TYPE_MORE) {
+                        setInputType(TYPE_INPUT)
+                        return@post
+                    }
+                    layout_bottom.layoutParams.height = moreHeight
+                    lockRecyclerViewHeight(contentViewHeight - moreHeight - inputHeight)
+                    showView(start_voice, center_emoji, center_input, layout_bottom)
+                    hideView(start_keyboard, center_keyboard, center_audio)
+                    closeKeyboard(center_input)
+                    replaceFragment(fragmentMore)
+                    unlockRecyclerViewHeight()
+                }
+                TYPE_VOICE -> {
+                    lockRecyclerViewHeight(contentViewHeight - inputHeight)
+                    showView(start_keyboard, center_emoji, center_audio)
+                    hideView(start_voice, center_keyboard, center_input, layout_bottom)
+                    closeKeyboard(center_input)
+                    unlockRecyclerViewHeight()
+                }
             }
-            TYPE_VOICE -> {
-                lockRecyclerViewHeight(contentViewHeight)
-                showView(start_keyboard, center_emoji, center_audio)
-                hideView(start_voice, center_keyboard, center_input, layout_bottom)
-                closeKeyboard(center_input)
-                unlockRecyclerViewHeight()
-            }
+            updateInput()
+            this.inputType = inputType
         }
-        updateInput()
-        this.inputType = inputType
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -165,9 +199,13 @@ class ViewMessageInput @JvmOverloads constructor(
         transaction.commitAllowingStateLoss()
     }
 
-    private fun showSoftKeyboard() {
+    private fun showSoftKeyboard(closure: (() -> Unit)? = null) {
         showKeyboard(context, center_input)
-        MainHandler.postDelayed { getSoftKeyboardHeight().toString().toast() }
+        MainHandler.postDelayed(100) {
+            getSoftKeyboardHeight().apply {
+                closure?.invoke()
+            }
+        }
     }
 
     /**
@@ -213,12 +251,12 @@ class ViewMessageInput @JvmOverloads constructor(
      * 释放锁定RecyclerView的高度
      */
     private fun lockRecyclerViewHeight(height: Int) {
-        val layoutParams = contentView.layoutParams as LinearLayout.LayoutParams
+        val layoutParams = recyclerView.layoutParams as LinearLayout.LayoutParams
         layoutParams.weight = 0f
-        val valueAnimator = ValueAnimator.ofInt(contentView.height, height)
+        val valueAnimator = ValueAnimator.ofInt(recyclerView.height, height)
         valueAnimator.addUpdateListener {
             layoutParams.height = toInt(it.animatedValue)
-            contentView.layoutParams = layoutParams
+            recyclerView.layoutParams = layoutParams
             scrollToBottom()
         }
         valueAnimator.duration = 200
@@ -226,7 +264,7 @@ class ViewMessageInput @JvmOverloads constructor(
     }
 
     private fun scrollToBottom() {
-        (contentView as RecyclerView).scrollToPosition((contentView as RecyclerView).adapter!!.itemCount - 1)
+        recyclerView.scrollToPosition(recyclerView.adapter?.itemCount ?: 1 - 1)
     }
 
     /**
@@ -234,7 +272,7 @@ class ViewMessageInput @JvmOverloads constructor(
      */
     private fun unlockRecyclerViewHeight() {
         MainHandler.postDelayed(300) {
-            val layoutParams = contentView.layoutParams as LinearLayout.LayoutParams
+            val layoutParams = recyclerView.layoutParams as LinearLayout.LayoutParams
             layoutParams.weight = 1f
         }
     }
