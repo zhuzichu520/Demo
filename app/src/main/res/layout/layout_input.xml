@@ -1,109 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp">
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/layout_left"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@mipmap/nim_input_voice" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@mipmap/nim_input_keyboard" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/nim_input_edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/layout_emoji"
-        app:layout_constraintStart_toEndOf="@+id/layout_left"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingTop="8dp">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_input"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autoLink="web|email|phone"
-            android:background="@null"
-            android:clickable="true"
-            android:focusable="true"
-            android:maxLength="5000"
-            android:maxLines="3"
-            android:text="@={viewModel.input}"
-            android:visibility="gone" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_audio"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:editable="false"
-            android:gravity="center"
-            android:text="@string/record_audio" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/layout_emoji"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/layout_right">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@mipmap/nim_input_emoji" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@mipmap/nim_input_keyboard" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/layout_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.appcompat.widget.AppCompatImageView
+        <FrameLayout
+            android:id="@+id/layout_left"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            app:srcCompat="@mipmap/nim_input_more" />
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/start_voice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/nim_input_voice" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/start_keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/nim_input_keyboard" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/nim_input_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/layout_emoji"
+            app:layout_constraintStart_toEndOf="@+id/layout_left"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/center_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoLink="web|email|phone"
+                android:background="@null"
+                android:clickable="true"
+                android:focusable="true"
+                android:maxLength="5000"
+                android:maxLines="3"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/center_audio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:editable="false"
+                android:gravity="center"
+                android:text="@string/record_audio" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layout_emoji"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/layout_right">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/center_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/nim_input_emoji" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/center_keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/nim_input_keyboard" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layout_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/nim_input_send"
-            android:text="@string/send"
-            android:textColor="@color/white" />
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    </FrameLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/end_more"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:srcCompat="@mipmap/nim_input_more" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/end_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/nim_input_send"
+                android:text="@string/send"
+                android:textColor="@color/white" />
+
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</LinearLayout>

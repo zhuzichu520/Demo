@@ -49,15 +49,10 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:onRefreshCommand="@{viewModel.onRefreshCommand}" />
 
-
-                <include layout="@layout/layout_input" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_bottom"
+                <com.netease.nim.demo.ui.message.view.ViewMessageInput
                     android:layout_width="match_parent"
-                    android:layout_height="320dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
 
             <FrameLayout
