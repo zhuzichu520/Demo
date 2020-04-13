@@ -9,7 +9,9 @@ import com.netease.nim.demo.ui.login.main.module.ModuleLogin
 import com.netease.nim.demo.ui.login.register.module.ModuleRegister
 import com.netease.nim.demo.ui.main.module.ModuleMain
 import com.netease.nim.demo.ui.me.main.module.ModuleMe
+import com.netease.nim.demo.ui.message.emoji.module.ModuleEmoji
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
+import com.netease.nim.demo.ui.message.more.module.ModuleMore
 import com.netease.nim.demo.ui.session.module.ModuleSession
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -34,7 +36,9 @@ abstract class ActivityBindingModule {
             ModuleContact::class,
             ModuleMe::class,
             ModuleRegister::class,
-            ModuleMessage::class
+            ModuleMessage::class,
+            ModuleMore::class,
+            ModuleEmoji::class
         ]
     )
     internal abstract fun launcherActivity(): ActivityLauncher

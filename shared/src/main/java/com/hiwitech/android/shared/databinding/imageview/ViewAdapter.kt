@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.request.RequestOptions
 import com.hiwitech.android.shared.glide.GlideApp
@@ -63,6 +64,17 @@ fun bindImageViewSrcBitmap(
         imageView.setImageBitmap(it)
     }
 }
+
+@BindingAdapter(value = ["src"], requireAll = false)
+fun bindImageViewSrcResource(
+    imageView: ImageView,
+    @DrawableRes resId: Int?
+) {
+    resId?.let {
+        imageView.setImageResource(resId)
+    }
+}
+
 
 @BindingAdapter(value = ["srcDrawable"], requireAll = false)
 fun bindImageViewSrcDrawable(

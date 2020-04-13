@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.message.main.fragment
 
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
@@ -8,10 +9,11 @@ import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
-import com.netease.nim.demo.databinding.FragmentMeBinding
+import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
+import com.netease.nim.demo.ui.message.view.ViewMessageInput
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
@@ -26,7 +28,7 @@ import javax.inject.Inject
  * time: 2020/4/5 7:48 PM
  * since: v 1.0.0
  */
-class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMessage>() {
+class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, ArgMessage>() {
 
     override fun bindVariableId(): Int = BR.viewModel
 
@@ -49,6 +51,30 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
             MessageBuilder.createEmptyMessage(arg.contactId, sessionType, 0),
             isFirst = true
         )
+    }
+
+    override fun initView() {
+        super.initView()
+        message_input.apply {
+            recycler.post {
+                attachContentView(recycler)
+                setInputType(ViewMessageInput.TYPE_DEFAULT)
+            }
+        }
+        initBackListener()
+    }
+
+    /**
+     * 返回监听
+     */
+    private fun initBackListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (ViewMessageInput.TYPE_EMOJI == message_input.getInputType() || ViewMessageInput.TYPE_MORE == message_input.getInputType()) {
+                message_input.setInputType(ViewMessageInput.TYPE_DEFAULT)
+            } else {
+                navController.popBackStack()
+            }
+        }
     }
 
     /**
@@ -109,6 +135,7 @@ class FragmentMessage : FragmentBase<FragmentMeBinding, ViewModelMessage, ArgMes
     override fun onPause() {
         super.onPause()
         msgService.setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None)
+        message_input.setInputType(ViewMessageInput.TYPE_DEFAULT)
     }
 
     /**

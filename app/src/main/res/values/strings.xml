@@ -22,4 +22,11 @@
     <string name="unsupport_desc">客户端版本不支持该内容</string>
     <string name="record_audio">按住 说话</string>
     <string name="send">发送</string>
+
+    <string name="input_panel_call">呼 叫</string>
+    <string name="input_panel_album">相 册</string>
+    <string name="input_panel_video">拍 摄</string>
+    <string name="input_panel_file">文 件</string>
+    <string name="input_panel_local">位 置</string>
+
 </resources>

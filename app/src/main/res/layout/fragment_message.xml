@@ -50,8 +50,9 @@
                     app:onRefreshCommand="@{viewModel.onRefreshCommand}" />
 
                 <com.netease.nim.demo.ui.message.view.ViewMessageInput
+                    android:id="@+id/message_input"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
 

@@ -61,7 +61,7 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.2.2"
 
-    const val DEVELOPER = "1.0.4"
+    const val DEVELOPER = "1.0.6"
 }
 
 /**

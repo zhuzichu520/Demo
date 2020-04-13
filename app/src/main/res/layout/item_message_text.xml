@@ -48,7 +48,7 @@
             android:layout_marginEnd="50dp"
             android:maxWidth="300dp"
             app:moonText="@{item.text}"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textSize="18sp"
             app:background="@{item.background}"
             app:layout_constraintStart_toEndOf="@+id/header"
