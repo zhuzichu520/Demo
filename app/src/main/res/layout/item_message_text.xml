@@ -57,8 +57,8 @@
             tools:text="哈哈哈哈哈哈哈哈哈哈哈" />
 
         <FrameLayout
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             app:displayChild="@{item.messageStatus}"
             app:layout_constraintBottom_toBottomOf="@id/text"
@@ -68,16 +68,19 @@
             <androidx.core.widget.ContentLoadingProgressBar
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@mipmap/nim_message_failed" />
+                android:src="@mipmap/nim_message_failed"
+                android:visibility="gone" />
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
         </FrameLayout>
 

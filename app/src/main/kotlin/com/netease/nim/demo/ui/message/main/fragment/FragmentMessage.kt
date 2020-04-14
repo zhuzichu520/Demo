@@ -11,6 +11,7 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
 import com.netease.nim.demo.ui.message.view.ViewMessageInput
@@ -133,7 +134,10 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             .bindToSchedulers()
             .autoDispose(viewModel)
             .subscribe {
-                viewModel.addMessage(it.list)
+                val data = it.list.filter { item ->
+                    item.sessionId == arg.contactId
+                }
+                viewModel.addMessage(data)
             }
 
         /**
@@ -143,7 +147,9 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             .bindToSchedulers()
             .autoDispose(viewModel)
             .subscribe {
-                viewModel.addMessage(listOf(it.message))
+                if (it.message.sessionId == arg.contactId) {
+                    viewModel.addMessage(listOf(it.message))
+                }
             }
     }
 

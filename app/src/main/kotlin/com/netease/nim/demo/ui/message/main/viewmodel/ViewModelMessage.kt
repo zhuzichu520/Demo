@@ -18,6 +18,7 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
 import me.tatarka.bindingcollectionadapter2.collections.AsyncDiffObservableList
+import me.tatarka.bindingcollectionadapter2.collections.DiffObservableList
 import javax.inject.Inject
 
 /**
@@ -55,7 +56,7 @@ class ViewModelMessage @Inject constructor(
      */
     private val messageList =
         AsyncDiffObservableList(itemPageDiffOf<ItemViewModelBaseMessage> { oldItem, newItem ->
-            oldItem.uuid == newItem.uuid
+            oldItem.uuid == newItem.uuid && oldItem.status == newItem.status
         })
 
     /**
@@ -170,7 +171,7 @@ class ViewModelMessage @Inject constructor(
     fun addMessage(list: List<IMMessage>) {
         val data = handleMessageList(list)
         data.forEach {
-            val index = messageList.indexOf(it)
+            val index = messageList.lastIndexOf(it)
             if (index != -1) {
                 //已经存在
                 messageList.update(messageList.replaceAt(index) { _ -> it })
@@ -188,7 +189,7 @@ class ViewModelMessage @Inject constructor(
      */
     private fun handleMessageList(list: List<IMMessage>): List<ItemViewModelBaseMessage> {
         return list.map { item ->
-            val message = when (item.msgType) {
+            when (item.msgType) {
                 MsgTypeEnum.text -> {
                     ItemViewModelTextMessage(item)
                 }
@@ -199,7 +200,6 @@ class ViewModelMessage @Inject constructor(
                     ItemViewModelUnknownMessage(item)
                 }
             }
-            message
         }
     }
 
