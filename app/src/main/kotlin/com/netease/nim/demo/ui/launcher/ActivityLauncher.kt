@@ -1,7 +1,10 @@
 package com.netease.nim.demo.ui.launcher
 
+import android.os.Bundle
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ActivityBase
+import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nim.demo.tools.ToolKeyboard
 
 
 /**
@@ -14,4 +17,23 @@ class ActivityLauncher : ActivityBase() {
 
     override fun setNavGraph(): Int = R.navigation.navigation_launcher
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registKeyboardListener()
+    }
+
+    private fun registKeyboardListener() {
+        ToolKeyboard(
+            this,
+            onKeyboardShow = {
+                NimUserStorage.softKeyboardHeight = this
+            },
+            onKeyboardChange = {
+                NimUserStorage.softKeyboardHeight = this
+            },
+            onKeyboardHide = {
+
+            }
+        )
+    }
 }

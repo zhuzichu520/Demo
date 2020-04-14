@@ -23,11 +23,11 @@ class ViewModelMore @Inject constructor(
      */
     val items = MutableLiveData<List<ItemViewModelMore>>().also {
         it.value = listOf(
-            ItemViewModelMore(this, R.string.input_panel_album, R.mipmap.nim_message_album),
-            ItemViewModelMore(this, R.string.input_panel_video, R.mipmap.nim_message_video),
-            ItemViewModelMore(this, R.string.input_panel_local, R.mipmap.nim_message_local),
-            ItemViewModelMore(this, R.string.input_panel_file, R.mipmap.nim_message_file),
-            ItemViewModelMore(this, R.string.input_panel_call, R.mipmap.nim_message_call)
+            ItemViewModelMore(this, R.string.input_panel_album, R.mipmap.nim_message_action_album),
+            ItemViewModelMore(this, R.string.input_panel_video, R.mipmap.nim_message_action_video),
+            ItemViewModelMore(this, R.string.input_panel_local, R.mipmap.nim_message_action_local),
+            ItemViewModelMore(this, R.string.input_panel_file, R.mipmap.nim_message_action_file),
+            ItemViewModelMore(this, R.string.input_panel_call, R.mipmap.nim_message_action_call)
         )
     }
 

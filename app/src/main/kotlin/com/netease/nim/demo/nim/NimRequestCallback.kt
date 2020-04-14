@@ -16,8 +16,12 @@ class NimRequestCallback<T>(
 ) : RequestCallback<T> {
 
     override fun onSuccess(any: T) {
-        emitter.onNext(any)
-        emitter.onComplete()
+        if (any == null) {
+            emitter.onComplete()
+        } else {
+            emitter.onNext(any)
+            emitter.onComplete()
+        }
     }
 
     override fun onFailed(code: Int) {

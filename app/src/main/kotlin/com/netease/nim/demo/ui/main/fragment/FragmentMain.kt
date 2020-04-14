@@ -66,6 +66,7 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
                 msgService.clearAllUnreadCount()
             }
         }
+
     }
 
     /**

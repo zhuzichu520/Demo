@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.*
+import com.hiwitech.android.shared.ext.clean
 import com.jakewharton.rxbinding3.view.layoutChangeEvents
 import com.netease.nim.demo.R
 import com.netease.nim.demo.storage.NimUserStorage
@@ -48,11 +49,17 @@ class ViewMessageInput @JvmOverloads constructor(
     /**
      * 底部emoji页面高度
      */
-    private val emojiHeight = dp2px(context, 320f)
+//    private val emojiHeight = dp2px(context, 320f)
     /**
      * 底部更多页面高度
      */
-    private val moreHeight = dp2px(context, 240f)
+//    private val moreHeight = dp2px(context, 240f)
+
+    /**
+     * 底部布局的高度与键盘的高度偏移量
+     */
+
+    private val keyboardOffset = dp2px(context, 50f)
 
     /**
      * 根布局
@@ -79,6 +86,9 @@ class ViewMessageInput @JvmOverloads constructor(
      */
     private var inputHeight: Int = 0
 
+
+    var onClickSendListener: (String.() -> Unit)? = null
+
     companion object {
         //默认状态 无键盘
         const val TYPE_DEFAULT = 0
@@ -96,12 +106,8 @@ class ViewMessageInput @JvmOverloads constructor(
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_input, this)
         setOnClickListener(
-            this,
-            start_voice,
-            start_keyboard,
-            center_emoji,
-            center_keyboard,
-            end_more
+            this, start_voice, start_keyboard, center_emoji,
+            center_keyboard, end_more, end_send
         )
         center_input.addTextChangedListener {
             updateInput()
@@ -128,7 +134,7 @@ class ViewMessageInput @JvmOverloads constructor(
         this.recyclerView = recyclerView
         this.contentViewHeight = contentView.height
         this.recyclerViewHeight = recyclerView.height
-        this.inputHeight= layout_input.height
+        this.inputHeight = layout_input.height
     }
 
     fun getInputType(): Int {
@@ -143,48 +149,64 @@ class ViewMessageInput @JvmOverloads constructor(
         layout_input.post {
             when (inputType) {
                 TYPE_DEFAULT -> {
-                    lockRecyclerViewHeight(contentViewHeight - inputHeight)
                     showView(start_voice, center_emoji, center_input)
-                    hideView(start_keyboard, center_keyboard, center_audio, layout_bottom)
-                    closeKeyboard(center_input)
-                    unlockRecyclerViewHeight()
+                    hideView(start_keyboard, center_keyboard, center_audio)
+                    layout_input.post {
+                        lockRecyclerViewHeight(contentViewHeight - inputHeight)
+                        hideView(layout_bottom)
+                        closeKeyboard(center_input)
+                        unlockRecyclerViewHeight()
+                    }
                 }
                 TYPE_INPUT -> {
-                    lockRecyclerViewHeight(contentViewHeight - getSoftKeyboardHeightLocalValue() - inputHeight)
-                    showSoftKeyboard {
-                        hideView(start_keyboard, center_keyboard, center_audio, layout_bottom)
-                        showView(start_voice, center_emoji, center_input)
+                    hideView(start_keyboard, center_keyboard, center_audio)
+                    showView(start_voice, center_emoji, center_input)
+                    layout_input.post {
+                        lockRecyclerViewHeight(contentViewHeight - getSoftKeyboardHeightLocalValue() - inputHeight)
+                        hideView(layout_bottom)
+                        showSoftKeyboard()
                         unlockRecyclerViewHeight()
                     }
                 }
                 TYPE_EMOJI -> {
-                    layout_bottom.layoutParams.height = emojiHeight
-                    lockRecyclerViewHeight(contentViewHeight - emojiHeight - inputHeight)
-                    showView(start_voice, center_keyboard, center_input, layout_bottom)
+                    showView(start_voice, center_keyboard, center_input)
                     hideView(start_keyboard, center_emoji, center_audio)
-                    closeKeyboard(center_input)
-                    replaceFragment(fragmentEmoji)
-                    unlockRecyclerViewHeight()
+                    val emojiHeight = getSoftKeyboardHeightLocalValue() + keyboardOffset
+                    layout_input.post {
+                        lockRecyclerViewHeight(contentViewHeight - emojiHeight - inputHeight)
+                        layout_bottom.layoutParams.height = emojiHeight
+                        showView(layout_bottom)
+                        closeKeyboard(center_input)
+                        replaceFragment(fragmentEmoji)
+                        unlockRecyclerViewHeight()
+                    }
                 }
                 TYPE_MORE -> {
                     if (this.inputType == TYPE_MORE) {
                         setInputType(TYPE_INPUT)
                         return@post
                     }
-                    layout_bottom.layoutParams.height = moreHeight
-                    lockRecyclerViewHeight(contentViewHeight - moreHeight - inputHeight)
-                    showView(start_voice, center_emoji, center_input, layout_bottom)
+                    showView(start_voice, center_emoji, center_input)
                     hideView(start_keyboard, center_keyboard, center_audio)
-                    closeKeyboard(center_input)
-                    replaceFragment(fragmentMore)
-                    unlockRecyclerViewHeight()
+                    val moreHeight = getSoftKeyboardHeightLocalValue()
+                    layout_input.post {
+                        lockRecyclerViewHeight(contentViewHeight - moreHeight - inputHeight)
+                        layout_bottom.layoutParams.height = moreHeight
+                        showView(layout_bottom)
+                        closeKeyboard(center_input)
+                        replaceFragment(fragmentMore)
+                        unlockRecyclerViewHeight()
+                    }
                 }
                 TYPE_VOICE -> {
-                    lockRecyclerViewHeight(contentViewHeight - inputHeight)
                     showView(start_keyboard, center_emoji, center_audio)
-                    hideView(start_voice, center_keyboard, center_input, layout_bottom)
-                    closeKeyboard(center_input)
-                    unlockRecyclerViewHeight()
+                    hideView(start_voice, center_keyboard, center_input)
+                    layout_input.post {
+                        lockRecyclerViewHeight(contentViewHeight - inputHeight)
+                        hideView(layout_bottom)
+                        closeKeyboard(center_input)
+                        unlockRecyclerViewHeight()
+                    }
                 }
             }
             updateInput()
@@ -199,11 +221,13 @@ class ViewMessageInput @JvmOverloads constructor(
         transaction.commitAllowingStateLoss()
     }
 
-    private fun showSoftKeyboard(closure: (() -> Unit)? = null) {
+    private fun showSoftKeyboard() {
         showKeyboard(context, center_input)
-        MainHandler.postDelayed(100) {
-            getSoftKeyboardHeight().apply {
-                closure?.invoke()
+        MainHandler.postDelayed(350) {
+            center_input.apply {
+                isFocusable = true
+                isFocusableInTouchMode = true
+                requestFocus()
             }
         }
     }
@@ -242,7 +266,8 @@ class ViewMessageInput @JvmOverloads constructor(
                 setInputType(TYPE_MORE)
             }
             R.id.end_send -> {
-
+                onClickSendListener?.invoke(center_input.text.toString())
+                center_input.clean()
             }
         }
     }
@@ -264,25 +289,18 @@ class ViewMessageInput @JvmOverloads constructor(
     }
 
     private fun scrollToBottom() {
-        recyclerView.scrollToPosition(recyclerView.adapter?.itemCount ?: 1 - 1)
+        recyclerView.adapter?.let {
+            recyclerView.scrollToPosition(it.itemCount - 1)
+        }
     }
 
     /**
      * 释放锁定的RecyclerView的高度
      */
     private fun unlockRecyclerViewHeight() {
-        MainHandler.postDelayed(300) {
+        MainHandler.postDelayed(250) {
             val layoutParams = recyclerView.layoutParams as LinearLayout.LayoutParams
             layoutParams.weight = 1f
-        }
-    }
-
-
-    private fun getSoftKeyboardHeight(): Int {
-        return (getSoftKeyboardHeight(context.toCast())).apply {
-            if (this != 0) {
-                NimUserStorage.softKeyboardHeight = this
-            }
         }
     }
 

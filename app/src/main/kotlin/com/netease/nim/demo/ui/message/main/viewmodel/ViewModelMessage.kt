@@ -1,8 +1,8 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.libs.tool.replaceAt
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
-import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.itemPageDiffOf
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.widget.page.PageHelper
@@ -13,6 +13,7 @@ import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.domain.UseCaseGetMessageList
 import com.netease.nim.demo.ui.message.main.domain.UseCaseGetTeamInfo
 import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
+import com.netease.nim.demo.ui.message.main.domain.UseCaseSendMessage
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
@@ -28,75 +29,11 @@ import javax.inject.Inject
 class ViewModelMessage @Inject constructor(
     private val useCaseGetTeamInfo: UseCaseGetTeamInfo,
     private val useCaseGetUserInfo: UseCaseGetUserInfo,
-    private val useCaseGetMessageList: UseCaseGetMessageList
+    private val useCaseGetMessageList: UseCaseGetMessageList,
+    private val useCaseSendMessage: UseCaseSendMessage
 ) : ViewModelBase<ArgMessage>() {
 
-    companion object {
-        const val TYPE_LEFT_VOICE = 0
-        const val TYPE_LEFT_KEYBOARD = 1
-
-        const val TYPE_CENTER_EMOJI = 0
-        const val TYPE_CENTER_KEYBOARD = 1
-
-        const val TYPE_RIGHT_MORE = 0
-        const val TYPE_RIGHT_SEND = 1
-
-        const val TYPE_BOTTOM_EMOJI = 0
-        const val TYPE_BOTTOM_MORE = 1
-        const val TYPE_BOTTOM_HIDE = -1
-    }
-
     private val pageSize = 30
-
-    val onKeyboardVoiceChangeEvent = MutableLiveData<Int>(TYPE_LEFT_VOICE)
-
-    val onKeyboardEmojiChangeEvent = MutableLiveData<Int>(TYPE_CENTER_EMOJI)
-
-    val onMoreSendChangeEvent = MutableLiveData<Int>(TYPE_RIGHT_MORE)
-
-    val onBottomChangeEvent = SingleLiveEvent<Int>().apply {
-        value = TYPE_BOTTOM_HIDE
-    }
-
-    /**
-     * 底部editText的输入内容 数据双向绑定
-     */
-    val input = MutableLiveData<String>()
-
-    /**
-     * 点击录音icon
-     */
-    val onClickVoiceCommand = createCommand {
-        onKeyboardVoiceChangeEvent.value = TYPE_LEFT_KEYBOARD
-    }
-
-    /**
-     * 点击左边键盘icon
-     */
-    val onClickLeftKeyboardCommand = createCommand {
-        onKeyboardVoiceChangeEvent.value = TYPE_LEFT_VOICE
-    }
-
-    /**
-     * 点击Emoji
-     */
-    val onClickEmojiCommand = createCommand {
-        onKeyboardEmojiChangeEvent.value = TYPE_CENTER_KEYBOARD
-    }
-
-    /**
-     * 点击中间键盘Icon
-     */
-    val onClickCenterKeyboardCommand = createCommand {
-        onKeyboardEmojiChangeEvent.value = TYPE_CENTER_EMOJI
-    }
-
-    /**
-     * 点击更多布局
-     */
-    val onClickMoreCommand = createCommand {
-        onBottomChangeEvent.value = TYPE_BOTTOM_MORE
-    }
 
     /**
      * 滑动事件
@@ -176,6 +113,17 @@ class ViewModelMessage @Inject constructor(
     }
 
     /**
+     * 发送消息
+     */
+    fun sendMessage(message: IMMessage, resend: Boolean = false) {
+        useCaseSendMessage.execute(UseCaseSendMessage.Parameters(message, resend))
+            .autoDispose(this)
+            .subscribe {
+
+            }
+    }
+
+    /**
      * 加载群组详情信息
      */
     fun loadTeamInfo() {
@@ -221,7 +169,16 @@ class ViewModelMessage @Inject constructor(
      */
     fun addMessage(list: List<IMMessage>) {
         val data = handleMessageList(list)
-        messageList.update(messageList + data)
+        data.forEach {
+            val index = messageList.indexOf(it)
+            if (index != -1) {
+                //已经存在
+                messageList.update(messageList.replaceAt(index) { _ -> it })
+            } else {
+                //不存在
+                messageList.update(messageList + it)
+            }
+        }
         onAddMessageCompletedEvent.value = messageList
     }
 
@@ -231,7 +188,7 @@ class ViewModelMessage @Inject constructor(
      */
     private fun handleMessageList(list: List<IMMessage>): List<ItemViewModelBaseMessage> {
         return list.map { item ->
-            when (item.msgType) {
+            val message = when (item.msgType) {
                 MsgTypeEnum.text -> {
                     ItemViewModelTextMessage(item)
                 }
@@ -242,6 +199,7 @@ class ViewModelMessage @Inject constructor(
                     ItemViewModelUnknownMessage(item)
                 }
             }
+            message
         }
     }
 

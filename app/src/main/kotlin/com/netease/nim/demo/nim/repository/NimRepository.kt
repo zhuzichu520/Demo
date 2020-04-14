@@ -45,6 +45,12 @@ interface NimRepository {
      */
     fun getMessageList(anchor: IMMessage, pageSize: Int): Flowable<List<IMMessage>>
 
+    /**
+     * 发送消息
+     * @param message 消息
+     * @param resend 是否重发
+     */
+    fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Void>
 }
 
 class NimRepositoryImpl(
@@ -90,6 +96,12 @@ class NimRepositoryImpl(
         return createFlowable {
             msgService.queryMessageListEx(anchor, QueryDirectionEnum.QUERY_OLD, pageSize, true)
                 .setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Void> {
+        return createFlowable {
+            msgService.sendMessage(message, resend).setCallback(NimRequestCallback(this))
         }
     }
 

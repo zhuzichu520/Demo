@@ -56,12 +56,21 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     override fun initView() {
         super.initView()
         message_input.apply {
+            onClickSendListener = {
+                sendTextMessage(this)
+            }
             recycler.post {
                 attachContentView(layout_content, recycler)
                 setInputType(ViewMessageInput.TYPE_DEFAULT)
             }
         }
         initBackListener()
+    }
+
+    private fun sendTextMessage(text: String) {
+        val message = MessageBuilder.createTextMessage(arg.contactId, sessionType, text)
+        viewModel.addMessage(listOf(message))
+        viewModel.sendMessage(message)
     }
 
     /**
@@ -104,15 +113,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         viewModel.onScrollPositionsEvent.observe(viewLifecycleOwner, Observer {
             scrollToPosition(it)
         })
-        /**
-         * 消息接收监听
-         */
-        RxBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
-            .bindToSchedulers()
-            .autoDispose(viewModel)
-            .subscribe {
-                viewModel.addMessage(it.list)
-            }
+
         /**
          * 添加数据完成
          */
@@ -124,6 +125,26 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 //todo zhuzichu 最后一条不可见 显示提醒有新消息
             }
         })
+
+        /**
+         * 消息接收监听
+         */
+        RxBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
+            .bindToSchedulers()
+            .autoDispose(viewModel)
+            .subscribe {
+                viewModel.addMessage(it.list)
+            }
+
+        /**
+         * 消息发送状态监听
+         */
+        RxBus.toObservable(NimEvent.OnMessageStatusEvent::class.java)
+            .bindToSchedulers()
+            .autoDispose(viewModel)
+            .subscribe {
+                viewModel.addMessage(listOf(it.message))
+            }
     }
 
     override fun onResume() {

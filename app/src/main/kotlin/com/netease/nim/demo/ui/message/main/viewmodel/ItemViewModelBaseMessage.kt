@@ -7,6 +7,7 @@ import com.hiwitech.android.shared.ext.toColorByResId
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 
@@ -19,10 +20,19 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 open class ItemViewModelBaseMessage(
     val message: IMMessage
 ) {
+    companion object {
+        //发送中
+        private const val STATE_SEND_LOADING = 0
+        //发送失败
+        private const val STATE_SEND_FAILED = 1
+        //发送完成
+        private const val STATE_SEND_NORMAL = 2
+    }
+
     /**
      * 会话id
      */
-    val uuid = message.uuid
+    val uuid: String = message.uuid
     /**
      * 姓名
      */
@@ -60,6 +70,12 @@ open class ItemViewModelBaseMessage(
      */
     val layoutDirection = MutableLiveData<Int>()
 
+    /**
+     * 发送状态
+     */
+    val messageStatus = MutableLiveData<Int>()
+
+
     init {
         val userInfo = ToolUserInfo.getUserInfo(message.fromAccount)
         isMe.value = isMine()
@@ -86,9 +102,37 @@ open class ItemViewModelBaseMessage(
         layoutDirection.value =
             if (mine) LayoutDirection.RTL else LayoutDirection.LTR
 
+        when (message.status) {
+            MsgStatusEnum.fail -> {
+                messageStatus.value = STATE_SEND_FAILED
+            }
+            MsgStatusEnum.sending -> {
+                messageStatus.value = STATE_SEND_LOADING
+            }
+            else -> {
+                messageStatus.value = STATE_SEND_NORMAL
+            }
+        }
     }
 
     private fun isMine(): Boolean {
         return message.fromAccount == NimUserStorage.account
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ItemViewModelBaseMessage
+
+        if (uuid != other.uuid) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return uuid.hashCode()
+    }
+
+
 }

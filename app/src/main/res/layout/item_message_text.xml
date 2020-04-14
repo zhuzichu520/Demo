@@ -13,8 +13,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutDirection="@{item.layoutDirection}"
-        android:padding="14dp">
+        android:padding="14dp"
+        app:layoutDirection="@{item.layoutDirection}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/header"
@@ -46,15 +46,41 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="50dp"
-            android:maxWidth="300dp"
-            app:moonText="@{item.text}"
             android:gravity="center_vertical"
+            android:maxWidth="300dp"
+            android:textColor="@color/color_font_primary"
             android:textSize="18sp"
             app:background="@{item.background}"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            android:textColor="@color/color_font_primary"
+            app:moonText="@{item.text}"
             tools:text="哈哈哈哈哈哈哈哈哈哈哈" />
+
+        <FrameLayout
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="5dp"
+            app:displayChild="@{item.messageStatus}"
+            app:layout_constraintBottom_toBottomOf="@id/text"
+            app:layout_constraintStart_toEndOf="@+id/text"
+            app:layout_constraintTop_toTopOf="@id/text">
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/nim_message_failed" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

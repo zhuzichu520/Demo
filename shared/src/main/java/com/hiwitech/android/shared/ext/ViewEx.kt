@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.forEachIndexed
 import androidx.viewpager.widget.ViewPager
@@ -102,3 +103,6 @@ fun BottomNavigationView.plusBadge(index: Int): Badge {
     return badge
 }
 
+fun EditText.clean() {
+    this.setText("")
+}
