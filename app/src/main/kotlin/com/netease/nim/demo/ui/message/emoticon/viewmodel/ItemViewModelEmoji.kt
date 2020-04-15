@@ -2,6 +2,8 @@ package com.netease.nim.demo.ui.message.emoticon.viewmodel
 
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.shared.ext.createCommand
+import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.AppGlobal.context
 import com.netease.nim.demo.nim.emoji.EmojiManager
 
@@ -17,6 +19,10 @@ data class ItemViewModelEmoji(
 
     val darawble = MutableLiveData<Drawable>().apply {
         value = EmojiManager.getDisplayDrawable(context,index)
+    }
+
+    val onClickEmoji= createCommand {
+        "哈哈".toast()
     }
 
 }

@@ -13,6 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:onClickCommand="@{item.onClickEmoji}"
         android:layout_margin="5dp">
 
         <androidx.appcompat.widget.AppCompatImageView
