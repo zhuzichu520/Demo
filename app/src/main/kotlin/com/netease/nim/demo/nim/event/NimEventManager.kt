@@ -1,5 +1,6 @@
 package com.netease.nim.demo.nim.event
 
+import com.hiwitech.android.shared.bus.RxBus
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.StatusCode
@@ -13,7 +14,6 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.netease.nimlib.sdk.uinfo.UserServiceObserve
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
-import com.hiwitech.android.shared.bus.RxBus
 
 object NimEventManager {
 

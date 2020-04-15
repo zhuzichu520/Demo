@@ -18,7 +18,7 @@ import com.hiwitech.android.shared.ext.clean
 import com.jakewharton.rxbinding3.view.layoutChangeEvents
 import com.netease.nim.demo.R
 import com.netease.nim.demo.storage.NimUserStorage
-import com.netease.nim.demo.ui.message.emoji.fragment.FragmentEmoji
+import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
 import com.uber.autodispose.android.autoDispose
 import kotlinx.android.synthetic.main.layout_input.view.*
@@ -37,7 +37,7 @@ class ViewMessageInput @JvmOverloads constructor(
      * todo 内存泄漏 带优化
      * 初始化fragment
      */
-    private var fragmentEmoji: FragmentEmoji
+    private var fragmentEmoji: FragmentEmoticon
 
     private var fragmentMore: FragmentMore
 
@@ -117,9 +117,9 @@ class ViewMessageInput @JvmOverloads constructor(
             if (MotionEvent.ACTION_UP == motionEvent.action) {
                 setInputType(TYPE_INPUT)
             }
-            true
+            false
         }
-        fragmentEmoji = FragmentEmoji()
+        fragmentEmoji = FragmentEmoticon()
         fragmentMore = FragmentMore()
 
         layout_input.post {
@@ -289,9 +289,7 @@ class ViewMessageInput @JvmOverloads constructor(
     }
 
     private fun scrollToBottom() {
-        recyclerView.adapter?.let {
-            recyclerView.scrollToPosition(it.itemCount - 1)
-        }
+        recyclerView.scrollBy(0, Int.MAX_VALUE)
     }
 
     /**

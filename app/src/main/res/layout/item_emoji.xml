@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.netease.nim.demo.ui.message.emoticon.viewmodel.ItemViewModelEmoji" />
+    </data>
+
+    <com.hiwitech.android.shared.widget.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcDrawable="@{item.darawble}"
+            tools:src="@mipmap/ic_launcher" />
+
+    </com.hiwitech.android.shared.widget.SquareRelativeLayout>
+</layout>

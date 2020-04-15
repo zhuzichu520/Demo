@@ -10,14 +10,12 @@ import android.webkit.WebView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.forEachIndexed
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.just.agentweb.AgentWeb
-import com.just.agentweb.DefaultWebClient
-import com.just.agentweb.WebChromeClient
-import com.just.agentweb.WebViewClient
 import com.hiwitech.android.libs.tool.showKeyboard
 import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.shared.R
@@ -25,6 +23,11 @@ import com.hiwitech.android.shared.global.AppGlobal.context
 import com.hiwitech.android.widget.badge.Badge
 import com.hiwitech.android.widget.badge.QBadgeView
 import com.hiwitech.android.widget.toast.toast
+import com.just.agentweb.AgentWeb
+import com.just.agentweb.DefaultWebClient
+import com.just.agentweb.WebChromeClient
+import com.just.agentweb.WebViewClient
+
 
 fun BottomNavigationView.setupWithViewPager(viewPager: ViewPager) {
     viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -105,4 +108,24 @@ fun BottomNavigationView.plusBadge(index: Int): Badge {
 
 fun EditText.clean() {
     this.setText("")
+}
+
+fun RecyclerView.openDefaultAnimator() {
+    this.itemAnimator?.addDuration = 120
+    this.itemAnimator?.changeDuration = 250
+    this.itemAnimator?.moveDuration = 250
+    this.itemAnimator?.removeDuration = 120
+    this.itemAnimator?.let {
+        (it as? SimpleItemAnimator)?.supportsChangeAnimations = true
+    }
+}
+
+fun RecyclerView.closeDefaultAnimator() {
+    this.itemAnimator?.addDuration = 0
+    this.itemAnimator?.changeDuration = 0
+    this.itemAnimator?.moveDuration = 0
+    this.itemAnimator?.removeDuration = 0
+    this.itemAnimator?.let {
+        (it as? SimpleItemAnimator)?.supportsChangeAnimations = false
+    }
 }

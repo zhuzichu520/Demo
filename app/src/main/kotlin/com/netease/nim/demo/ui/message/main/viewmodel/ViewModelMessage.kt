@@ -1,9 +1,8 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
+import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
-import com.hiwitech.android.libs.tool.replaceAt
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
-import com.hiwitech.android.shared.ext.itemPageDiffOf
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.widget.page.PageHelper
 import com.netease.nim.demo.BR
@@ -17,8 +16,6 @@ import com.netease.nim.demo.ui.message.main.domain.UseCaseSendMessage
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
-import me.tatarka.bindingcollectionadapter2.collections.AsyncDiffObservableList
-import me.tatarka.bindingcollectionadapter2.collections.DiffObservableList
 import javax.inject.Inject
 
 /**
@@ -39,7 +36,7 @@ class ViewModelMessage @Inject constructor(
     /**
      * 滑动事件
      */
-    val onScrollPositionsEvent = SingleLiveEvent<Int>()
+    val onScrollBottomEvent = SingleLiveEvent<Unit>()
 
     /**
      * 添加数据完成事件
@@ -54,10 +51,7 @@ class ViewModelMessage @Inject constructor(
     /**
      * 消息数据
      */
-    private val messageList =
-        AsyncDiffObservableList(itemPageDiffOf<ItemViewModelBaseMessage> { oldItem, newItem ->
-            oldItem.uuid == newItem.uuid && oldItem.status == newItem.status
-        })
+    private val messageList = ObservableArrayList<Any>()
 
     /**
      * 分页
@@ -154,7 +148,7 @@ class ViewModelMessage @Inject constructor(
                     val list = handleMessageList(it)
                     val data = pageHelper.add(list, true)
                     if (true == isFirst) {
-                        onScrollPositionsEvent.value = data.size - 1
+                        onScrollBottomEvent.call()
                     }
                 },
                 {
@@ -174,10 +168,10 @@ class ViewModelMessage @Inject constructor(
             val index = messageList.lastIndexOf(it)
             if (index != -1) {
                 //已经存在
-                messageList.update(messageList.replaceAt(index) { _ -> it })
+                messageList[index] = it
             } else {
                 //不存在
-                messageList.update(messageList + it)
+                messageList.add(it)
             }
         }
         onAddMessageCompletedEvent.value = messageList

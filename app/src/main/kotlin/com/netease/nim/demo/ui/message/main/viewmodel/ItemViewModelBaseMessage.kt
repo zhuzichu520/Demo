@@ -3,7 +3,7 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 import android.util.LayoutDirection
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import com.hiwitech.android.shared.ext.toColorByResId
+import com.hiwitech.android.shared.ext.logi
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.storage.NimUserStorage
@@ -102,8 +102,8 @@ open class ItemViewModelBaseMessage(
     /**
      * 发送状态
      */
-    val messageStatus = MutableLiveData<Int>().apply {
-        value = when (status) {
+    val messageStatus = MutableLiveData<Int>(STATE_SEND_LOADING).apply {
+        value = when (message.status) {
             MsgStatusEnum.fail -> {
                 STATE_SEND_FAILED
             }
@@ -111,6 +111,7 @@ open class ItemViewModelBaseMessage(
                 STATE_SEND_LOADING
             }
             else -> {
+                ("RX：" + "uuid:" + message.uuid + ",content:" + message.content + ",status:" + message.status.value).logi()
                 STATE_SEND_NORMAL
             }
         }

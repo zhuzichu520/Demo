@@ -7,6 +7,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.view.forEachIndexed
 import androidx.databinding.BindingAdapter
 import com.hiwitech.android.mvvm.databinding.BindingCommand
+import com.hiwitech.android.shared.ext.logi
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
 import com.jakewharton.rxbinding3.view.touches
@@ -85,7 +86,9 @@ fun bindViewGroup(
     displayChild2: Int?,
     layoutDirection: Int?
 ) {
+
     displayChild?.let {
+        it.toString().logi()
         viewGroup.forEachIndexed { index, view ->
             if (it == index) {
                 view.visibility = View.VISIBLE

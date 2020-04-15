@@ -1,5 +1,6 @@
 package com.hiwitech.android.shared.widget.page
 
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.libs.internal.MainHandler
@@ -81,6 +82,9 @@ class PageHelper(
             (items as? AsyncDiffObservableList)?.let {
                 items.update(data)
             }
+            (items as? ObservableArrayList)?.let {
+                items.addAll(0, list)
+            }
             MainHandler.postDelayed {
                 if (list.size < pageSize) {
                     setHeaderState(ItemViewModelNetworkHeader.STATE_END)
@@ -95,6 +99,9 @@ class PageHelper(
             }
             (items as? AsyncDiffObservableList)?.let {
                 items.update(data)
+            }
+            (items as? ObservableArrayList)?.let {
+                items.addAll(list)
             }
             MainHandler.postDelayed {
                 if (list.size < pageSize) {

@@ -1,10 +1,10 @@
-package com.netease.nim.demo.ui.message.emoji.module
+package com.netease.nim.demo.ui.message.emoticon.module
 
 import androidx.lifecycle.ViewModel
 import com.hiwitech.android.mvvm.di.FragmentScoped
 import com.hiwitech.android.mvvm.di.ViewModelKey
-import com.netease.nim.demo.ui.message.emoji.fragment.FragmentEmoji
-import com.netease.nim.demo.ui.message.emoji.viewmodel.ViewModelEmoji
+import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
+import com.netease.nim.demo.ui.message.emoticon.viewmodel.ViewModelEmoticon
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -17,15 +17,15 @@ import dagger.multibindings.IntoMap
  * since: v 1.0.0
  */
 @Module
-internal abstract class ModuleEmoji {
+internal abstract class ModuleEmoticon {
 
     @FragmentScoped
     @ContributesAndroidInjector
-    internal abstract fun fragment(): FragmentEmoji
+    internal abstract fun fragment(): FragmentEmoticon
 
     @Binds
     @IntoMap
-    @ViewModelKey(ViewModelEmoji::class)
-    abstract fun viewModel(viewModel: ViewModelEmoji): ViewModel
+    @ViewModelKey(ViewModelEmoticon::class)
+    abstract fun viewModel(viewModel: ViewModelEmoticon): ViewModel
 
 }

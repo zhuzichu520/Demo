@@ -160,6 +160,8 @@ object Libs {
         "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:${Versions.BINDING_COLLECTION_ADAPTER}"
     const val BINDING_COLLECTION_ADAPTER_RECYCLERVIEW =
         "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:${Versions.BINDING_COLLECTION_ADAPTER}"
+    const val BINDING_COLLECTION_ADAPTER_VIEWPAGER2 =
+        "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-viewpager2:${Versions.BINDING_COLLECTION_ADAPTER}"
 
     //log
     const val TIMBER =
