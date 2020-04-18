@@ -32,10 +32,10 @@ abstract class ActivityBindingModule {
             ModuleLauncher::class,
             ModuleLogin::class,
             ModuleMain::class,
-            ModuleSession::class,
-            ModuleContact::class,
             ModuleMe::class,
             ModuleRegister::class,
+            ModuleSession::class,
+            ModuleContact::class,
             ModuleMessage::class,
             ModuleMore::class,
             ModuleEmoticon::class

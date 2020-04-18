@@ -55,6 +55,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:maxLength="5000"
+                android:textSize="14sp"
                 android:maxLines="3"
                 android:visibility="gone" />
 

@@ -7,19 +7,25 @@ import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.shared.bus.RxBus
 import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.hiwitech.android.shared.ext.closeDefaultAnimator
+import com.hiwitech.android.shared.ext.toEditable
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
+import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
 import com.netease.nim.demo.ui.message.view.ViewMessageInput
+import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_EMOJI
+import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_MORE
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.uber.autodispose.autoDispose
 import kotlinx.android.synthetic.main.fragment_message.*
+import kotlinx.android.synthetic.main.layout_input.*
 import javax.inject.Inject
 
 
@@ -57,16 +63,54 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     override fun initView() {
         super.initView()
         recycler.closeDefaultAnimator()
+        initBottomFragment()
+        initBackListener()
+    }
+
+    /**
+     * 初始化底部布局的Fragment，有Emoji表情，有更多布局
+     */
+    private fun initBottomFragment() {
+        val fragmentEmoji = FragmentEmoticon()
+        val fragmentMore = FragmentMore()
         message_input.apply {
+            // 切换Fragment
+            onReplaceFragment = {
+                when (this) {
+                    TYPE_EMOJI -> {
+                        fragmentEmoji
+                    }
+                    TYPE_MORE -> {
+                        fragmentMore
+                    }
+                    else -> {
+                        fragmentEmoji
+                    }
+                }
+            }
+            // 点击发送
             onClickSendListener = {
                 sendTextMessage(this)
             }
+
+            // 默认ViewMessageInput
             recycler.post {
                 attachContentView(layout_content, recycler)
                 setInputType(ViewMessageInput.TYPE_DEFAULT)
             }
+
+            // 初始化Emoji的View
+            fragmentEmoji.onInitView = {
+                //emoji的点击事件
+                onClickEmojiEvent.observe(viewLifecycleOwner, Observer {
+                    appendText(it)
+                })
+            }
         }
-        initBackListener()
+    }
+
+    private fun appendText(text: String?) {
+        center_input.text = center_input.text.toString().plus(text).toEditable()
     }
 
     private fun sendTextMessage(text: String) {
@@ -80,7 +124,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
      */
     private fun initBackListener() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (ViewMessageInput.TYPE_EMOJI == message_input.getInputType() || ViewMessageInput.TYPE_MORE == message_input.getInputType()) {
+            if (TYPE_EMOJI == message_input.getInputType() || TYPE_MORE == message_input.getInputType()) {
                 message_input.setInputType(ViewMessageInput.TYPE_DEFAULT)
             } else {
                 navController.popBackStack()

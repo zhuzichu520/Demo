@@ -19,4 +19,11 @@ class FragmentEmoticon : FragmentBase<FragmentEmoticonBinding, ViewModelEmoticon
 
     override fun setLayoutId(): Int = R.layout.fragment_emoticon
 
+    var onInitView: (ViewModelEmoticon.() -> Unit)? = null
+
+    override fun initView() {
+        super.initView()
+        onInitView?.invoke(viewModel)
+    }
+
 }

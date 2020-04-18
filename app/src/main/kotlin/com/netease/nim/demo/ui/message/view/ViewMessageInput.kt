@@ -2,6 +2,9 @@ package com.netease.nim.demo.ui.message.view
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -9,7 +12,6 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.hiwitech.android.libs.internal.MainHandler
@@ -17,9 +19,8 @@ import com.hiwitech.android.libs.tool.*
 import com.hiwitech.android.shared.ext.clean
 import com.jakewharton.rxbinding3.view.layoutChangeEvents
 import com.netease.nim.demo.R
+import com.netease.nim.demo.nim.emoji.ToolMoon
 import com.netease.nim.demo.storage.NimUserStorage
-import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
-import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
 import com.uber.autodispose.android.autoDispose
 import kotlinx.android.synthetic.main.layout_input.view.*
 
@@ -32,14 +33,6 @@ import kotlinx.android.synthetic.main.layout_input.view.*
 class ViewMessageInput @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
-
-    /**
-     * todo 内存泄漏 带优化
-     * 初始化fragment
-     */
-    private var fragmentEmoji: FragmentEmoticon
-
-    private var fragmentMore: FragmentMore
 
     /**
      * 类型
@@ -89,6 +82,8 @@ class ViewMessageInput @JvmOverloads constructor(
 
     var onClickSendListener: (String.() -> Unit)? = null
 
+    var onReplaceFragment: (Int.() -> Fragment)? = null
+
     companion object {
         //默认状态 无键盘
         const val TYPE_DEFAULT = 0
@@ -109,9 +104,28 @@ class ViewMessageInput @JvmOverloads constructor(
             this, start_voice, start_keyboard, center_emoji,
             center_keyboard, end_more, end_send
         )
-        center_input.addTextChangedListener {
-            updateInput()
-        }
+
+        center_input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        center_input.addTextChangedListener(object : TextWatcher {
+
+            private var start = 0
+            private var count = 0
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                this.start = start
+                this.count = count
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                checkSendButtonEnable()
+                ToolMoon.replaceEmoticons(context, s, start, count)
+                center_input.setSelection(center_input.length())
+            }
+        })
 
         center_input.setOnTouchListener { _, motionEvent ->
             if (MotionEvent.ACTION_UP == motionEvent.action) {
@@ -119,8 +133,6 @@ class ViewMessageInput @JvmOverloads constructor(
             }
             false
         }
-        fragmentEmoji = FragmentEmoticon()
-        fragmentMore = FragmentMore()
 
         layout_input.post {
             layoutChangeEvents().autoDispose(layout_input).subscribe {
@@ -177,7 +189,10 @@ class ViewMessageInput @JvmOverloads constructor(
                         layout_bottom.layoutParams.height = emojiHeight
                         showView(layout_bottom)
                         closeKeyboard(center_input)
-                        replaceFragment(fragmentEmoji)
+                        onReplaceFragment?.let {
+                            val fragment = it.invoke(TYPE_EMOJI)
+                            replaceFragment(fragment)
+                        }
                         unlockRecyclerViewHeight()
                     }
                 }
@@ -194,7 +209,10 @@ class ViewMessageInput @JvmOverloads constructor(
                         layout_bottom.layoutParams.height = moreHeight
                         showView(layout_bottom)
                         closeKeyboard(center_input)
-                        replaceFragment(fragmentMore)
+                        onReplaceFragment?.let {
+                            val fragment = it.invoke(TYPE_MORE)
+                            replaceFragment(fragment)
+                        }
                         unlockRecyclerViewHeight()
                     }
                 }
@@ -209,7 +227,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     }
                 }
             }
-            updateInput()
+            checkSendButtonEnable()
             this.inputType = inputType
         }
     }
@@ -235,7 +253,7 @@ class ViewMessageInput @JvmOverloads constructor(
     /**
      * 更新输入判断是否显示发送
      */
-    private fun updateInput() {
+    private fun checkSendButtonEnable() {
         if (center_input.text.toString().isNotEmpty() && start_voice.visibility == View.VISIBLE) {
             showView(end_send)
             hideView(end_more)

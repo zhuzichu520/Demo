@@ -13,12 +13,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:onClickCommand="@{item.onClickEmoji}"
+        app:onClickCommand="@{item.onClickEmojiCommand}"
+        android:background="@drawable/nim_emoji_item_selector"
         android:layout_margin="5dp">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
             app:srcDrawable="@{item.darawble}"
             tools:src="@mipmap/ic_launcher" />
 
