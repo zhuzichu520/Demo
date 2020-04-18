@@ -13,17 +13,16 @@ import com.netease.nim.demo.nim.emoji.ToolMoon
  * since: v 1.0.0
  */
 
-@BindingAdapter("moonText")
+@BindingAdapter(value = ["moonText"], requireAll = false)
 fun bindMoonTextView(
     textView: TextView,
-    text: String?
+    moonText: String?
 ) {
-    text?.let {
+    moonText?.let {
         ToolMoon.identifyFaceExpression(
             textView.context,
             textView,
-            it,
-            ImageSpan.ALIGN_BOTTOM
+            it
         )
         textView.movementMethod = LinkMovementMethod.getInstance()
     }

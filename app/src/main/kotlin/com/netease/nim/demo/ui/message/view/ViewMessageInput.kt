@@ -122,8 +122,7 @@ class ViewMessageInput @JvmOverloads constructor(
 
             override fun afterTextChanged(s: Editable?) {
                 checkSendButtonEnable()
-                ToolMoon.replaceEmoticons(context, s, start, count)
-                center_input.setSelection(center_input.length())
+                ToolMoon.replaceEmoticons(context, center_input, start, count)
             }
         })
 

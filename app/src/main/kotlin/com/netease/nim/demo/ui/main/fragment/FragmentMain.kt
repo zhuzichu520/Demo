@@ -10,6 +10,7 @@ import com.hiwitech.android.shared.ext.plusBadge
 import com.hiwitech.android.shared.ext.setupWithViewPager
 import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.widget.badge.Badge
+import com.hiwitech.android.widget.badge.QBadgeView
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.databinding.FragmentMainBinding
@@ -32,7 +33,6 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
     private val waitTime = 2000L
     private var touchTime: Long = 0
-    private var badge: Badge? = null
 
     @Inject
     lateinit var msgService: MsgService
@@ -42,10 +42,17 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
     override fun bindVariableId(): Int = BR.viewModel
 
     override fun initView() {
+        val badge = bottom.plusBadge(0)
+        badge.setOnDragStateChangedListener { dragState, _, _ ->
+            if (Badge.OnDragStateChangedListener.STATE_SUCCEED == dragState) {
+                msgService.clearAllUnreadCount()
+            }
+        }
+
         val fragments = listOf<Fragment>(
             FragmentSession().apply {
                 closure = {
-                    updateBadgeNumber(this)
+                    badge.badgeNumber = this
                 }
             },
             FragmentContact(),
@@ -60,20 +67,7 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
         content.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments, titles)
         bottom.setupWithViewPager(content)
-        badge = bottom.plusBadge(0)
-        badge?.setOnDragStateChangedListener { dragState, _, _ ->
-            if (Badge.OnDragStateChangedListener.STATE_SUCCEED == dragState) {
-                msgService.clearAllUnreadCount()
-            }
-        }
 
-    }
-
-    /**
-     * 刷新小红点
-     */
-    private fun updateBadgeNumber(number: Int) {
-        badge?.badgeNumber = number
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,9 +77,6 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
     override fun onDestroy() {
         super.onDestroy()
-        badge?.let {
-            badge = null
-        }
         NimEventManager.unRegist()
     }
 

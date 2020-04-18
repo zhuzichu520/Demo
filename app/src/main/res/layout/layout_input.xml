@@ -49,22 +49,24 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/center_input"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:autoLink="web|email|phone"
                 android:background="@null"
                 android:clickable="true"
                 android:focusable="true"
                 android:maxLength="5000"
-                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:textSize="17sp"
                 android:maxLines="3"
                 android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/center_audio"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@null"
                 android:editable="false"
+                android:textSize="17sp"
                 android:gravity="center"
                 android:text="@string/record_audio" />
 

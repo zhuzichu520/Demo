@@ -39,7 +39,7 @@
             app:visibility="@{item.displayName}"
             tools:text="哈哈哈哈哈" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,14 +47,16 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="50dp"
             android:gravity="center_vertical"
-            android:maxWidth="300dp"
+            android:maxWidth="240dp"
+            android:includeFontPadding="false"
             android:textColor="@color/color_font_primary"
-            android:textSize="18sp"
+            android:textDirection="anyRtl"
+            android:textSize="17sp"
             app:background="@{item.background}"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toBottomOf="@+id/name"
             app:moonText="@{item.text}"
-            tools:text="哈哈哈哈哈哈哈哈哈哈哈" />
+            tools:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" />
 
         <FrameLayout
             android:layout_width="wrap_content"

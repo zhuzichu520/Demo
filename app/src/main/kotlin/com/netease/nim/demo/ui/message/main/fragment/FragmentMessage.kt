@@ -26,6 +26,8 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.uber.autodispose.autoDispose
 import kotlinx.android.synthetic.main.fragment_message.*
 import kotlinx.android.synthetic.main.layout_input.*
+import kotlinx.android.synthetic.main.layout_input.center_input
+import kotlinx.android.synthetic.main.layout_input.view.*
 import javax.inject.Inject
 
 
@@ -104,6 +106,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 //emoji的点击事件
                 onClickEmojiEvent.observe(viewLifecycleOwner, Observer {
                     appendText(it)
+                    center_input.setSelection(center_input.length())
                 })
             }
         }

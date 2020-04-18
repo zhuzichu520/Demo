@@ -1,6 +1,7 @@
 package com.netease.nim.demo.nim.emoji;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Editable;
@@ -21,18 +22,33 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ToolMoon {
-    private static final float DEF_SCALE = 0.6f;
-    private static final float SMALL_SCALE = 0.45F;
 
-    public static void identifyFaceExpression(Context context,
-                                              View textView, String value, int align) {
-        identifyFaceExpression(context, textView, value, align, DEF_SCALE);
+    private static final float DEF_SCALE = 0.6f;
+
+    public static void identifyFaceExpression(Context context, TextView textView, String value) {
+        identifyFaceExpression(
+                context,
+                textView,
+                value,
+                ImageSpan.ALIGN_BOTTOM,
+                getScale(textView.getPaint())
+        );
     }
 
-    public static void identifyFaceExpressionAndATags(Context context,
-                                                      View textView, String value, int align) {
-        SpannableString mSpannableString = makeSpannableStringTags(context, value, DEF_SCALE, align);
+    public static void identifyFaceExpressionAndATags(Context context, TextView textView, String value) {
+        SpannableString mSpannableString = makeSpannableStringTags(
+                context,
+                value,
+                getScale(textView.getPaint()),
+                ImageSpan.ALIGN_BOTTOM
+        );
         viewSetText(textView, mSpannableString);
+    }
+
+    private static float getScale(TextPaint textPaint) {
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+        float height = Math.abs(fontMetrics.ascent + fontMetrics.descent);
+        return height / 64f;
     }
 
     /**
@@ -42,13 +58,8 @@ public class ToolMoon {
      * @param mSpannableString
      */
     private static void viewSetText(View textView, SpannableString mSpannableString) {
-        if (textView instanceof TextView) {
-            TextView tv = (TextView) textView;
-            tv.setText(mSpannableString);
-        } else if (textView instanceof EditText) {
-            EditText et = (EditText) textView;
-            et.setText(mSpannableString);
-        }
+        TextView tv = (TextView) textView;
+        tv.setText(mSpannableString);
     }
 
     public static void identifyFaceExpression(Context context,
@@ -107,8 +118,8 @@ public class ToolMoon {
         //a标签需要替换原始文本,放在moonutil类中
         Matcher aTagMatcher = mATagPattern.matcher(value);
 
-        int start = 0;
-        int end = 0;
+        int start;
+        int end;
         while (aTagMatcher.find()) {
             start = aTagMatcher.start();
             end = aTagMatcher.end();
@@ -143,17 +154,17 @@ public class ToolMoon {
         return mSpannableString;
     }
 
-    public static void replaceEmoticons(Context context, Editable editable, int start, int count) {
+    public static void replaceEmoticons(Context context, EditText editText, int start, int count) {
+        Editable editable = editText.getText();
         if (count <= 0 || editable.length() < start + count)
             return;
-
         CharSequence s = editable.subSequence(start, start + count);
         Matcher matcher = EmojiManager.getPattern().matcher(s);
         while (matcher.find()) {
             int from = start + matcher.start();
             int to = start + matcher.end();
             String emot = editable.subSequence(from, to).toString();
-            Drawable d = getEmotDrawable(context, emot, SMALL_SCALE);
+            Drawable d = getEmotDrawable(context, emot, getScale(editText.getPaint()));
             if (d != null) {
                 ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);
                 editable.setSpan(span, from, to, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
