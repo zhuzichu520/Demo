@@ -136,6 +136,7 @@ class ViewMessageInput @JvmOverloads constructor(
         layout_input.post {
             layoutChangeEvents().autoDispose(layout_input).subscribe {
                 inputHeight = layout_input.height
+                scrollToBottom()
             }
         }
     }
