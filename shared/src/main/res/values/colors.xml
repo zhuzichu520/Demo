@@ -7,7 +7,8 @@
     <color name="color_secondary_variant">#018786</color>
 
     <color name="color_background">#ffffff</color>
-    <color name="color_background_primary">#eaeaea</color>
+    <color name="color_background_primary">#F9F9F9</color>
+    <color name="color_background_secondary">#F3F3F3</color>
 
     <color name="color_surface">#ffffff</color>
     <color name="color_error">#b00020</color>

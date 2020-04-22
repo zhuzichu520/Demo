@@ -6,10 +6,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_divider" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color_background_primary"
         android:paddingTop="8dp">
 
         <FrameLayout
@@ -54,10 +60,10 @@
                 android:background="@null"
                 android:clickable="true"
                 android:focusable="true"
-                android:maxLength="5000"
                 android:gravity="center_vertical"
-                android:textSize="17sp"
+                android:maxLength="5000"
                 android:maxLines="3"
+                android:textSize="17sp"
                 android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -66,9 +72,9 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:editable="false"
-                android:textSize="17sp"
                 android:gravity="center"
-                android:text="@string/record_audio" />
+                android:text="@string/record_audio"
+                android:textSize="17sp" />
 
         </FrameLayout>
 
@@ -123,15 +129,11 @@
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/color_divider" />
-
     <FrameLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:visibility="gone"
         tools:visibility="visible" />
+
 </LinearLayout>
