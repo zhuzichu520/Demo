@@ -18,8 +18,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/header"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:error="@{item.error}"
             app:isCircle="@{true}"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,6 @@
             android:layout_marginEnd="50dp"
             android:gravity="center_vertical"
             android:maxWidth="240dp"
-            android:includeFontPadding="false"
             android:textColor="@color/color_font_primary"
             android:textDirection="anyRtl"
             android:textSize="17sp"

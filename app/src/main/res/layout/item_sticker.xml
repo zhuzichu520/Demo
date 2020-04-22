@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.netease.nim.demo.ui.message.emoticon.viewmodel.ItemViewModelSticker" />
+    </data>
+
+    <com.hiwitech.android.shared.widget.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/nim_emoji_item_selector"
+        app:onClickCommand="@{item.onClickStickerCommand}">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            app:url="@{item.icon}"
+            tools:src="@mipmap/ic_launcher" />
+
+    </com.hiwitech.android.shared.widget.SquareRelativeLayout>
+</layout>

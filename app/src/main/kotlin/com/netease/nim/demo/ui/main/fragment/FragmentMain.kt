@@ -3,6 +3,8 @@ package com.netease.nim.demo.ui.main.fragment
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.mvvm.base.BaseFragment
 import com.hiwitech.android.shared.base.DefaultIntFragmentPagerAdapter
@@ -10,9 +12,9 @@ import com.hiwitech.android.shared.ext.plusBadge
 import com.hiwitech.android.shared.ext.setupWithViewPager
 import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.widget.badge.Badge
-import com.hiwitech.android.widget.badge.QBadgeView
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
+import com.netease.nim.demo.SharedViewModel
 import com.netease.nim.demo.databinding.FragmentMainBinding
 import com.netease.nim.demo.nim.event.NimEventManager
 import com.netease.nim.demo.ui.contact.fragment.FragmentContact
@@ -37,24 +39,27 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
     @Inject
     lateinit var msgService: MsgService
 
+    private val shareViewModel by activityViewModels<SharedViewModel>()
+
     override fun setLayoutId(): Int = R.layout.fragment_main
 
     override fun bindVariableId(): Int = BR.viewModel
 
     override fun initView() {
+        //初始化红点
         val badge = bottom.plusBadge(0)
         badge.setOnDragStateChangedListener { dragState, _, _ ->
             if (Badge.OnDragStateChangedListener.STATE_SUCCEED == dragState) {
                 msgService.clearAllUnreadCount()
             }
         }
+        //监听会话列表未读数监听
+        shareViewModel.onSessionNumberChangeEvent.observe(viewLifecycleOwner, Observer {
+            badge.badgeNumber=it
+        })
 
         val fragments = listOf<Fragment>(
-            FragmentSession().apply {
-                closure = {
-                    badge.badgeNumber = this
-                }
-            },
+            FragmentSession(),
             FragmentContact(),
             FragmentMe()
         )

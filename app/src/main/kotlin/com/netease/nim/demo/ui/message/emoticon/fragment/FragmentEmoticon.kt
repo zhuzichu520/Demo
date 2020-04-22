@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.message.emoticon.fragment
 
+import androidx.lifecycle.Observer
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
@@ -19,11 +20,16 @@ class FragmentEmoticon : FragmentBase<FragmentEmoticonBinding, ViewModelEmoticon
 
     override fun setLayoutId(): Int = R.layout.fragment_emoticon
 
-    var onInitView: (ViewModelEmoticon.() -> Unit)? = null
+    override fun initViewObservable() {
+        super.initViewObservable()
+        viewModel.tabIndex.observe(viewLifecycleOwner, Observer {
+            viewModel.updateTabs()
+        })
+    }
 
-    override fun initView() {
-        super.initView()
-        onInitView?.invoke(viewModel)
+    override fun initData() {
+        super.initData()
+        viewModel.tabIndex.value = 0
     }
 
 }

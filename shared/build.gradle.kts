@@ -112,6 +112,8 @@ dependencies {
 
     api(Libs.GUAVA)
 
+    api(Libs.FASTJSON)
+
 
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)

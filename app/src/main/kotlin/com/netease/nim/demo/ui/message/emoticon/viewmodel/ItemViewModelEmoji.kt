@@ -3,10 +3,12 @@ package com.netease.nim.demo.ui.message.emoticon.viewmodel
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.BaseViewModel
+import com.hiwitech.android.shared.bus.RxBus
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.global.AppGlobal.context
 import com.netease.nim.demo.base.ItemViewModelBase
 import com.netease.nim.demo.nim.emoji.EmojiManager
+import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
 
 /**
  * desc
@@ -26,9 +28,7 @@ data class ItemViewModelEmoji(
     }
 
     val onClickEmojiCommand = createCommand {
-        (viewModel as? ViewModelEmoticon)?.apply {
-            onClickEmojiEvent.value = text
-        }
+        RxBus.post(EventEmoticon.OnClickEmojiEvent(text))
     }
 
 }

@@ -29,4 +29,8 @@
     <string name="input_panel_file">文 件</string>
     <string name="input_panel_local">位 置</string>
 
+
+    <string name="start_session_record">我发起了白板演示</string>
+    <string name="session_end_record">白板演示已结束</string>
+
 </resources>

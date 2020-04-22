@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:onClickCommand="@{item.onClickEmojiCommand}"
-        android:background="@drawable/nim_emoji_item_selector"
-        android:layout_margin="5dp">
+        android:background="@drawable/nim_emoji_item_selector">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="30dp"

@@ -18,8 +18,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/header"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:error="@{item.error}"
             app:isCircle="@{true}"
             app:layout_constraintStart_toStartOf="parent"

@@ -8,6 +8,7 @@ import com.hiwitech.android.shared.widget.page.PageHelper
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
+import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.domain.UseCaseGetMessageList
 import com.netease.nim.demo.ui.message.main.domain.UseCaseGetTeamInfo
@@ -87,6 +88,7 @@ class ViewModelMessage @Inject constructor(
     val itemBinding = pageHelper.pageItemBinding.apply {
         map<ItemViewModelTextMessage>(BR.item, R.layout.item_message_text)
         map<ItemViewModelPictureMessage>(BR.item, R.layout.item_message_picture)
+        map<ItemViewModelStickerMessage>(BR.item, R.layout.item_message_sticker)
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
     }
 
@@ -111,6 +113,7 @@ class ViewModelMessage @Inject constructor(
      * 发送消息
      */
     fun sendMessage(message: IMMessage, resend: Boolean = false) {
+        addMessage(listOf(message))
         useCaseSendMessage.execute(UseCaseSendMessage.Parameters(message, resend))
             .autoDispose(this)
             .subscribe {
@@ -189,6 +192,14 @@ class ViewModelMessage @Inject constructor(
                 }
                 MsgTypeEnum.image -> {
                     ItemViewModelPictureMessage(item)
+                }
+                MsgTypeEnum.custom -> {
+                    val attachment = item.attachment
+                    if (attachment is StickerAttachment) {
+                        ItemViewModelStickerMessage(item)
+                    } else {
+                        ItemViewModelUnknownMessage(item)
+                    }
                 }
                 else -> {
                     ItemViewModelUnknownMessage(item)

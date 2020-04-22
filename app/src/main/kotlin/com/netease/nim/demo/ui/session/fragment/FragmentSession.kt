@@ -1,11 +1,13 @@
 package com.netease.nim.demo.ui.session.fragment
 
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.shared.bus.RxBus
 import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
+import com.netease.nim.demo.SharedViewModel
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentSessionBinding
 import com.netease.nim.demo.nim.event.NimEvent
@@ -29,7 +31,7 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
         viewModel.loadSessionList()
     }
 
-    var closure: (Int.() -> Unit)? = null
+    private val shareViewModel by activityViewModels<SharedViewModel>()
 
     override fun initViewObservable() {
         super.initViewObservable()
@@ -45,7 +47,7 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
             it.forEach { item ->
                 number += item.contact.unreadCount
             }
-            closure?.invoke(number)
+            shareViewModel.onSessionNumberChangeEvent.value = number
         })
 
     }

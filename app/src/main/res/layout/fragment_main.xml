@@ -19,7 +19,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="54dp"
             android:layout_gravity="start"
             app:itemIconSize="25dp"
             app:labelVisibilityMode="labeled"

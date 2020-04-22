@@ -1,5 +1,6 @@
 package com.netease.nim.demo.nim.tools
 
+import android.text.TextUtils
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team

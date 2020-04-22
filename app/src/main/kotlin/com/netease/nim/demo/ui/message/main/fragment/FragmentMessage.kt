@@ -1,6 +1,7 @@
 package com.netease.nim.demo.ui.message.main.fragment
 
 import androidx.activity.addCallback
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
@@ -10,9 +11,13 @@ import com.hiwitech.android.shared.ext.closeDefaultAnimator
 import com.hiwitech.android.shared.ext.toEditable
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
+import com.netease.nim.demo.SharedViewModel
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMessageBinding
+import com.netease.nim.demo.nim.attachment.StickerAttachment
+import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
 import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
@@ -26,8 +31,6 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.uber.autodispose.autoDispose
 import kotlinx.android.synthetic.main.fragment_message.*
 import kotlinx.android.synthetic.main.layout_input.*
-import kotlinx.android.synthetic.main.layout_input.center_input
-import kotlinx.android.synthetic.main.layout_input.view.*
 import javax.inject.Inject
 
 
@@ -44,6 +47,8 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     override fun setLayoutId(): Int = R.layout.fragment_message
 
     private lateinit var sessionType: SessionTypeEnum
+
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     @Inject
     lateinit var msgService: MsgService
@@ -70,6 +75,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     }
 
     /**
+     * todo 内存泄漏
      * 初始化底部布局的Fragment，有Emoji表情，有更多布局
      */
     private fun initBottomFragment() {
@@ -100,26 +106,12 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 attachContentView(layout_content, recycler)
                 setInputType(ViewMessageInput.TYPE_DEFAULT)
             }
-
-            // 初始化Emoji的View
-            fragmentEmoji.onInitView = {
-                //emoji的点击事件
-                onClickEmojiEvent.observe(viewLifecycleOwner, Observer {
-                    appendText(it)
-                    center_input.setSelection(center_input.length())
-                })
-            }
         }
+
     }
 
     private fun appendText(text: String?) {
         center_input.text = center_input.text.toString().plus(text).toEditable()
-    }
-
-    private fun sendTextMessage(text: String) {
-        val message = MessageBuilder.createTextMessage(arg.contactId, sessionType, text)
-        viewModel.addMessage(listOf(message))
-        viewModel.sendMessage(message)
     }
 
     /**
@@ -200,6 +192,45 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                     viewModel.addMessage(listOf(it.message))
                 }
             }
+        /**
+         * 点击Emoji事件
+         */
+        RxBus.toObservable(EventEmoticon.OnClickEmojiEvent::class.java)
+            .bindToSchedulers()
+            .autoDispose(viewModel)
+            .subscribe {
+                appendText(it.text)
+                center_input.setSelection(center_input.length())
+            }
+
+        /**
+         * 点击贴图事件
+         */
+        RxBus.toObservable(EventEmoticon.OnClickStickerEvent::class.java)
+            .bindToSchedulers()
+            .autoDispose(viewModel)
+            .subscribe {
+                sendStickerMessage(it.stickerItem)
+            }
+    }
+
+    /**
+     * 发送文本消息
+     */
+    private fun sendTextMessage(text: String) {
+        val message = MessageBuilder.createTextMessage(arg.contactId, sessionType, text)
+        viewModel.sendMessage(message)
+    }
+
+    /**
+     * 发送贴图消息
+     */
+    private fun sendStickerMessage(stickerItem: StickerItem) {
+        val attachment = StickerAttachment(stickerItem.category, stickerItem.name)
+        val stickerMessage = MessageBuilder.createCustomMessage(
+            arg.contactId, sessionType, "贴图消息", attachment
+        )
+        viewModel.sendMessage(stickerMessage)
     }
 
     override fun onResume() {

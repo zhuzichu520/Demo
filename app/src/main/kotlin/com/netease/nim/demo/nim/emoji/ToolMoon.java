@@ -1,7 +1,6 @@
 package com.netease.nim.demo.nim.emoji;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Editable;
@@ -10,7 +9,6 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
-import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,15 +21,17 @@ import java.util.regex.Pattern;
 
 public class ToolMoon {
 
-    private static final float DEF_SCALE = 0.6f;
+    /**
+     * 表情的放大倍数
+     */
+    private static final float EMOJIICON_SCALE = 1.2f;
 
     public static void identifyFaceExpression(Context context, TextView textView, String value) {
         identifyFaceExpression(
                 context,
                 textView,
                 value,
-                ImageSpan.ALIGN_BOTTOM,
-                getScale(textView.getPaint())
+                (int) (textView.getTextSize() * EMOJIICON_SCALE)
         );
     }
 
@@ -39,16 +39,9 @@ public class ToolMoon {
         SpannableString mSpannableString = makeSpannableStringTags(
                 context,
                 value,
-                getScale(textView.getPaint()),
-                ImageSpan.ALIGN_BOTTOM
+                (int) (textView.getTextSize() * EMOJIICON_SCALE)
         );
         viewSetText(textView, mSpannableString);
-    }
-
-    private static float getScale(TextPaint textPaint) {
-        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
-        float height = Math.abs(fontMetrics.ascent + fontMetrics.descent);
-        return height / 64f;
     }
 
     /**
@@ -62,15 +55,14 @@ public class ToolMoon {
         tv.setText(mSpannableString);
     }
 
-    public static void identifyFaceExpression(Context context,
-                                              View textView, String value, int align, float scale) {
-        SpannableString mSpannableString = replaceEmoticons(context, value, scale, align);
+    public static void identifyFaceExpression(Context context, View textView, String value, int size) {
+        SpannableString mSpannableString = replaceEmoticons(context, value, size);
         viewSetText(textView, mSpannableString);
     }
 
     public static void identifyRecentVHFaceExpressionAndTags(Context context, View textView,
-                                                             String value, int align, float scale) {
-        SpannableString mSpannableString = makeSpannableStringTags(context, value, scale, align, false);
+                                                             String value, int size) {
+        SpannableString mSpannableString = makeSpannableStringTags(context, value, size, false);
         ToolTeamMemberAit.replaceAitForeground(value, mSpannableString);
         viewSetText(textView, mSpannableString);
     }
@@ -79,12 +71,12 @@ public class ToolMoon {
      * lstmsgviewholder类使用,只需显示a标签对应的文本
      */
     public static void identifyFaceExpressionAndTags(Context context,
-                                                     View textView, String value, int align, float scale) {
-        SpannableString mSpannableString = makeSpannableStringTags(context, value, scale, align, false);
+                                                     View textView, String value, int size) {
+        SpannableString mSpannableString = makeSpannableStringTags(context, value, size, false);
         viewSetText(textView, mSpannableString);
     }
 
-    private static SpannableString replaceEmoticons(Context context, String value, float scale, int align) {
+    private static SpannableString replaceEmoticons(Context context, String value, int size) {
         if (TextUtils.isEmpty(value)) {
             value = "";
         }
@@ -95,9 +87,8 @@ public class ToolMoon {
             int start = matcher.start();
             int end = matcher.end();
             String emot = value.substring(start, end);
-            Drawable d = getEmotDrawable(context, emot, scale);
-            if (d != null) {
-                ImageSpan span = new ImageSpan(d, align);
+            EmojiSpan span = new EmojiSpan(context, emot, size, size);
+            if (span.getDrawable() != null) {
                 mSpannableString.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -106,11 +97,11 @@ public class ToolMoon {
 
     private static Pattern mATagPattern = Pattern.compile("<a.*?>.*?</a>");
 
-    public static SpannableString makeSpannableStringTags(Context context, String value, float scale, int align) {
-        return makeSpannableStringTags(context, value, DEF_SCALE, align, true);
+    public static SpannableString makeSpannableStringTags(Context context, String value, int size) {
+        return makeSpannableStringTags(context, value, size, true);
     }
 
-    public static SpannableString makeSpannableStringTags(Context context, String value, float scale, int align, boolean bTagClickable) {
+    public static SpannableString makeSpannableStringTags(Context context, String value, int size, boolean bTagClickable) {
         ArrayList<ATagSpan> tagSpans = new ArrayList<ATagSpan>();
         if (TextUtils.isEmpty(value)) {
             value = "";
@@ -138,9 +129,8 @@ public class ToolMoon {
             start = matcher.start();
             end = matcher.end();
             String emot = value.substring(start, end);
-            Drawable d = getEmotDrawable(context, emot, scale);
-            if (d != null) {
-                ImageSpan span = align == -1 ? new ImageSpanAlignCenter(d) : new ImageSpan(d, align);
+            EmojiSpan span = new EmojiSpan(context, emot, size, size);
+            if (span.getDrawable() != null) {
                 mSpannableString.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -160,13 +150,13 @@ public class ToolMoon {
             return;
         CharSequence s = editable.subSequence(start, start + count);
         Matcher matcher = EmojiManager.getPattern().matcher(s);
+        int emojiSize = (int) (editText.getTextSize() * EMOJIICON_SCALE);
         while (matcher.find()) {
             int from = start + matcher.start();
             int to = start + matcher.end();
             String emot = editable.subSequence(from, to).toString();
-            Drawable d = getEmotDrawable(context, emot, getScale(editText.getPaint()));
-            if (d != null) {
-                ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);
+            EmojiSpan span = new EmojiSpan(context, emot, emojiSize, emojiSize);
+            if(span.getDrawable()!=null){
                 editable.setSpan(span, from, to, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
