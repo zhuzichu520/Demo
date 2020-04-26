@@ -20,9 +20,12 @@ fun bindingHtmlText(textView: TextView, string: String?) {
     }
 }
 
-@BindingAdapter(value = ["textColor"], requireAll = false)
-fun bindingTextView(textView: TextView, color: Int?) {
+@BindingAdapter(value = ["textColor", "text"], requireAll = false)
+fun bindingTextView(textView: TextView, color: Int?, text: Int?) {
     color?.let {
         textView.setTextColor(it)
+    }
+    text?.let {
+        textView.setText(text)
     }
 }

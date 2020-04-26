@@ -62,6 +62,8 @@ object Versions {
     const val POPUPWINDOW = "2.2.2.2"
 
     const val DEVELOPER = "1.0.8"
+
+    const val LIVEEVENTBUS = "1.6.1"
 }
 
 /**
@@ -185,7 +187,9 @@ object Libs {
     //guava
     const val GUAVA = "com.google.guava:guava:${Versions.GUAVA}"
     //popupWindow
-    const val POPUPWINDOW = "com.github.razerdp:BasePopup:${Versions.POPUPWINDOW}";
+    const val POPUPWINDOW = "com.github.razerdp:BasePopup:${Versions.POPUPWINDOW}"
+    //LiveEventBus
+    const val LIVEEVENTBUS = "com.jeremyliao:live-event-bus-x:${Versions.LIVEEVENTBUS}"
 }
 
 

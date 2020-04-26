@@ -5,7 +5,7 @@ import android.graphics.Rect
 import android.view.View
 
 /**
- * desc
+ * desc 键盘工具类
  * author: 朱子楚
  * time: 2020/4/14 1:54 PM
  * since: v 1.0.0
@@ -51,11 +51,10 @@ class ToolKeyboard(
                     if (!isKeyboardShow) {
                         onKeyboardShow?.invoke(softKeyboardHeight)
                         isKeyboardShow = true
-                    } else {
-                        //切换键盘高度发生变化
-                        if (this.softKeyboardHeight != softKeyboardHeight) {
-                            onKeyboardChange?.invoke(softKeyboardHeight)
-                        }
+                    }
+                    //切换键盘高度发生变化
+                    if (this.softKeyboardHeight != softKeyboardHeight) {
+                        onKeyboardChange?.invoke(softKeyboardHeight)
                     }
                     this@ToolKeyboard.softKeyboardHeight = softKeyboardHeight
                 }

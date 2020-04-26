@@ -33,4 +33,7 @@
     <string name="start_session_record">我发起了白板演示</string>
     <string name="session_end_record">白板演示已结束</string>
 
+    <string name="recording_cancel">手指上滑　取消发送</string>
+    <string name="recording_cancel_tip">松开手指　取消发送</string>
+
 </resources>

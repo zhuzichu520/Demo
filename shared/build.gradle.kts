@@ -113,7 +113,7 @@ dependencies {
     api(Libs.GUAVA)
 
     api(Libs.FASTJSON)
-
+    api(Libs.LIVEEVENTBUS)
 
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)

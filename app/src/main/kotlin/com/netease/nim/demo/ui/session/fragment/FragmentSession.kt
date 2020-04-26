@@ -4,7 +4,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.shared.bus.RxBus
-import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
@@ -12,7 +11,6 @@ import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentSessionBinding
 import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.ui.session.viewmodel.ViewModelSession
-import com.uber.autodispose.autoDispose
 
 /**
  * desc 会话列表Fragment
@@ -35,12 +33,11 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
 
     override fun initViewObservable() {
         super.initViewObservable()
+
         RxBus.toObservable(NimEvent.OnRecentContactEvent::class.java)
-            .bindToSchedulers()
-            .autoDispose(viewModel)
-            .subscribe {
+            .observe(this, Observer {
                 viewModel.parseSessionList(it.list)
-            }
+            })
 
         viewModel.sessionList.observe(viewLifecycleOwner, Observer {
             var number = 0

@@ -5,7 +5,7 @@ import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.netease.nim.demo.nim.repository.NimRepository
 import com.netease.nimlib.sdk.msg.model.IMMessage
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import javax.inject.Inject
 
 /**
@@ -16,10 +16,10 @@ import javax.inject.Inject
  */
 class UseCaseGetMessageList @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<UseCaseGetMessageList.Parameters, Observable<List<IMMessage>>>() {
+) : UseCase<UseCaseGetMessageList.Parameters, Flowable<List<IMMessage>>>() {
 
-    override fun execute(parameters: Parameters): Observable<List<IMMessage>> {
-        return nimRepository.getMessageList(parameters.anchor, parameters.pageSize).toObservable()
+    override fun execute(parameters: Parameters): Flowable<List<IMMessage>> {
+        return nimRepository.getMessageList(parameters.anchor, parameters.pageSize)
             .bindToSchedulers()
             .bindToException()
     }

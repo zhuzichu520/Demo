@@ -16,13 +16,22 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.*
+import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.hiwitech.android.shared.ext.clean
 import com.jakewharton.rxbinding3.view.layoutChangeEvents
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.emoji.ToolMoon
 import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nim.demo.ui.message.main.event.EventMessage
+import com.netease.nimlib.sdk.media.record.AudioRecorder
+import com.netease.nimlib.sdk.media.record.IAudioRecordCallback
+import com.netease.nimlib.sdk.media.record.RecordType
 import com.uber.autodispose.android.autoDispose
+import io.reactivex.Flowable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_input.view.*
+import java.util.concurrent.TimeUnit
 
 /**
  * desc
@@ -84,6 +93,27 @@ class ViewMessageInput @JvmOverloads constructor(
 
     var onReplaceFragment: (Int.() -> Fragment)? = null
 
+    /**
+     * 录音秒数
+     */
+    var recordSecond = 0
+    /**
+     * 是否打开录音
+     */
+    var isOpenRecord = false
+
+    /**
+     * 是否能取消录音
+     */
+    var cancelled: Boolean = false
+
+    /**
+     * 计时器的Disposable对象
+     */
+    private var disposableTime: Disposable? = null
+
+//    private var audioRecorder: AudioRecorder = AudioRecorder(context, RecordType.AAC,60,this)
+
     companion object {
         //默认状态 无键盘
         const val TYPE_DEFAULT = 0
@@ -99,13 +129,17 @@ class ViewMessageInput @JvmOverloads constructor(
 
 
     init {
+        //加载布局
         LayoutInflater.from(context).inflate(R.layout.layout_input, this)
+        //设置点击事件
         setOnClickListener(
             this, start_voice, start_keyboard, center_emoji,
             center_keyboard, end_more, end_send
         )
 
         center_input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+
+        //监听输入变化
         center_input.addTextChangedListener(object : TextWatcher {
 
             private var start = 0
@@ -124,7 +158,9 @@ class ViewMessageInput @JvmOverloads constructor(
                 checkSendButtonEnable()
                 ToolMoon.replaceEmoticons(context, center_input, start, count)
             }
+
         })
+
 
         center_input.setOnTouchListener { _, motionEvent ->
             if (MotionEvent.ACTION_UP == motionEvent.action) {
@@ -133,14 +169,110 @@ class ViewMessageInput @JvmOverloads constructor(
             false
         }
 
+        //监听输入框高度变化
         layout_input.post {
-            layoutChangeEvents().autoDispose(layout_input).subscribe {
+            layout_input.layoutChangeEvents().autoDispose(layout_input).subscribe {
                 inputHeight = layout_input.height
-                scrollToBottom()
+            }
+        }
+
+        center_audio.post {
+            center_audio.setOnTouchListener { view, motionEvent ->
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_UP and MotionEvent.ACTION_CANCEL -> {
+                        stopRecord(isCancelled(view, motionEvent))
+                    }
+                    MotionEvent.ACTION_DOWN -> {
+                        startRecord()
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        updateCancel(isCancelled(view, motionEvent))
+                    }
+                }
+                false
             }
         }
     }
 
+
+    /**
+     * 是否计时器的资源
+     */
+    fun releaseTimeDisposable() {
+        disposableTime?.dispose()
+        disposableTime = null
+    }
+
+    /**
+     * 开始计时
+     */
+    private fun startTime() {
+        disposableTime = Flowable.interval(0, 1, TimeUnit.SECONDS)
+            .bindToSchedulers()
+            .subscribe {
+                if (isOpenRecord) {
+                    RxBus.post(
+                        EventMessage.OnRecordAudioEvent(
+                            EventMessage.RECORD_RECORDING,
+                            recordSecond++
+                        )
+                    )
+                }
+            }
+
+    }
+
+    /**
+     * 更新cancelled值
+     */
+    private fun updateCancel(cancelled: Boolean) {
+        if (!isOpenRecord)
+            return
+        if (this.cancelled == cancelled)
+            return
+        this.cancelled = cancelled
+        RxBus.post(EventMessage.OnRecordCancelChangeEvent(this.cancelled))
+    }
+
+    private fun isCancelled(view: View, event: MotionEvent): Boolean {
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        return event.rawX < location[0] || event.rawX > location[0] + view.width || event.rawY < location[1] - 40
+    }
+
+    /**
+     * 停止录音
+     * @param isCancelled 是否取消发送这段录音
+     */
+    private fun stopRecord(isCancelled: Boolean) {
+        releaseTimeDisposable()
+        recordSecond = 0
+        isOpenRecord = false
+        if (isCancelled) {
+            RxBus.post(
+                EventMessage.OnRecordAudioEvent(
+                    EventMessage.RECORD_CANCEL,
+                    recordSecond
+                )
+            )
+        } else {
+            RxBus.post(EventMessage.OnRecordAudioEvent(EventMessage.RECORD_SEND, recordSecond))
+        }
+    }
+
+    private fun startRecord() {
+        releaseTimeDisposable()
+        recordSecond = 0
+        isOpenRecord = true
+        cancelled = false
+        RxBus.post(EventMessage.OnRecordCancelChangeEvent(this.cancelled))
+        RxBus.post(EventMessage.OnRecordAudioEvent(EventMessage.RECORD_RECORDING, recordSecond))
+        startTime()
+    }
+
+    /**
+     * 初始化View
+     */
     fun attachContentView(contentView: View, recyclerView: RecyclerView) {
         this.contentView = contentView
         this.recyclerView = recyclerView
@@ -149,6 +281,9 @@ class ViewMessageInput @JvmOverloads constructor(
         this.inputHeight = layout_input.height
     }
 
+    /**
+     * 获取底部显示的状态类型
+     */
     fun getInputType(): Int {
         return inputType
     }
@@ -232,6 +367,9 @@ class ViewMessageInput @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 切换Fragment
+     */
     private fun replaceFragment(fragment: Fragment) {
         val manager = (context as AppCompatActivity).supportFragmentManager
         val transaction = manager.beginTransaction()
@@ -239,6 +377,9 @@ class ViewMessageInput @JvmOverloads constructor(
         transaction.commitAllowingStateLoss()
     }
 
+    /**
+     * 弹出软键盘
+     */
     private fun showSoftKeyboard() {
         showKeyboard(context, center_input)
         MainHandler.postDelayed(350) {
@@ -320,6 +461,9 @@ class ViewMessageInput @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 获取键盘高度
+     */
     private fun getSoftKeyboardHeightLocalValue(): Int {
         return NimUserStorage.softKeyboardHeight
     }

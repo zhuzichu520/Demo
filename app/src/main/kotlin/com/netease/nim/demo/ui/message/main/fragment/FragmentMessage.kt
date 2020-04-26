@@ -1,14 +1,17 @@
 package com.netease.nim.demo.ui.message.main.fragment
 
+import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.shared.bus.RxBus
-import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.hiwitech.android.shared.ext.closeDefaultAnimator
 import com.hiwitech.android.shared.ext.toEditable
+import com.hiwitech.android.shared.ext.toast
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
@@ -17,9 +20,11 @@ import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
 import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
 import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
+import com.netease.nim.demo.ui.message.main.event.EventMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
 import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
 import com.netease.nim.demo.ui.message.view.ViewMessageInput
@@ -28,7 +33,6 @@ import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_MORE
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
-import com.uber.autodispose.autoDispose
 import kotlinx.android.synthetic.main.fragment_message.*
 import kotlinx.android.synthetic.main.layout_input.*
 import javax.inject.Inject
@@ -47,6 +51,8 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     override fun setLayoutId(): Int = R.layout.fragment_message
 
     private lateinit var sessionType: SessionTypeEnum
+
+    private lateinit var recordAnima: AnimationDrawable
 
     private val sharedViewModel by activityViewModels<SharedViewModel>()
 
@@ -70,6 +76,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     override fun initView() {
         super.initView()
         recycler.closeDefaultAnimator()
+        recordAnima = view_record.background as AnimationDrawable
         initBottomFragment()
         initBackListener()
     }
@@ -171,47 +178,95 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          * 消息接收监听
          */
         RxBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
-            .bindToSchedulers()
-            .autoDispose(viewModel)
-            .subscribe {
+            .observe(viewLifecycleOwner, Observer {
                 val data = it.list.filter { item ->
                     item.sessionId == arg.contactId
                 }
                 viewModel.addMessage(data)
-            }
-
+            })
         /**
          * 消息发送状态监听
          */
         RxBus.toObservable(NimEvent.OnMessageStatusEvent::class.java)
-            .bindToSchedulers()
-            .autoDispose(viewModel)
-            .subscribe {
+            .observe(viewLifecycleOwner, Observer {
                 val message = it.message
                 if (message.sessionId == arg.contactId) {
                     viewModel.addMessage(listOf(it.message))
                 }
-            }
+            })
         /**
          * 点击Emoji事件
          */
         RxBus.toObservable(EventEmoticon.OnClickEmojiEvent::class.java)
-            .bindToSchedulers()
-            .autoDispose(viewModel)
-            .subscribe {
+            .observe(viewLifecycleOwner, Observer {
                 appendText(it.text)
                 center_input.setSelection(center_input.length())
-            }
+            })
 
         /**
          * 点击贴图事件
          */
         RxBus.toObservable(EventEmoticon.OnClickStickerEvent::class.java)
-            .bindToSchedulers()
-            .autoDispose(viewModel)
-            .subscribe {
+            .observe(viewLifecycleOwner, Observer {
                 sendStickerMessage(it.stickerItem)
-            }
+            })
+
+        /**
+         * 录音计时事件
+         */
+        RxBus.toObservable(EventMessage.OnRecordAudioEvent::class.java)
+            .observe(viewLifecycleOwner, Observer {
+                var isShownRecord = false
+                when (it.recordType) {
+                    EventMessage.RECORD_SEND -> {
+                        //发送语言
+                        isShownRecord = false
+                        recordAnima.stop()
+                        "发送".toast()
+                    }
+                    EventMessage.RECORD_RECORDING -> {
+                        //正在录制语言
+                        isShownRecord = true
+                        recordAnima.start()
+                    }
+                    EventMessage.RECORD_CANCEL -> {
+                        //取消发送
+                        isShownRecord = false
+                        recordAnima.stop()
+                        "取消".toast()
+                    }
+                }
+                viewModel.isShownRecord.value = isShownRecord
+                viewModel.recordTime.value = it.recordSecond.toString()
+            })
+
+        /**
+         * 监听是否可以取消录制事件
+         */
+        RxBus.toObservable(EventMessage.OnRecordCancelChangeEvent::class.java)
+            .observe(viewLifecycleOwner, Observer {
+                updateTimerTip(it.cancelled)
+            })
+
+        RxBus.toObservable(OnKeyboardChangeEvent::class.java)
+            .observe(viewLifecycleOwner, Observer {
+                message_input.setInputType(ViewMessageInput.TYPE_INPUT)
+            })
+    }
+
+    /**
+     * 正在进行语音录制和取消语音录制，界面展示
+     *
+     * @param cancel
+     */
+    private fun updateTimerTip(cancel: Boolean) {
+        if (cancel) {
+            viewModel.timerTip.value = R.string.recording_cancel_tip
+            viewModel.timerTipBackgroundColor.value = R.drawable.nim_cancel_record_red_bg
+        } else {
+            viewModel.timerTip.value = R.string.recording_cancel
+            viewModel.timerTipBackgroundColor.value = 0
+        }
     }
 
     /**
@@ -264,4 +319,28 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         return findLastPosition == position
     }
 
+    override fun onDestroyView() {
+        message_input.releaseTimeDisposable()
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        releaseRecordAnima()
+    }
+
+    /**
+     * 释放帧动画资源
+     */
+    private fun releaseRecordAnima() {
+        recordAnima.stop()
+        for (i in 0 until recordAnima.numberOfFrames) {
+            val frame: Drawable = recordAnima.getFrame(i)
+            if (frame is BitmapDrawable) {
+                frame.bitmap.recycle()
+            }
+            frame.callback = null
+        }
+        recordAnima.callback = null
+    }
 }

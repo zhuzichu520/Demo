@@ -3,6 +3,9 @@
 
     <!--Components-->
 
+    <style name="Widget.MyTheme.AppBarLayout" parent="Widget.Design.AppBarLayout">
+
+    </style>
 
     <!--Bottom Sheets-->
     <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">

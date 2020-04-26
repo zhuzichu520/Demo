@@ -3,11 +3,12 @@ package com.hiwitech.android.shared.global
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.tencent.mmkv.MMKV
 import com.hiwitech.android.shared.log.lumberjack.FileLoggingSetup
 import com.hiwitech.android.shared.log.lumberjack.FileLoggingTree
 import com.hiwitech.android.shared.log.lumberjack.L
 import com.hiwitech.android.shared.theme.ThemeManager
+import com.jeremyliao.liveeventbus.LiveEventBus
+import com.tencent.mmkv.MMKV
 import timber.log.ConsoleTree
 
 object AppGlobal {
@@ -26,7 +27,7 @@ object AppGlobal {
         L.plant(FileLoggingTree(FileLoggingSetup(context).withFolder(CacheGlobal.getLogCacheDir())))
         AppCompatDelegate.setDefaultNightMode(ThemeManager.getNightMode())
         ThemeManager.initTheme(context)
-        //或者，调试模式下会有日志输出
+        LiveEventBus.config().autoClear(true)
         return this
     }
 

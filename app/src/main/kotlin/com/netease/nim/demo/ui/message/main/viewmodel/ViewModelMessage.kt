@@ -49,6 +49,27 @@ class ViewModelMessage @Inject constructor(
      */
     val title = MutableLiveData<String>()
 
+
+    /**
+     * 是否显示录音布局
+     */
+    val isShownRecord = MutableLiveData<Boolean>(false)
+
+    /**
+     * 录音时间显示
+     */
+    val recordTime = MutableLiveData<String>()
+
+    /**
+     * 录音界面的文案提示
+     */
+    val timerTip = MutableLiveData<Int>()
+
+    /**
+     * 录音界面的背景色
+     */
+    val timerTipBackgroundColor = MutableLiveData<Int>()
+
     /**
      * 消息数据
      */
@@ -149,7 +170,7 @@ class ViewModelMessage @Inject constructor(
             .subscribe(
                 {
                     val list = handleMessageList(it)
-                    val data = pageHelper.add(list, true)
+                    pageHelper.add(list, true)
                     if (true == isFirst) {
                         onScrollBottomEvent.call()
                     }

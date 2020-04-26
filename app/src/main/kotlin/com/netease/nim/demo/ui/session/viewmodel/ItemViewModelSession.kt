@@ -9,6 +9,7 @@ import com.hiwitech.android.shared.tools.ToolDate
 import com.hiwitech.android.widget.badge.Badge
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ItemViewModelBase
+import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.tools.ToolTeam
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
@@ -69,7 +70,6 @@ data class ItemViewModelSession(
      */
     init {
         val contactId = contact.contactId
-        content.value = contact.content
         date.value = ToolDate.getTimeShowString(contact.time, false)
         isTop.value = isOnTop()
         number.value = contact.unreadCount
@@ -91,6 +91,12 @@ data class ItemViewModelSession(
             else -> {
 
             }
+        }
+        val attachment = contact.attachment
+        if (attachment is StickerAttachment) {
+            content.value = "[贴图]"
+        } else {
+            content.value = contact.content
         }
     }
 
