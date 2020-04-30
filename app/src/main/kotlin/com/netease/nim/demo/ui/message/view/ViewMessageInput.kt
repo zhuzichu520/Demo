@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.message.view
 
+import android.Manifest
 import android.animation.ValueAnimator
 import android.content.Context
 import android.text.Editable
@@ -13,10 +14,11 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.*
-import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.hiwitech.android.shared.ext.clean
 import com.jakewharton.rxbinding3.view.layoutChangeEvents
@@ -25,8 +27,7 @@ import com.netease.nim.demo.nim.emoji.ToolMoon
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.message.main.event.EventMessage
 import com.netease.nimlib.sdk.media.record.AudioRecorder
-import com.netease.nimlib.sdk.media.record.IAudioRecordCallback
-import com.netease.nimlib.sdk.media.record.RecordType
+import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.autoDispose
 import io.reactivex.Flowable
 import io.reactivex.disposables.Disposable
@@ -40,7 +41,9 @@ import java.util.concurrent.TimeUnit
  * since: v 1.0.0
  */
 class ViewMessageInput @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
     /**
@@ -112,7 +115,8 @@ class ViewMessageInput @JvmOverloads constructor(
      */
     private var disposableTime: Disposable? = null
 
-//    private var audioRecorder: AudioRecorder = AudioRecorder(context, RecordType.AAC,60,this)
+
+    var audioRecorder: AudioRecorder? = null
 
     companion object {
         //默认状态 无键盘
@@ -178,15 +182,24 @@ class ViewMessageInput @JvmOverloads constructor(
 
         center_audio.post {
             center_audio.setOnTouchListener { view, motionEvent ->
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_UP and MotionEvent.ACTION_CANCEL -> {
-                        stopRecord(isCancelled(view, motionEvent))
-                    }
-                    MotionEvent.ACTION_DOWN -> {
-                        startRecord()
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        updateCancel(isCancelled(view, motionEvent))
+                RxPermissions(context as FragmentActivity).request(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).autoDispose(this).subscribe {
+                    if (it) {
+                        setInputType(TYPE_VOICE)
+                        when (motionEvent.action) {
+                            MotionEvent.ACTION_UP and MotionEvent.ACTION_CANCEL -> {
+                                stopRecord(isCancelled(view, motionEvent))
+                            }
+                            MotionEvent.ACTION_DOWN -> {
+                                startRecord()
+                            }
+                            MotionEvent.ACTION_MOVE -> {
+                                updateCancel(isCancelled(view, motionEvent))
+                            }
+                        }
                     }
                 }
                 false
@@ -211,7 +224,7 @@ class ViewMessageInput @JvmOverloads constructor(
             .bindToSchedulers()
             .subscribe {
                 if (isOpenRecord) {
-                    RxBus.post(
+                    LiveDataBus.post(
                         EventMessage.OnRecordAudioEvent(
                             EventMessage.RECORD_RECORDING,
                             recordSecond++
@@ -231,7 +244,7 @@ class ViewMessageInput @JvmOverloads constructor(
         if (this.cancelled == cancelled)
             return
         this.cancelled = cancelled
-        RxBus.post(EventMessage.OnRecordCancelChangeEvent(this.cancelled))
+        LiveDataBus.post(EventMessage.OnRecordCancelChangeEvent(this.cancelled))
     }
 
     private fun isCancelled(view: View, event: MotionEvent): Boolean {
@@ -248,15 +261,17 @@ class ViewMessageInput @JvmOverloads constructor(
         releaseTimeDisposable()
         recordSecond = 0
         isOpenRecord = false
+        audioRecorder?.completeRecord(isCancelled)
+        center_layout.setBackgroundResource(R.drawable.nim_input_edit)
         if (isCancelled) {
-            RxBus.post(
+            LiveDataBus.post(
                 EventMessage.OnRecordAudioEvent(
                     EventMessage.RECORD_CANCEL,
                     recordSecond
                 )
             )
         } else {
-            RxBus.post(EventMessage.OnRecordAudioEvent(EventMessage.RECORD_SEND, recordSecond))
+            LiveDataBus.post(EventMessage.OnRecordAudioEvent(EventMessage.RECORD_SEND, recordSecond))
         }
     }
 
@@ -265,8 +280,15 @@ class ViewMessageInput @JvmOverloads constructor(
         recordSecond = 0
         isOpenRecord = true
         cancelled = false
-        RxBus.post(EventMessage.OnRecordCancelChangeEvent(this.cancelled))
-        RxBus.post(EventMessage.OnRecordAudioEvent(EventMessage.RECORD_RECORDING, recordSecond))
+        audioRecorder?.startRecord()
+        center_layout.setBackgroundResource(R.drawable.nim_input_edit_pressed)
+        LiveDataBus.post(EventMessage.OnRecordCancelChangeEvent(this.cancelled))
+        LiveDataBus.post(
+            EventMessage.OnRecordAudioEvent(
+                EventMessage.RECORD_RECORDING,
+                recordSecond
+            )
+        )
         startTime()
     }
 

@@ -51,6 +51,13 @@ interface NimRepository {
      * @param resend 是否重发
      */
     fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Void>
+
+    /**
+     * 下载附件
+     * @param message 附件所在的消息体
+     * @param thumb 下载缩略图还是原文件。为true时，仅下载缩略图,该参数仅对图片和视频类消息有效
+     */
+    fun downloadAttachment(message: IMMessage, thumb: Boolean): Flowable<Void>
 }
 
 class NimRepositoryImpl(
@@ -102,6 +109,12 @@ class NimRepositoryImpl(
     override fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Void> {
         return createFlowable {
             msgService.sendMessage(message, resend).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun downloadAttachment(message: IMMessage, thumb: Boolean): Flowable<Void> {
+        return createFlowable {
+            msgService.downloadAttachment(message, thumb).setCallback(NimRequestCallback(this))
         }
     }
 

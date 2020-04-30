@@ -36,4 +36,7 @@
     <string name="recording_cancel">手指上滑　取消发送</string>
     <string name="recording_cancel_tip">松开手指　取消发送</string>
 
+    <string name="recording_error">说话时间太短</string>
+    <string name="recording_max">说话时间超时</string>
+
 </resources>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="alphaEmphasisHigh" format="float"/>
-    <attr name="alphaEmphasisMedium" format="float"/>
-    <attr name="alphaEmphasisDisabled" format="float"/>
+    <attr name="alphaEmphasisHigh" format="float" />
+    <attr name="alphaEmphasisMedium" format="float" />
+    <attr name="alphaEmphasisDisabled" format="float" />
+
+    <attr name="colorFontPrimary" format="reference"/>
+    <attr name="colorFontSecondary" format="reference"/>
+    <attr name="colorFontTertiary" format="reference"/>
+    <attr name="colorFontQuaternary" format="reference"/>
 
     <declare-styleable name="RecyclerView">
         <attr name="itemBinding" format="reference" />

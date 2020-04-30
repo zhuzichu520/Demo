@@ -1,5 +1,6 @@
 package com.netease.nim.demo.nim
 
+import com.hiwitech.android.shared.ext.logi
 import com.hiwitech.android.shared.http.exception.NimError
 import com.hiwitech.android.shared.http.exception.NimThrowable
 import com.netease.nimlib.sdk.RequestCallback
@@ -25,6 +26,7 @@ class NimRequestCallback<T>(
     }
 
     override fun onFailed(code: Int) {
+        "IM出现了错误:".plus(code).logi()
         emitter.onError(
             NimThrowable(
                 code,

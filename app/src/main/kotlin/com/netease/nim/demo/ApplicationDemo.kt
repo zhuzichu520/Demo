@@ -49,6 +49,7 @@ class ApplicationDemo : DaggerApplication() {
         NIMClient.init(this, loginInfo(), NimSDKOptionConfig.getSDKOptions(this))
 
         if (NIMUtil.isMainProcess(this)) {
+            //开启数据同步监听
             NIMClient.toggleNotification(NimUserStorage.notifyToggle)
             // 注册自定义消息附件解析器
             NIMClient.getService(MsgService::class.java)

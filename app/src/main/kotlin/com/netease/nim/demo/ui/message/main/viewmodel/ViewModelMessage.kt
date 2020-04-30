@@ -2,6 +2,7 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.libs.tool.replaceAt
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.widget.page.PageHelper
@@ -9,14 +10,14 @@ import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
 import com.netease.nim.demo.nim.attachment.StickerAttachment
+import com.netease.nim.demo.nim.audio.NimAudioManager
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
-import com.netease.nim.demo.ui.message.main.domain.UseCaseGetMessageList
-import com.netease.nim.demo.ui.message.main.domain.UseCaseGetTeamInfo
-import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
-import com.netease.nim.demo.ui.message.main.domain.UseCaseSendMessage
+import com.netease.nim.demo.ui.message.main.domain.*
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
+import com.netease.nimlib.sdk.msg.model.AttachmentProgress
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 /**
@@ -29,7 +30,9 @@ class ViewModelMessage @Inject constructor(
     private val useCaseGetTeamInfo: UseCaseGetTeamInfo,
     private val useCaseGetUserInfo: UseCaseGetUserInfo,
     private val useCaseGetMessageList: UseCaseGetMessageList,
-    private val useCaseSendMessage: UseCaseSendMessage
+    private val useCaseSendMessage: UseCaseSendMessage,
+    private val useCaseDowloadAttachment: UseCaseDowloadAttachment,
+    private val nimAudioManager: NimAudioManager
 ) : ViewModelBase<ArgMessage>() {
 
     private val pageSize = 30
@@ -108,8 +111,9 @@ class ViewModelMessage @Inject constructor(
      */
     val itemBinding = pageHelper.pageItemBinding.apply {
         map<ItemViewModelTextMessage>(BR.item, R.layout.item_message_text)
-        map<ItemViewModelPictureMessage>(BR.item, R.layout.item_message_picture)
+        map<ItemViewModelImageMessage>(BR.item, R.layout.item_message_image)
         map<ItemViewModelStickerMessage>(BR.item, R.layout.item_message_sticker)
+        map<ItemViewModelAudioMessage>(BR.item, R.layout.item_message_audio)
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
     }
 
@@ -176,6 +180,7 @@ class ViewModelMessage @Inject constructor(
                     }
                 },
                 {
+                    it.printStackTrace()
                     handleThrowable(it)
                 }
             )
@@ -212,7 +217,10 @@ class ViewModelMessage @Inject constructor(
                     ItemViewModelTextMessage(item)
                 }
                 MsgTypeEnum.image -> {
-                    ItemViewModelPictureMessage(item)
+                    ItemViewModelImageMessage(item, useCaseDowloadAttachment)
+                }
+                MsgTypeEnum.audio -> {
+                    ItemViewModelAudioMessage(item, useCaseDowloadAttachment, nimAudioManager)
                 }
                 MsgTypeEnum.custom -> {
                     val attachment = item.attachment
@@ -225,6 +233,27 @@ class ViewModelMessage @Inject constructor(
                 else -> {
                     ItemViewModelUnknownMessage(item)
                 }
+            }
+        }
+    }
+
+    /**
+     * 更新message的附件的附件下载进度
+     */
+    fun updateAttachmenntProgress(attachment: AttachmentProgress) {
+        var index = -1
+        messageList.forEachIndexed { i, item ->
+            if (item is ItemViewModelImageMessage) {
+                if (attachment.uuid == item.uuid) {
+                    index = i
+                    return@forEachIndexed
+                }
+            }
+        }
+        if (index != -1) {
+            messageList.replaceAt(index){
+                val l = attachment.transferred.toFloat() / attachment.total.toFloat()
+                (it as ItemViewModelImageMessage).copy(progress = DecimalFormat("0.00%").format(l))
             }
         }
     }

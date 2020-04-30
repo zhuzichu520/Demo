@@ -1,17 +1,22 @@
 package com.netease.nim.demo.ui.message.main.fragment
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
-import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.closeDefaultAnimator
 import com.hiwitech.android.shared.ext.toEditable
 import com.hiwitech.android.shared.ext.toast
+import com.hiwitech.android.shared.global.CacheGlobal
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
@@ -26,15 +31,29 @@ import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.event.EventMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
+import com.netease.nim.demo.ui.message.more.event.EventMore
 import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
+import com.netease.nim.demo.ui.message.more.viewmodel.ViewModelMore
 import com.netease.nim.demo.ui.message.view.ViewMessageInput
 import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_EMOJI
 import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_MORE
+import com.netease.nimlib.sdk.media.record.AudioRecorder
+import com.netease.nimlib.sdk.media.record.IAudioRecordCallback
+import com.netease.nimlib.sdk.media.record.RecordType
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
+import com.tbruyelle.rxpermissions2.RxPermissions
+import com.uber.autodispose.autoDispose
+import com.zhihu.matisse.Matisse
+import com.zhihu.matisse.MimeType
+import com.zhihu.matisse.engine.impl.GlideEngine
 import kotlinx.android.synthetic.main.fragment_message.*
 import kotlinx.android.synthetic.main.layout_input.*
+import top.zibin.luban.Luban
+import top.zibin.luban.OnCompressListener
+import java.io.File
+import java.util.*
 import javax.inject.Inject
 
 
@@ -46,6 +65,10 @@ import javax.inject.Inject
  */
 class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, ArgMessage>() {
 
+    companion object {
+        const val REQUEST_CODE_CHOOSE = 0x11
+    }
+
     override fun bindVariableId(): Int = BR.viewModel
 
     override fun setLayoutId(): Int = R.layout.fragment_message
@@ -55,6 +78,8 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     private lateinit var recordAnima: AnimationDrawable
 
     private val sharedViewModel by activityViewModels<SharedViewModel>()
+
+    private lateinit var audioRecorder: AudioRecorder
 
     @Inject
     lateinit var msgService: MsgService
@@ -75,6 +100,42 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
 
     override fun initView() {
         super.initView()
+        audioRecorder = AudioRecorder(context, RecordType.AAC, 60, object : IAudioRecordCallback {
+            override fun onRecordSuccess(
+                audioFile: File,
+                audioLength: Long,
+                recordType: RecordType
+            ) {
+                val audioMessage =
+                    MessageBuilder.createAudioMessage(
+                        arg.contactId,
+                        sessionType,
+                        audioFile,
+                        audioLength
+                    )
+                viewModel.sendMessage(audioMessage)
+            }
+
+            override fun onRecordReachedMaxTime(maxTime: Int) {
+
+            }
+
+            override fun onRecordReady() {
+
+            }
+
+            override fun onRecordCancel() {
+
+            }
+
+            override fun onRecordStart(audioFile: File, recordType: RecordType) {
+
+            }
+
+            override fun onRecordFail() {
+                R.string.recording_error.toast()
+            }
+        })
         recycler.closeDefaultAnimator()
         recordAnima = view_record.background as AnimationDrawable
         initBottomFragment()
@@ -88,33 +149,29 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     private fun initBottomFragment() {
         val fragmentEmoji = FragmentEmoticon()
         val fragmentMore = FragmentMore()
-        message_input.apply {
-            // 切换Fragment
-            onReplaceFragment = {
-                when (this) {
-                    TYPE_EMOJI -> {
-                        fragmentEmoji
-                    }
-                    TYPE_MORE -> {
-                        fragmentMore
-                    }
-                    else -> {
-                        fragmentEmoji
-                    }
+        recycler.post {
+            message_input.attachContentView(layout_content, recycler)
+            message_input.setInputType(ViewMessageInput.TYPE_DEFAULT)
+        }
+        message_input.audioRecorder = audioRecorder
+        // 切换Fragment
+        message_input.onReplaceFragment = {
+            when (this) {
+                TYPE_EMOJI -> {
+                    fragmentEmoji
+                }
+                TYPE_MORE -> {
+                    fragmentMore
+                }
+                else -> {
+                    fragmentEmoji
                 }
             }
-            // 点击发送
-            onClickSendListener = {
-                sendTextMessage(this)
-            }
-
-            // 默认ViewMessageInput
-            recycler.post {
-                attachContentView(layout_content, recycler)
-                setInputType(ViewMessageInput.TYPE_DEFAULT)
-            }
         }
-
+        // 点击发送
+        message_input.onClickSendListener = {
+            sendTextMessage(this)
+        }
     }
 
     private fun appendText(text: String?) {
@@ -177,7 +234,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         /**
          * 消息接收监听
          */
-        RxBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
+        LiveDataBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 val data = it.list.filter { item ->
                     item.sessionId == arg.contactId
@@ -187,7 +244,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         /**
          * 消息发送状态监听
          */
-        RxBus.toObservable(NimEvent.OnMessageStatusEvent::class.java)
+        LiveDataBus.toObservable(NimEvent.OnMessageStatusEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 val message = it.message
                 if (message.sessionId == arg.contactId) {
@@ -197,7 +254,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         /**
          * 点击Emoji事件
          */
-        RxBus.toObservable(EventEmoticon.OnClickEmojiEvent::class.java)
+        LiveDataBus.toObservable(EventEmoticon.OnClickEmojiEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 appendText(it.text)
                 center_input.setSelection(center_input.length())
@@ -206,7 +263,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         /**
          * 点击贴图事件
          */
-        RxBus.toObservable(EventEmoticon.OnClickStickerEvent::class.java)
+        LiveDataBus.toObservable(EventEmoticon.OnClickStickerEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 sendStickerMessage(it.stickerItem)
             })
@@ -214,7 +271,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         /**
          * 录音计时事件
          */
-        RxBus.toObservable(EventMessage.OnRecordAudioEvent::class.java)
+        LiveDataBus.toObservable(EventMessage.OnRecordAudioEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 var isShownRecord = false
                 when (it.recordType) {
@@ -222,7 +279,6 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                         //发送语言
                         isShownRecord = false
                         recordAnima.stop()
-                        "发送".toast()
                     }
                     EventMessage.RECORD_RECORDING -> {
                         //正在录制语言
@@ -233,7 +289,6 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                         //取消发送
                         isShownRecord = false
                         recordAnima.stop()
-                        "取消".toast()
                     }
                 }
                 viewModel.isShownRecord.value = isShownRecord
@@ -243,15 +298,61 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         /**
          * 监听是否可以取消录制事件
          */
-        RxBus.toObservable(EventMessage.OnRecordCancelChangeEvent::class.java)
+        LiveDataBus.toObservable(EventMessage.OnRecordCancelChangeEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 updateTimerTip(it.cancelled)
             })
 
-        RxBus.toObservable(OnKeyboardChangeEvent::class.java)
+        /**
+         * 键盘高度改变事件
+         */
+        LiveDataBus.toObservable(OnKeyboardChangeEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 message_input.setInputType(ViewMessageInput.TYPE_INPUT)
             })
+
+        /**
+         *  点击更多中的item事件
+         */
+        LiveDataBus.toObservable(EventMore.OnClickItemMoreEvent::class.java)
+            .observe(viewLifecycleOwner, Observer {
+                when (it.type) {
+                    ViewModelMore.TYPE_ALBUM -> {
+                        startAlbum()
+                    }
+                    else -> {
+                    }
+                }
+            })
+
+        /**
+         * 附件下载监听
+         */
+        LiveDataBus.toObservable(NimEvent.OnAttachmentProgressEvent::class.java)
+            .observe(viewLifecycleOwner, Observer {
+                viewModel.updateAttachmenntProgress(it.attachment)
+            })
+    }
+
+    /**
+     * 跳转到相册
+     */
+    private fun startAlbum() {
+        RxPermissions(requireActivity()).request(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ).autoDispose(viewModel).subscribe {
+            Matisse.from(this)
+                .choose(MimeType.ofImage())
+                .countable(true)
+                .maxSelectable(9)
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(GlideEngine())
+                .theme(R.style.Widget_MyTheme_Zhihu)
+                .showPreview(false) // Default is `true`
+                .forResult(REQUEST_CODE_CHOOSE)
+        }
     }
 
     /**
@@ -288,6 +389,32 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         viewModel.sendMessage(stickerMessage)
     }
 
+    /**
+     * 发送图片消息
+     */
+    private fun sendImageMessage(paths: List<String>) {
+        Luban.with(requireContext())
+            .load(paths)
+            .ignoreBy(100)
+            .setTargetDir(CacheGlobal.getLubanCacheDir())
+            .filter {
+                !(TextUtils.isEmpty(it) || it.toLowerCase(Locale.getDefault()).endsWith(".gif"))
+            }.setCompressListener(object : OnCompressListener {
+                override fun onSuccess(file: File) {
+                    val message =
+                        MessageBuilder.createImageMessage(arg.contactId, sessionType, file)
+                    viewModel.sendMessage(message, false)
+                }
+
+                override fun onError(e: Throwable) {
+                }
+
+                override fun onStart() {
+                }
+
+            }).launch()
+    }
+
     override fun onResume() {
         super.onResume()
         msgService.setChattingAccount(arg.contactId, sessionType)
@@ -297,7 +424,6 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     override fun onPause() {
         super.onPause()
         msgService.setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None)
-        message_input.setInputType(ViewMessageInput.TYPE_DEFAULT)
     }
 
     /**
@@ -343,4 +469,14 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         }
         recordAnima.callback = null
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        data?.let {
+            if (requestCode == REQUEST_CODE_CHOOSE) {
+                sendImageMessage(Matisse.obtainPathResult(it))
+            }
+        }
+    }
+
 }

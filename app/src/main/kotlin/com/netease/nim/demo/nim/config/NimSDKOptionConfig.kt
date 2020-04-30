@@ -3,10 +3,9 @@ package com.netease.nim.demo.nim.config
 import android.app.LauncherActivity
 import android.content.Context
 import android.text.TextUtils
-import com.hiwitech.android.libs.tool.getScreenWidth
-import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.shared.global.CacheGlobal
 import com.netease.nim.demo.nim.provider.NimUserInfoProvider
+import com.netease.nim.demo.nim.tools.ToolImage.Companion.getImageMaxEdge
 import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.ServerAddresses
 import com.netease.nimlib.sdk.StatusBarNotificationConfig
@@ -24,46 +23,31 @@ object NimSDKOptionConfig {
     fun getSDKOptions(context: Context): SDKOptions {
         val options = SDKOptions()
         // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
-        // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
         initStatusBarNotificationConfig(options)
-        // 配置 APP 保存图片/语音/文件/log等数据的目录
         // 配置 APP 保存图片/语音/文件/log等数据的目录
         options.sdkStorageRootPath = CacheGlobal.getNimCacheDir()
         // 配置是否需要预下载附件缩略图
-        // 配置是否需要预下载附件缩略图
-        options.preloadAttach = true
+        options.preloadAttach = false
         // 配置附件缩略图的尺寸大小
-        // 配置附件缩略图的尺寸大小
-        options.thumbnailSize = (165.0 / 320.0 * getScreenWidth(context)).toCast()
+        options.thumbnailSize = getImageMaxEdge()
         // 通知栏显示用户昵称和头像
-        // 通知栏显示用户昵称和头像
-        options.userInfoProvider =
-            NimUserInfoProvider(context)
-        // 定制通知栏提醒文案（可选，如果不定制将采用SDK默认文案）
+        options.userInfoProvider = NimUserInfoProvider(context)
         // 定制通知栏提醒文案（可选，如果不定制将采用SDK默认文案）
         options.messageNotifierCustomization = messageNotifierCustomization
         // 在线多端同步未读数
-        // 在线多端同步未读数
         options.sessionReadAck = true
-        // 动图的缩略图直接下载原图
         // 动图的缩略图直接下载原图
         options.animatedImageThumbnailEnabled = true
         // 采用异步加载SDK
-        // 采用异步加载SDK
         options.asyncInitSDK = true
-        // 是否是弱IM场景
         // 是否是弱IM场景
         options.reducedIM = false
         // 是否检查manifest 配置，调试阶段打开，调试通过之后请关掉
-        // 是否检查manifest 配置，调试阶段打开，调试通过之后请关掉
         options.checkManifestConfig = false
-        // 是否启用群消息已读功能，默认关闭
         // 是否启用群消息已读功能，默认关闭
         options.enableTeamMsgAck = true
         // 打开消息撤回未读数-1的开关
-        // 打开消息撤回未读数-1的开关
         options.shouldConsiderRevokedMessageUnreadCount = true
-        // 云信私有化配置项
         // 云信私有化配置项
         configServerAddress(options, context)
         options.mixPushConfig = buildMixPushConfig()
@@ -134,4 +118,8 @@ object NimSDKOptionConfig {
         config.oppoCertificateName = "DEMO_OPPO_PUSH"
         return config
     }
+
+
+
+
 }

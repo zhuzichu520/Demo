@@ -28,11 +28,11 @@ class ViewModelLogin @Inject constructor(
     /**
      * 账号
      */
-    val account = MutableLiveData<String>()
+    val account = MutableLiveData<String>("a7711451")
     /**
      * 密码
      */
-    val password = MutableLiveData<String>()
+    val password = MutableLiveData<String>("7711451")
 
     /**
      * 点击登录

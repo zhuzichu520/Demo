@@ -141,3 +141,15 @@ fun bindViewColor(view: View, backgroundColor: Int?, @DrawableRes background: In
         view.setBackgroundResource(it)
     }
 }
+
+@BindingAdapter(value = ["layoutWidth", "layoutHeight"], requireAll = false)
+fun bindViewLayout(view: View, layoutWidth: Int?, layoutHeight: Int?) {
+    layoutWidth?.let {
+        view.setBackgroundColor(it)
+        view.layoutParams.width = it
+    }
+    layoutHeight?.let {
+        view.layoutParams.height = it
+    }
+    view.layoutParams = view.layoutParams
+}

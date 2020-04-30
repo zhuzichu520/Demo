@@ -4,7 +4,10 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.BaseViewModel
+import com.hiwitech.android.shared.bus.LiveDataBus
+import com.hiwitech.android.shared.ext.createCommand
 import com.netease.nim.demo.base.ItemViewModelBase
+import com.netease.nim.demo.ui.message.more.event.EventMore
 
 /**
  * desc
@@ -15,8 +18,16 @@ import com.netease.nim.demo.base.ItemViewModelBase
 data class ItemViewModelMore(
     private val viewModel: BaseViewModel<*>,
     @StringRes private val titleId: Int,
-    @DrawableRes private val iconId: Int
+    @DrawableRes private val iconId: Int,
+    val type: Int
 ) : ItemViewModelBase(viewModel) {
+
     val title = MutableLiveData(titleId)
+
     val icon = MutableLiveData(iconId)
+
+    val onClickItemMoreCommand = createCommand {
+        LiveDataBus.post(EventMore.OnClickItemMoreEvent(type))
+    }
+
 }

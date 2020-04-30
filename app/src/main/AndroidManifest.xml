@@ -92,6 +92,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme.DayNight"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         tools:replace="android:label,android:allowBackup">
 
         <meta-data

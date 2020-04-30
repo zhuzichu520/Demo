@@ -114,6 +114,8 @@ dependencies {
 
     api(Libs.FASTJSON)
     api(Libs.LIVEEVENTBUS)
+    api(Libs.MATISSE)
+    api(Libs.LUBAN)
 
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)

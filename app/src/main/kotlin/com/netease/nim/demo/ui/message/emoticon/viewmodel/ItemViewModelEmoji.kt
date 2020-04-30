@@ -3,7 +3,7 @@ package com.netease.nim.demo.ui.message.emoticon.viewmodel
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.BaseViewModel
-import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.global.AppGlobal.context
 import com.netease.nim.demo.base.ItemViewModelBase
@@ -28,7 +28,7 @@ data class ItemViewModelEmoji(
     }
 
     val onClickEmojiCommand = createCommand {
-        RxBus.post(EventEmoticon.OnClickEmojiEvent(text))
+        LiveDataBus.post(EventEmoticon.OnClickEmojiEvent(text))
     }
 
 }

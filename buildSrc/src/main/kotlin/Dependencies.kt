@@ -61,9 +61,12 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.2.2"
 
-    const val DEVELOPER = "1.0.8"
+    const val DEVELOPER = "1.0.9"
 
     const val LIVEEVENTBUS = "1.6.1"
+
+    const val MATISSE="0.5.3-beta3"
+    const val LUBAN = "1.1.8"
 }
 
 /**
@@ -190,6 +193,10 @@ object Libs {
     const val POPUPWINDOW = "com.github.razerdp:BasePopup:${Versions.POPUPWINDOW}"
     //LiveEventBus
     const val LIVEEVENTBUS = "com.jeremyliao:live-event-bus-x:${Versions.LIVEEVENTBUS}"
+    //matisse
+    const val MATISSE = "com.zhihu.android:matisse:${Versions.MATISSE}"
+    //Luban
+    const val LUBAN= "top.zibin:Luban:${Versions.LUBAN}"
 }
 
 

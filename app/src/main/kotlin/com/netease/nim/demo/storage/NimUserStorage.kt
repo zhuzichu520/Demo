@@ -1,5 +1,6 @@
 package com.netease.nim.demo.storage
 
+import android.media.AudioManager
 import com.hiwitech.android.shared.storage.BooleanPreference
 import com.hiwitech.android.shared.storage.IntPreference
 import com.hiwitech.android.shared.storage.StringPreference
@@ -23,7 +24,8 @@ object NimUserStorage {
     var account by StringPreference(prefs, null)
     var token by StringPreference(prefs, null)
     var notifyToggle by BooleanPreference(prefs, true)
-    var softKeyboardHeight by IntPreference(prefs, 0)
+    var audioStream by IntPreference(prefs, AudioManager.STREAM_MUSIC)
+    var softKeyboardHeight by IntPreference(prefs, 720)
 
     fun logout() {
         account = null

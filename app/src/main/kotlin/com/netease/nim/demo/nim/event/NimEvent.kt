@@ -1,5 +1,6 @@
 package com.netease.nim.demo.nim.event
 
+import com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelAudioMessage
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.OnlineClient
 import com.netease.nimlib.sdk.friend.model.Friend
@@ -33,4 +34,8 @@ class NimEvent {
     data class OnUserInfoUpdateEvent(val list:  List<NimUserInfo>)
     data class OnAddedOrUpdatedFriendsEvent(val list: List<Friend>)
     data class OnDeletedFriendsEvent(val list: List<String>)
+
+    data class OnAudioPlayerEvent(
+        val itemViewModelAudioMessage: ItemViewModelAudioMessage
+    )
 }

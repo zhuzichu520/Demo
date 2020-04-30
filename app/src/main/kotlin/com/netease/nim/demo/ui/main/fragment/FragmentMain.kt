@@ -55,7 +55,7 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
         }
         //监听会话列表未读数监听
         shareViewModel.onSessionNumberChangeEvent.observe(viewLifecycleOwner, Observer {
-            badge.badgeNumber=it
+            badge.badgeNumber = it
         })
 
         val fragments = listOf<Fragment>(
@@ -72,7 +72,6 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
         content.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments, titles)
         bottom.setupWithViewPager(content)
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

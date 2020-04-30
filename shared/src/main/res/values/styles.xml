@@ -34,5 +34,28 @@
 
     </style>
 
+    <style name="Widget.MyTheme.Zhihu" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">?colorSurface</item>
+        <item name="colorPrimaryDark">?colorSurface</item>
+        <item name="toolbar">@style/Toolbar.Zhihu</item>
+        <item name="album.dropdown.title.color">?colorFontPrimary</item>
+        <item name="album.dropdown.count.color">?colorFontSecondary</item>
+        <item name="album.element.color">?colorFontPrimary</item>
+        <item name="album.thumbnail.placeholder">?colorFontPrimary</item>
+        <item name="album.emptyView">@drawable/ic_empty_zhihu</item>
+        <item name="album.emptyView.textColor">?colorFontPrimary</item>
+        <item name="item.placeholder">?colorFontPrimary</item>
+        <item name="item.checkCircle.borderColor">?colorSurface</item>
+        <item name="item.checkCircle.backgroundColor">?colorSecondary</item>
+        <item name="page.bg">@color/color_background</item>
+        <item name="bottomToolbar.bg">@color/color_background_secondary</item>
+        <item name="bottomToolbar.preview.textColor">?colorFontPrimary</item>
+        <item name="bottomToolbar.apply.textColor">@color/color_primary</item>
+        <item name="preview.bottomToolbar.back.textColor">?colorFontPrimary</item>
+        <item name="preview.bottomToolbar.apply.textColor">?colorPrimary</item>
+        <item name="listPopupWindowStyle">@style/Popup.Zhihu</item>
+        <item name="capture.textColor">@color/zhihu_capture</item>
+    </style>
+
 
 </resources>

@@ -1,7 +1,7 @@
 package com.netease.nim.demo.ui.launcher
 
 import android.os.Bundle
-import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.bus.LiveDataBus
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ActivityBase
 import com.netease.nim.demo.storage.NimUserStorage
@@ -32,7 +32,7 @@ class ActivityLauncher : ActivityBase() {
             },
             onKeyboardChange = {
                 NimUserStorage.softKeyboardHeight = this
-                RxBus.post(OnKeyboardChangeEvent())
+                LiveDataBus.post(OnKeyboardChangeEvent())
             },
             onKeyboardHide = {
 

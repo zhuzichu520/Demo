@@ -14,6 +14,8 @@ object CacheGlobal {
 
     private const val CACHE_NIM_FILE_NAME = "cache_nim"
 
+    private const val CACHE_LUBAN_FILE_NAME = "cache_luban"
+
     fun initDir() {
         getGlideCacheDir()
     }
@@ -32,6 +34,10 @@ object CacheGlobal {
 
     fun getNimCacheDir(): String {
         return getDiskCacheDir(CACHE_NIM_FILE_NAME).absolutePath
+    }
+
+    fun getLubanCacheDir(): String {
+        return getDiskCacheDir(CACHE_LUBAN_FILE_NAME).absolutePath
     }
 
     private fun getBaseDiskCacheDir(): File {

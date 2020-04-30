@@ -1,5 +1,7 @@
 package com.netease.nim.demo.di
 
+import android.content.Context
+import com.netease.nim.demo.nim.audio.NimAudioManager
 import com.netease.nim.demo.nim.repository.NimRepository
 import com.netease.nim.demo.nim.repository.NimRepositoryImpl
 import com.netease.nimlib.sdk.NIMClient
@@ -39,12 +41,16 @@ class NimModule {
 
     @Singleton
     @Provides
+    fun providesNimAudioManager(context: Context): NimAudioManager = NimAudioManager(context)
+
+    @Singleton
+    @Provides
     fun providesNimRepository(
         teamService: TeamService,
         userService: UserService,
         authService: AuthService,
         msgService: MsgService
     ): NimRepository =
-        NimRepositoryImpl(teamService, userService, authService,msgService)
+        NimRepositoryImpl(teamService, userService, authService, msgService)
 
 }

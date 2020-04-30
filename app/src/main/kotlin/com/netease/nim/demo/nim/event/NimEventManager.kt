@@ -1,6 +1,6 @@
 package com.netease.nim.demo.nim.event
 
-import com.hiwitech.android.shared.bus.RxBus
+import com.hiwitech.android.shared.bus.LiveDataBus
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.StatusCode
@@ -23,7 +23,7 @@ object NimEventManager {
     private val observerRecentContact =
         Observer { list: List<RecentContact>? ->
             if (!list.isNullOrEmpty()) {
-                RxBus.post(NimEvent.OnRecentContactEvent(list))
+                LiveDataBus.post(NimEvent.OnRecentContactEvent(list))
             }
         }
 
@@ -33,7 +33,7 @@ object NimEventManager {
     private val observeOnlineStatus =
         Observer { statusCode: StatusCode? ->
             statusCode?.let {
-                RxBus.post(NimEvent.OnLineStatusEvent(it))
+                LiveDataBus.post(NimEvent.OnLineStatusEvent(it))
             }
         }
 
@@ -43,7 +43,7 @@ object NimEventManager {
     private val observeOnlineClient =
         Observer { onlineClients: List<OnlineClient>? ->
             onlineClients?.let {
-                RxBus.post(NimEvent.OnLienClientEvent(it))
+                LiveDataBus.post(NimEvent.OnLienClientEvent(it))
             }
         }
 
@@ -53,7 +53,7 @@ object NimEventManager {
     private val observeMessageStatus =
         Observer { message: IMMessage? ->
             message?.let {
-                RxBus.post(NimEvent.OnMessageStatusEvent(it))
+                LiveDataBus.post(NimEvent.OnMessageStatusEvent(it))
             }
         }
 
@@ -63,14 +63,17 @@ object NimEventManager {
     private val observeReceiveMessage =
         Observer { list: List<IMMessage>? ->
             if (!list.isNullOrEmpty()) {
-                RxBus.post(NimEvent.OnReceiveMessageEvent(list))
+                LiveDataBus.post(NimEvent.OnReceiveMessageEvent(list))
             }
         }
 
+    /**
+     * 附件下载监听
+     */
     private val observerAttachmentProgress =
         Observer { attachmentProgress: AttachmentProgress? ->
             attachmentProgress?.let {
-                RxBus.post(NimEvent.OnAttachmentProgressEvent(it))
+                LiveDataBus.post(NimEvent.OnAttachmentProgressEvent(it))
             }
         }
 
@@ -84,7 +87,7 @@ object NimEventManager {
     private val observerUserInfoUpdate =
         Observer { list: List<NimUserInfo>? ->
             if (!list.isNullOrEmpty()) {
-                RxBus.post(NimEvent.OnUserInfoUpdateEvent(list))
+                LiveDataBus.post(NimEvent.OnUserInfoUpdateEvent(list))
             }
         }
 
@@ -99,10 +102,10 @@ object NimEventManager {
             val deletedFriends =
                 friendChangedNotify.deletedFriends
             if (addedOrUpdatedFriends.isNullOrEmpty()) {
-                RxBus.post(NimEvent.OnAddedOrUpdatedFriendsEvent(addedOrUpdatedFriends))
+                LiveDataBus.post(NimEvent.OnAddedOrUpdatedFriendsEvent(addedOrUpdatedFriends))
             }
             if (!deletedFriends.isNullOrEmpty()) {
-                RxBus.post(NimEvent.OnDeletedFriendsEvent(deletedFriends))
+                LiveDataBus.post(NimEvent.OnDeletedFriendsEvent(deletedFriends))
             }
         } as Observer<FriendChangedNotify>
 

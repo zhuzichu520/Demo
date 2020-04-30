@@ -117,7 +117,7 @@ open class ItemViewModelBaseMessage(
         }
     }
 
-    private fun isMine(): Boolean {
+    fun isMine(): Boolean {
         return message.fromAccount == NimUserStorage.account
     }
 
