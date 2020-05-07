@@ -2,7 +2,6 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
-import com.hiwitech.android.libs.tool.replaceAt
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.widget.page.PageHelper
@@ -13,11 +12,11 @@ import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.audio.NimAudioManager
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.domain.*
+import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
+import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
-import com.netease.nimlib.sdk.msg.model.AttachmentProgress
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
-import java.text.DecimalFormat
 import javax.inject.Inject
 
 /**
@@ -138,7 +137,7 @@ class ViewModelMessage @Inject constructor(
      * 发送消息
      */
     fun sendMessage(message: IMMessage, resend: Boolean = false) {
-        addMessage(listOf(message))
+        addMessage(listOf(message), true)
         useCaseSendMessage.execute(UseCaseSendMessage.Parameters(message, resend))
             .autoDispose(this)
             .subscribe {
@@ -190,20 +189,23 @@ class ViewModelMessage @Inject constructor(
      * 添加新消息
      *
      * @param list 消息集合
+     * @param isEvent 是否开启添加完成事件
      */
-    fun addMessage(list: List<IMMessage>) {
+    fun addMessage(list: List<IMMessage>, isEvent: Boolean) {
         val data = handleMessageList(list)
-        data.forEach {
-            val index = messageList.lastIndexOf(it)
+        data.forEach { item ->
+            val index = messageList.indexOf(item)
             if (index != -1) {
                 //已经存在
-                messageList[index] = it
+                messageList[index] = item
             } else {
                 //不存在
-                messageList.add(it)
+                messageList.add(item)
             }
         }
-        onAddMessageCompletedEvent.value = messageList
+        if (isEvent) {
+            onAddMessageCompletedEvent.value = messageList
+        }
     }
 
     /**
@@ -217,7 +219,7 @@ class ViewModelMessage @Inject constructor(
                     ItemViewModelTextMessage(item)
                 }
                 MsgTypeEnum.image -> {
-                    ItemViewModelImageMessage(item, useCaseDowloadAttachment)
+                    convertItemViewModelImageMessage(item)
                 }
                 MsgTypeEnum.audio -> {
                     ItemViewModelAudioMessage(item, useCaseDowloadAttachment, nimAudioManager)
@@ -238,24 +240,21 @@ class ViewModelMessage @Inject constructor(
     }
 
     /**
-     * 更新message的附件的附件下载进度
+     * 将IMesasge转换成ItemViewModelImageMessage
      */
-    fun updateAttachmenntProgress(attachment: AttachmentProgress) {
-        var index = -1
-        messageList.forEachIndexed { i, item ->
-            if (item is ItemViewModelImageMessage) {
-                if (attachment.uuid == item.uuid) {
-                    index = i
-                    return@forEachIndexed
+    private fun convertItemViewModelImageMessage(item: IMMessage): ItemViewModelImageMessage {
+        val attachment = item.attachment as ImageAttachment
+        val thumbPath = attachment.thumbPath
+        if (thumbPath.isNullOrEmpty() && (item.attachStatus == AttachStatusEnum.def || item.attachStatus == AttachStatusEnum.transferred)) {
+            //缩略图不存在，开启下载缩略图
+            useCaseDowloadAttachment.execute(
+                UseCaseDowloadAttachment.Parameters(item, true)
+            ).autoDispose(this)
+                .subscribe {
+
                 }
-            }
         }
-        if (index != -1) {
-            messageList.replaceAt(index){
-                val l = attachment.transferred.toFloat() / attachment.total.toFloat()
-                (it as ItemViewModelImageMessage).copy(progress = DecimalFormat("0.00%").format(l))
-            }
-        }
+        return ItemViewModelImageMessage(item)
     }
 
 }

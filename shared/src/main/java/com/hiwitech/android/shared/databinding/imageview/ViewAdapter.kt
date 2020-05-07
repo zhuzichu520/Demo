@@ -11,7 +11,7 @@ import com.hiwitech.android.shared.glide.GlideApp
 import com.hiwitech.android.widget.sharp.Sharp
 
 @BindingAdapter(value = ["url", "isCircle", "placeholder", "error"], requireAll = false)
-fun bindSimpleDraweeView(
+fun bindImageViewGlide(
     imageView: ImageView,
     url: Any?,
     isCircle: Boolean?,
@@ -22,8 +22,9 @@ fun bindSimpleDraweeView(
         val requestOptions = RequestOptions()
         val glide = GlideApp.with(imageView).load(url)
         if (true == isCircle) {
-            requestOptions.circleCrop().autoClone()
+            requestOptions.circleCrop()
         }
+
         placeholder?.let {
             glide.thumbnail(GlideApp.with(imageView).load(placeholder).apply(requestOptions))
         }

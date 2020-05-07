@@ -3,10 +3,10 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 import android.util.LayoutDirection
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import com.hiwitech.android.shared.ext.logi
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
@@ -37,11 +37,6 @@ open class ItemViewModelBaseMessage(
      * 会话id
      */
     val uuid: String = message.uuid
-
-    /**
-     * 发送状态
-     */
-    val status: MsgStatusEnum = message.status
 
     /**
      * 姓名
@@ -111,8 +106,21 @@ open class ItemViewModelBaseMessage(
                 STATE_SEND_LOADING
             }
             else -> {
-                ("RX：" + "uuid:" + message.uuid + ",content:" + message.content + ",status:" + message.status.value).logi()
                 STATE_SEND_NORMAL
+            }
+        }
+    }
+
+    /**
+     * 附件下载状态
+     */
+    val attachStatus = MutableLiveData<Boolean>(false).apply {
+        value = when (message.attachStatus) {
+            AttachStatusEnum.transferring -> {
+                true
+            }
+            else -> {
+                false
             }
         }
     }

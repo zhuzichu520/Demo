@@ -8,6 +8,7 @@ import com.netease.nim.demo.ui.launcher.module.ModuleLauncher
 import com.netease.nim.demo.ui.login.main.module.ModuleLogin
 import com.netease.nim.demo.ui.login.register.module.ModuleRegister
 import com.netease.nim.demo.ui.main.module.ModuleMain
+import com.netease.nim.demo.ui.map.module.ModuleAmap
 import com.netease.nim.demo.ui.me.main.module.ModuleMe
 import com.netease.nim.demo.ui.message.emoticon.module.ModuleEmoticon
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
@@ -38,7 +39,8 @@ abstract class ActivityBindingModule {
             ModuleContact::class,
             ModuleMessage::class,
             ModuleMore::class,
-            ModuleEmoticon::class
+            ModuleEmoticon::class,
+            ModuleAmap::class
         ]
     )
     internal abstract fun launcherActivity(): ActivityLauncher

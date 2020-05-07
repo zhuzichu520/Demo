@@ -16,7 +16,7 @@ class NimRequestCallback<T>(
     private val emitter: FlowableEmitter<T>
 ) : RequestCallback<T> {
 
-    override fun onSuccess(any: T) {
+    override fun onSuccess(any: T?) {
         if (any == null) {
             emitter.onComplete()
         } else {

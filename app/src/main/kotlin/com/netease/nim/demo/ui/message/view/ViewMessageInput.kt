@@ -99,16 +99,16 @@ class ViewMessageInput @JvmOverloads constructor(
     /**
      * 录音秒数
      */
-    var recordSecond = 0
+    private var recordSecond = 0
     /**
      * 是否打开录音
      */
-    var isOpenRecord = false
+    private var isOpenRecord = false
 
     /**
      * 是否能取消录音
      */
-    var cancelled: Boolean = false
+    private var cancelled: Boolean = false
 
     /**
      * 计时器的Disposable对象
@@ -271,7 +271,12 @@ class ViewMessageInput @JvmOverloads constructor(
                 )
             )
         } else {
-            LiveDataBus.post(EventMessage.OnRecordAudioEvent(EventMessage.RECORD_SEND, recordSecond))
+            LiveDataBus.post(
+                EventMessage.OnRecordAudioEvent(
+                    EventMessage.RECORD_SEND,
+                    recordSecond
+                )
+            )
         }
     }
 

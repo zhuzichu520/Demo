@@ -46,6 +46,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="50dp"
+            app:layoutHeight="@{item.imageHeight}"
+            app:layoutWidth="@{item.imageWidth}"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toBottomOf="@+id/name">
 
@@ -58,15 +60,23 @@
                 app:qmui_border_color="@color/color_divider"
                 app:qmui_border_width="1dp"
                 app:qmui_corner_radius="4dp"
-                app:url="@{item.image}" />
+                app:url="@{item.imageUrl}" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@{item.attachmentProgress}"
-                android:textAppearance="?textAppearanceButton"
-                android:textColor="@color/color_primary" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:isShown="@{item.attachStatus}"
+                android:background="@drawable/shape_bg_message_image">
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
+
 
         </FrameLayout>
 

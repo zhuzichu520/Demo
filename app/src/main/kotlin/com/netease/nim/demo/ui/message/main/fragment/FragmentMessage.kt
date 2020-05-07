@@ -239,18 +239,20 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 val data = it.list.filter { item ->
                     item.sessionId == arg.contactId
                 }
-                viewModel.addMessage(data)
+                viewModel.addMessage(data, true)
             })
+
         /**
-         * 消息发送状态监听
+         * 消息状态监听
          */
         LiveDataBus.toObservable(NimEvent.OnMessageStatusEvent::class.java)
             .observe(viewLifecycleOwner, Observer {
                 val message = it.message
                 if (message.sessionId == arg.contactId) {
-                    viewModel.addMessage(listOf(it.message))
+                    viewModel.addMessage(listOf(it.message), false)
                 }
             })
+
         /**
          * 点击Emoji事件
          */
@@ -320,18 +322,14 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                     ViewModelMore.TYPE_ALBUM -> {
                         startAlbum()
                     }
+                    ViewModelMore.TYPE_LOCAL -> {
+                        start(R.id.action_fragmentMessage_to_fragmentAmap)
+                    }
                     else -> {
                     }
                 }
             })
 
-        /**
-         * 附件下载监听
-         */
-        LiveDataBus.toObservable(NimEvent.OnAttachmentProgressEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
-                viewModel.updateAttachmenntProgress(it.attachment)
-            })
     }
 
     /**
