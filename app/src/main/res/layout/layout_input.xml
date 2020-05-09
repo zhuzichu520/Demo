@@ -15,7 +15,7 @@
         android:id="@+id/layout_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_background_primary"
+        android:background="@color/color_background"
         android:paddingTop="8dp">
 
         <FrameLayout

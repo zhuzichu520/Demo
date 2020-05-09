@@ -11,6 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_background">
@@ -23,11 +24,67 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_weight="1" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/nim_shap_location_top"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="40dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="@string/cancel"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClickCommand="@{viewModel.onCancelCommand}" />
+
+        <com.hiwitech.android.widget.qmui.layout.QMUIButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="15dp"
+            android:background="@color/color_primary"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="@string/send"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClickCommand="@{viewModel.onSendCommand}"
+            app:qmui_radius="5dp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:layout_height="300dp"
+            app:itemBinding="@{viewModel.itemBinding}"
+            app:items="@{viewModel.items}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/item_map_poi" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_location"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/btn_location_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/view_map"
+            app:layout_constraintStart_toStartOf="@+id/view_map" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

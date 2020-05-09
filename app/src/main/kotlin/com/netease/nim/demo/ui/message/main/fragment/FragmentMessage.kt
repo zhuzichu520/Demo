@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.shared.bus.LiveDataBus
-import com.hiwitech.android.shared.ext.closeDefaultAnimator
 import com.hiwitech.android.shared.ext.toEditable
 import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.CacheGlobal
@@ -26,6 +25,7 @@ import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
+import com.netease.nim.demo.ui.map.event.EventMap
 import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
 import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
@@ -37,6 +37,7 @@ import com.netease.nim.demo.ui.message.more.viewmodel.ViewModelMore
 import com.netease.nim.demo.ui.message.view.ViewMessageInput
 import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_EMOJI
 import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_MORE
+import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.netease.nimlib.sdk.media.record.AudioRecorder
 import com.netease.nimlib.sdk.media.record.IAudioRecordCallback
 import com.netease.nimlib.sdk.media.record.RecordType
@@ -136,7 +137,6 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 R.string.recording_error.toast()
             }
         })
-        recycler.closeDefaultAnimator()
         recordAnima = view_record.background as AnimationDrawable
         initBottomFragment()
         initBackListener()
@@ -231,11 +231,16 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             }
         })
 
+    }
+
+    override fun initOneObservable() {
+        super.initOneObservable()
+
         /**
          * 消息接收监听
          */
         LiveDataBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 val data = it.list.filter { item ->
                     item.sessionId == arg.contactId
                 }
@@ -246,7 +251,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          * 消息状态监听
          */
         LiveDataBus.toObservable(NimEvent.OnMessageStatusEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 val message = it.message
                 if (message.sessionId == arg.contactId) {
                     viewModel.addMessage(listOf(it.message), false)
@@ -257,7 +262,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          * 点击Emoji事件
          */
         LiveDataBus.toObservable(EventEmoticon.OnClickEmojiEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 appendText(it.text)
                 center_input.setSelection(center_input.length())
             })
@@ -266,7 +271,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          * 点击贴图事件
          */
         LiveDataBus.toObservable(EventEmoticon.OnClickStickerEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 sendStickerMessage(it.stickerItem)
             })
 
@@ -274,7 +279,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          * 录音计时事件
          */
         LiveDataBus.toObservable(EventMessage.OnRecordAudioEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 var isShownRecord = false
                 when (it.recordType) {
                     EventMessage.RECORD_SEND -> {
@@ -301,7 +306,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          * 监听是否可以取消录制事件
          */
         LiveDataBus.toObservable(EventMessage.OnRecordCancelChangeEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 updateTimerTip(it.cancelled)
             })
 
@@ -309,7 +314,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          * 键盘高度改变事件
          */
         LiveDataBus.toObservable(OnKeyboardChangeEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 message_input.setInputType(ViewMessageInput.TYPE_INPUT)
             })
 
@@ -317,19 +322,47 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          *  点击更多中的item事件
          */
         LiveDataBus.toObservable(EventMore.OnClickItemMoreEvent::class.java)
-            .observe(viewLifecycleOwner, Observer {
+            .observe(this, Observer {
                 when (it.type) {
                     ViewModelMore.TYPE_ALBUM -> {
                         startAlbum()
                     }
                     ViewModelMore.TYPE_LOCAL -> {
-                        start(R.id.action_fragmentMessage_to_fragmentAmap)
+                        startLocation()
                     }
                     else -> {
                     }
                 }
             })
 
+        /**
+         * 发送地图消息
+         */
+        LiveDataBus.toObservable(EventMap.OnSendLocationEvent::class.java)
+            .observe(this, Observer {
+                val latLon = it.itemViewModelPoi.latLonPoint
+                val message = MessageBuilder.createLocationMessage(
+                    arg.contactId,
+                    sessionType,
+                    latLon.latitude,
+                    latLon.longitude,
+                    it.itemViewModelPoi.poiItem.title
+                )
+                viewModel.sendMessage(message)
+            })
+
+    }
+
+    private fun startLocation() {
+        RxPermissions(requireActivity()).request(
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ).autoDispose(viewModel).subscribe {
+            if (it) {
+                start(R.id.action_fragmentMessage_to_activityAmap)
+            } else {
+                FragmentPermissions().show("定位", parentFragmentManager)
+            }
+        }
     }
 
     /**
@@ -340,16 +373,20 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).autoDispose(viewModel).subscribe {
-            Matisse.from(this)
-                .choose(MimeType.ofImage())
-                .countable(true)
-                .maxSelectable(9)
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                .thumbnailScale(0.85f)
-                .imageEngine(GlideEngine())
-                .theme(R.style.Widget_MyTheme_Zhihu)
-                .showPreview(false) // Default is `true`
-                .forResult(REQUEST_CODE_CHOOSE)
+            if (it) {
+                Matisse.from(this)
+                    .choose(MimeType.ofImage())
+                    .countable(true)
+                    .maxSelectable(9)
+                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                    .thumbnailScale(0.85f)
+                    .imageEngine(GlideEngine())
+                    .theme(R.style.Widget_MyTheme_Zhihu)
+                    .showPreview(false) // Default is `true`
+                    .forResult(REQUEST_CODE_CHOOSE)
+            } else {
+                FragmentPermissions().show("文件读写", parentFragmentManager)
+            }
         }
     }
 

@@ -59,6 +59,17 @@ public class EmojiManager {
         };
     }
 
+    /**
+     * 提前预加载emoji
+     *
+     * @param context
+     */
+    public static void initLoad(Context context) {
+        for (int i = 0; i < getDisplayCount(); i++) {
+            getDisplayDrawable(context, i);
+        }
+    }
+
     private static class Entry {
         String text;
         String assetPath;

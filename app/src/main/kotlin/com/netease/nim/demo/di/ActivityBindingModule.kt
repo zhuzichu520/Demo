@@ -8,11 +8,13 @@ import com.netease.nim.demo.ui.launcher.module.ModuleLauncher
 import com.netease.nim.demo.ui.login.main.module.ModuleLogin
 import com.netease.nim.demo.ui.login.register.module.ModuleRegister
 import com.netease.nim.demo.ui.main.module.ModuleMain
+import com.netease.nim.demo.ui.map.ActivityAmap
 import com.netease.nim.demo.ui.map.module.ModuleAmap
 import com.netease.nim.demo.ui.me.main.module.ModuleMe
 import com.netease.nim.demo.ui.message.emoticon.module.ModuleEmoticon
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.message.more.module.ModuleMore
+import com.netease.nim.demo.ui.permissions.module.ModulePermissions
 import com.netease.nim.demo.ui.session.module.ModuleSession
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -40,8 +42,19 @@ abstract class ActivityBindingModule {
             ModuleMessage::class,
             ModuleMore::class,
             ModuleEmoticon::class,
+            ModuleAmap::class,
+            ModulePermissions::class,
             ModuleAmap::class
         ]
     )
     internal abstract fun launcherActivity(): ActivityLauncher
+
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleAmap::class
+        ]
+    )
+    internal abstract fun amapActivity(): ActivityAmap
 }

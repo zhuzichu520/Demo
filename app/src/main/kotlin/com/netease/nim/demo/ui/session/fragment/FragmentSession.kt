@@ -34,11 +34,6 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
     override fun initViewObservable() {
         super.initViewObservable()
 
-        LiveDataBus.toObservable(NimEvent.OnRecentContactEvent::class.java)
-            .observe(this, Observer {
-                viewModel.parseSessionList(it.list)
-            })
-
         viewModel.sessionList.observe(viewLifecycleOwner, Observer {
             var number = 0
             it.forEach { item ->
@@ -46,6 +41,16 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
             }
             shareViewModel.onSessionNumberChangeEvent.value = number
         })
+
+    }
+
+    override fun initOneObservable() {
+        super.initOneObservable()
+
+        LiveDataBus.toObservable(NimEvent.OnRecentContactEvent::class.java)
+            .observe(this, Observer {
+                viewModel.parseSessionList(it.list)
+            })
 
     }
 

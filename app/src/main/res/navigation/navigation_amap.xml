@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_amap"
+    app:startDestination="@id/fragmentAmap">
+
+    <fragment
+        android:id="@+id/fragmentAmap"
+        android:name="com.netease.nim.demo.ui.map.fragment.FragmentAmap"
+        android:label="FragmentAmap"
+        tools:layout="@layout/fragment_amap" />
+</navigation>

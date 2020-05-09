@@ -32,6 +32,9 @@ android {
         versionName = Config.versionName()
         renderscriptTargetApi = 18
         renderscriptSupportModeEnabled = true
+        ndk {
+            setAbiFilters(listOf("armeabi-v7a"))
+        }
         resValue("string", "app_name_new", Config.appName())
         val fields = Config.getBuildConfigFields()
         fields.forEach {

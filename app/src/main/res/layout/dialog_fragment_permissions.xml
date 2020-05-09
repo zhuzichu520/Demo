@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.netease.nim.demo.ui.permissions.viewmodel.ViewModelPermissions" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.hiwitech.android.widget.qmui.layout.QMUILinearLayout
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:background="@color/color_background_primary"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:qmui_radius="10dp"
+            app:qmui_shadowElevation="14dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:minHeight="150dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@{viewModel.content}"
+                android:textAppearance="?attr/textAppearanceBody2"
+                tools:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/left"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="取消" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_divider" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/right"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="去设置"
+                    android:textColor="@color/color_primary" />
+            </LinearLayout>
+
+        </com.hiwitech.android.widget.qmui.layout.QMUILinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -26,6 +26,7 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.emoji.ToolMoon
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.message.main.event.EventMessage
+import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.netease.nimlib.sdk.media.record.AudioRecorder
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.autoDispose
@@ -118,6 +119,8 @@ class ViewMessageInput @JvmOverloads constructor(
 
     var audioRecorder: AudioRecorder? = null
 
+    private var fragmentPermissions: FragmentPermissions = FragmentPermissions()
+
     companion object {
         //默认状态 无键盘
         const val TYPE_DEFAULT = 0
@@ -200,10 +203,18 @@ class ViewMessageInput @JvmOverloads constructor(
                                 updateCancel(isCancelled(view, motionEvent))
                             }
                         }
+                    } else {
+                        showPermissionsDiaog(context)
                     }
                 }
                 false
             }
+        }
+    }
+
+    private fun showPermissionsDiaog(context: FragmentActivity) {
+        if (!fragmentPermissions.isAdded) {
+            fragmentPermissions.show("录音，文件读写", context.supportFragmentManager)
         }
     }
 
@@ -459,7 +470,7 @@ class ViewMessageInput @JvmOverloads constructor(
     }
 
     /**
-     * 释放锁定RecyclerView的高度
+     * 锁定RecyclerView的高度
      */
     private fun lockRecyclerViewHeight(height: Int) {
         val layoutParams = recyclerView.layoutParams as LinearLayout.LayoutParams

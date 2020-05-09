@@ -10,15 +10,16 @@
         android:name="com.netease.nim.demo.ui.message.main.fragment.FragmentMessage"
         android:label="FragmentMessage"
         tools:layout="@layout/fragment_message">
+
         <action
-            android:id="@+id/action_fragmentMessage_to_fragmentAmap"
-            app:destination="@id/fragmentAmap" />
+            android:id="@+id/action_fragmentMessage_to_activityAmap"
+            app:destination="@id/activityAmap" />
     </fragment>
 
-    <fragment
-        android:id="@+id/fragmentAmap"
-        android:name="com.netease.nim.demo.ui.map.fragment.FragmentAmap"
-        android:label="FragmentAmap"
+    <activity
+        android:id="@+id/activityAmap"
+        android:name="com.netease.nim.demo.ui.map.ActivityAmap"
+        android:label="ActivityAmap"
         tools:layout="@layout/fragment_amap" />
 
 </navigation>

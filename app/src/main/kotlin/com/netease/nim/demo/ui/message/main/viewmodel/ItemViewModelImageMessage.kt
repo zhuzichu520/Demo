@@ -1,6 +1,7 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolImage
 import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
 import com.netease.nimlib.sdk.msg.model.IMMessage
@@ -41,6 +42,16 @@ class ItemViewModelImageMessage(
     /**
      * 缩略图地址（下载到本地缩略图片）
      */
-    val imageUrl = MutableLiveData<String>(attachment.thumbPath)
+    val imageUrl = MutableLiveData<Any>().apply {
+        val thumbPath = attachment.thumbPath
+        val path = attachment.path
+        value = if (!path.isNullOrEmpty()) {
+            path
+        } else if (!thumbPath.isNullOrEmpty()) {
+            thumbPath
+        } else {
+            R.drawable.shape_bg_message_image
+        }
+    }
 
 }

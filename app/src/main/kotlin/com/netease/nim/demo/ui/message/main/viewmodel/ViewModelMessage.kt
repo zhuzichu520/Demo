@@ -114,6 +114,7 @@ class ViewModelMessage @Inject constructor(
         map<ItemViewModelStickerMessage>(BR.item, R.layout.item_message_sticker)
         map<ItemViewModelAudioMessage>(BR.item, R.layout.item_message_audio)
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
+        map<ItemViewModelLocationMessage>(BR.item, R.layout.item_message_location)
     }
 
     /**
@@ -223,6 +224,9 @@ class ViewModelMessage @Inject constructor(
                 }
                 MsgTypeEnum.audio -> {
                     ItemViewModelAudioMessage(item, useCaseDowloadAttachment, nimAudioManager)
+                }
+                MsgTypeEnum.location -> {
+                    ItemViewModelLocationMessage(item)
                 }
                 MsgTypeEnum.custom -> {
                     val attachment = item.attachment
