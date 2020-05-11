@@ -124,6 +124,12 @@
 
         <activity android:name=".ui.map.ActivityAmap" />
 
+        <activity android:name=".ui.camera.ActivityCamera" />
+
+        <activity
+            android:name=".ui.photobrowser.ActivityPhotoBrowser"
+            android:theme="@style/PhotoBrowser" />
+
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"

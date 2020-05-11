@@ -217,27 +217,27 @@ class ViewModelMessage @Inject constructor(
         return list.map { item ->
             when (item.msgType) {
                 MsgTypeEnum.text -> {
-                    ItemViewModelTextMessage(item)
+                    ItemViewModelTextMessage(this, item)
                 }
                 MsgTypeEnum.image -> {
                     convertItemViewModelImageMessage(item)
                 }
                 MsgTypeEnum.audio -> {
-                    ItemViewModelAudioMessage(item, useCaseDowloadAttachment, nimAudioManager)
+                    ItemViewModelAudioMessage(this, item, useCaseDowloadAttachment, nimAudioManager)
                 }
                 MsgTypeEnum.location -> {
-                    ItemViewModelLocationMessage(item)
+                    ItemViewModelLocationMessage(this, item)
                 }
                 MsgTypeEnum.custom -> {
                     val attachment = item.attachment
                     if (attachment is StickerAttachment) {
-                        ItemViewModelStickerMessage(item)
+                        ItemViewModelStickerMessage(this, item)
                     } else {
-                        ItemViewModelUnknownMessage(item)
+                        ItemViewModelUnknownMessage(this, item)
                     }
                 }
                 else -> {
-                    ItemViewModelUnknownMessage(item)
+                    ItemViewModelUnknownMessage(this, item)
                 }
             }
         }
@@ -258,7 +258,7 @@ class ViewModelMessage @Inject constructor(
 
                 }
         }
-        return ItemViewModelImageMessage(item)
+        return ItemViewModelImageMessage(this, item)
     }
 
 }

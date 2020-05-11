@@ -3,7 +3,9 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 import android.util.LayoutDirection
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.netease.nim.demo.R
+import com.netease.nim.demo.base.ItemViewModelBase
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum
@@ -18,8 +20,9 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
  * since: v 1.0.0
  */
 open class ItemViewModelBaseMessage(
+    viewModel: BaseViewModel<*>,
     val message: IMMessage
-) {
+) : ItemViewModelBase(viewModel) {
     companion object {
         //发送中
         private const val STATE_SEND_LOADING = 0

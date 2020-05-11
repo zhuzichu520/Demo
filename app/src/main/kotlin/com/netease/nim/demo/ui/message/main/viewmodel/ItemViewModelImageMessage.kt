@@ -1,8 +1,12 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
+import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.mvvm.base.BaseViewModel
+import com.hiwitech.android.shared.ext.createTypeCommand
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolImage
+import com.netease.nim.demo.ui.message.main.arg.ArgPhotoBrowser
 import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
 import com.netease.nimlib.sdk.msg.model.IMMessage
 
@@ -13,8 +17,9 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
  * since: v 1.0.0
  */
 class ItemViewModelImageMessage(
+    viewModel: BaseViewModel<*>,
     message: IMMessage
-) : ItemViewModelBaseMessage(message) {
+) : ItemViewModelBaseMessage(viewModel, message) {
 
     var attachment = (message.attachment as ImageAttachment)
 
@@ -54,4 +59,7 @@ class ItemViewModelImageMessage(
         }
     }
 
+    val onClickImageCommand = createTypeCommand<ImageView> {
+        start(R.id.action_fragmentMessage_to_activityPhotoBrowser, arg = ArgPhotoBrowser(listOf()))
+    }
 }

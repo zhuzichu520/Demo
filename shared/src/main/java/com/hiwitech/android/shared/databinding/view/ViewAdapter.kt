@@ -31,8 +31,8 @@ fun onClickCommand(
     view: View,
     clickCommand: BindingCommand<*>?,
     longClickCommand: BindingCommand<*>?,
-    onClickViewCommand: BindingCommand<View>?,
-    onLongClickViewCommand: BindingCommand<View>?,
+    onClickViewCommand: BindingCommand<*>?,
+    onLongClickViewCommand: BindingCommand<*>?,
     onTouchCommmand: BindingCommand<MotionEvent>?,
     isThrottleFirst: Boolean?
 ) {
@@ -49,7 +49,7 @@ fun onClickCommand(
     }
 
     onClickViewCommand?.apply {
-        view.longClicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
+        view.clicks().isThrottleFirst(isThrottleFirst ?: true).subscribe {
             execute(view)
         }
     }

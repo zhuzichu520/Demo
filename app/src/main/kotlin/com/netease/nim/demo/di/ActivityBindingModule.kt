@@ -2,6 +2,8 @@ package com.netease.nim.demo.di
 
 
 import com.hiwitech.android.mvvm.di.ActivityScoped
+import com.netease.nim.demo.ui.camera.ActivityCamera
+import com.netease.nim.demo.ui.camera.module.ModuleCamera
 import com.netease.nim.demo.ui.contact.module.ModuleContact
 import com.netease.nim.demo.ui.launcher.ActivityLauncher
 import com.netease.nim.demo.ui.launcher.module.ModuleLauncher
@@ -15,6 +17,8 @@ import com.netease.nim.demo.ui.message.emoticon.module.ModuleEmoticon
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.message.more.module.ModuleMore
 import com.netease.nim.demo.ui.permissions.module.ModulePermissions
+import com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser
+import com.netease.nim.demo.ui.photobrowser.module.ModulePhotoBrowser
 import com.netease.nim.demo.ui.session.module.ModuleSession
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -57,4 +61,21 @@ abstract class ActivityBindingModule {
         ]
     )
     internal abstract fun amapActivity(): ActivityAmap
+
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleCamera::class
+        ]
+    )
+    internal abstract fun cameraActivity(): ActivityCamera
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModulePhotoBrowser::class
+        ]
+    )
+    internal abstract fun photoBrowserActivity(): ActivityPhotoBrowser
 }

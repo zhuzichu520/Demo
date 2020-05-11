@@ -14,6 +14,12 @@
         <action
             android:id="@+id/action_fragmentMessage_to_activityAmap"
             app:destination="@id/activityAmap" />
+        <action
+            android:id="@+id/action_fragmentMessage_to_activityCamera"
+            app:destination="@id/activityCamera" />
+        <action
+            android:id="@+id/action_fragmentMessage_to_activityPhotoBrowser"
+            app:destination="@id/activityPhotoBrowser" />
     </fragment>
 
     <activity
@@ -21,5 +27,16 @@
         android:name="com.netease.nim.demo.ui.map.ActivityAmap"
         android:label="ActivityAmap"
         tools:layout="@layout/fragment_amap" />
+    <activity
+        android:id="@+id/activityCamera"
+        android:name="com.netease.nim.demo.ui.camera.ActivityCamera"
+        android:label="ActivityCamera"
+        tools:layout="@layout/fragment_camera" />
+
+    <activity
+        android:id="@+id/activityPhotoBrowser"
+        android:name="com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser"
+        android:label="ActivityPhotoBrowser"
+        tools:layout="@layout/fragment_photo_browser" />
 
 </navigation>

@@ -3,7 +3,6 @@ package com.netease.nim.demo.ui.session.fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.hiwitech.android.mvvm.base.ArgDefault
-import com.hiwitech.android.shared.bus.LiveDataBus
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
@@ -42,15 +41,9 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
             shareViewModel.onSessionNumberChangeEvent.value = number
         })
 
-    }
-
-    override fun initOneObservable() {
-        super.initOneObservable()
-
-        LiveDataBus.toObservable(NimEvent.OnRecentContactEvent::class.java)
-            .observe(this, Observer {
-                viewModel.parseSessionList(it.list)
-            })
+        viewModel.toObservable(NimEvent.OnRecentContactEvent::class.java, Observer {
+            viewModel.parseSessionList(it.list)
+        })
 
     }
 

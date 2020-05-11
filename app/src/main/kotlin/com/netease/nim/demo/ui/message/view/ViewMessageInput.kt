@@ -213,9 +213,7 @@ class ViewMessageInput @JvmOverloads constructor(
     }
 
     private fun showPermissionsDiaog(context: FragmentActivity) {
-        if (!fragmentPermissions.isAdded) {
-            fragmentPermissions.show("录音，文件读写", context.supportFragmentManager)
-        }
+        fragmentPermissions.show("录音，文件读写", context.supportFragmentManager)
     }
 
 

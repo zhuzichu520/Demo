@@ -1,6 +1,7 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerManager
 import com.netease.nimlib.sdk.msg.model.IMMessage
@@ -11,7 +12,10 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
  * time: 2020/4/22 8:28 PM
  * since: v 1.0.0
  */
-class ItemViewModelStickerMessage(message: IMMessage) : ItemViewModelBaseMessage(message) {
+class ItemViewModelStickerMessage(
+    viewModel: BaseViewModel<*>,
+    message: IMMessage
+) : ItemViewModelBaseMessage(viewModel,message) {
 
     val sticker = MutableLiveData<Any>().apply {
         (message.attachment as? StickerAttachment)?.let {

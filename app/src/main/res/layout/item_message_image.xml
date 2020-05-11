@@ -39,7 +39,7 @@
             app:visibility="@{item.displayName}"
             tools:text="哈哈哈哈哈" />
 
-        <com.hiwitech.android.widget.qmui.layout.QMUIFrameLayout
+        <FrameLayout
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,15 +47,9 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="10dp"
-            app:layoutHeight="@{item.imageHeight}"
-            app:layoutWidth="@{item.imageWidth}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/header"
-            app:layout_constraintTop_toBottomOf="@+id/name"
-            app:qmui_outerNormalColor="@color/color_secondary"
-            app:qmui_radius="8dp"
-            app:qmui_shadowAlpha="1.0"
-            app:qmui_shadowElevation="5dp">
+            app:layout_constraintTop_toBottomOf="@+id/name">
 
             <com.hiwitech.android.widget.qmui.QMUIRadiusImageView
                 android:id="@+id/image"
@@ -63,10 +57,12 @@
                 android:layout_height="wrap_content"
                 app:layoutHeight="@{item.imageHeight}"
                 app:layoutWidth="@{item.imageWidth}"
+                app:qmui_border_color="@color/color_divider"
+                app:qmui_border_width="1dp"
                 app:qmui_corner_radius="8dp"
+                app:onClickViewCommand="@{item.onClickImageCommand}"
                 app:srcCompat="@drawable/shape_bg_message_image"
                 app:url="@{item.imageUrl}" />
-
 
             <androidx.core.widget.ContentLoadingProgressBar
                 style="?android:attr/progressBarStyleSmall"
@@ -76,9 +72,7 @@
                 app:isShown="@{item.attachStatus}"
                 tools:visibility="visible" />
 
-
-        </com.hiwitech.android.widget.qmui.layout.QMUIFrameLayout>
-
+        </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"

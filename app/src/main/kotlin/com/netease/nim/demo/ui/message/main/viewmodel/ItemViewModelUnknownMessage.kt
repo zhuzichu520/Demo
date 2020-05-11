@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
+import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.netease.nimlib.sdk.msg.model.IMMessage
 
 /**
@@ -8,6 +9,9 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
  * time: 2020/4/5 7:48 PM
  * since: v 1.0.0
  */
-class ItemViewModelUnknownMessage(message: IMMessage) : ItemViewModelBaseMessage(message) {
+class ItemViewModelUnknownMessage(
+    viewModel: BaseViewModel<*>,
+    message: IMMessage
+) : ItemViewModelBaseMessage(viewModel,message) {
 
 }

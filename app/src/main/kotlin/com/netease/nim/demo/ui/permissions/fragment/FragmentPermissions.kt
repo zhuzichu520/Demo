@@ -75,7 +75,7 @@ class FragmentPermissions :
 
     fun show(content: String, fragmentManager: FragmentManager) {
         this.content = content
-        show(fragmentManager, "FragmentPermissions")
+        showNow(fragmentManager, "FragmentPermissions")
     }
 
     /**

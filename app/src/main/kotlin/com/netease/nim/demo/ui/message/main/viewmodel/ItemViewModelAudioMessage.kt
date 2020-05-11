@@ -2,6 +2,7 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.libs.tool.isFileExists
+import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.createCommand
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.audio.NimAudioManager
@@ -17,10 +18,11 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
  * since: v 1.0.0
  */
 class ItemViewModelAudioMessage(
+    viewModel: BaseViewModel<*>,
     message: IMMessage,
     useCaseDowloadAttachment: UseCaseDowloadAttachment,
     private val nimAudioManager: NimAudioManager
-) : ItemViewModelBaseMessage(message) {
+) : ItemViewModelBaseMessage(viewModel, message) {
 
     val attachment = message.attachment as AudioAttachment
 

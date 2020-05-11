@@ -8,17 +8,14 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import androidx.activity.addCallback
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
-import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.toEditable
 import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.CacheGlobal
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
-import com.netease.nim.demo.SharedViewModel
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.attachment.StickerAttachment
@@ -77,8 +74,6 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     private lateinit var sessionType: SessionTypeEnum
 
     private lateinit var recordAnima: AnimationDrawable
-
-    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     private lateinit var audioRecorder: AudioRecorder
 
@@ -231,126 +226,131 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             }
         })
 
-    }
-
-    override fun initOneObservable() {
-        super.initOneObservable()
-
         /**
          * 消息接收监听
          */
-        LiveDataBus.toObservable(NimEvent.OnReceiveMessageEvent::class.java)
-            .observe(this, Observer {
-                val data = it.list.filter { item ->
-                    item.sessionId == arg.contactId
-                }
-                viewModel.addMessage(data, true)
-            })
+        viewModel.toObservable(NimEvent.OnReceiveMessageEvent::class.java, Observer {
+            val data = it.list.filter { item ->
+                item.sessionId == arg.contactId
+            }
+            viewModel.addMessage(data, true)
+        })
 
         /**
          * 消息状态监听
          */
-        LiveDataBus.toObservable(NimEvent.OnMessageStatusEvent::class.java)
-            .observe(this, Observer {
-                val message = it.message
-                if (message.sessionId == arg.contactId) {
-                    viewModel.addMessage(listOf(it.message), false)
-                }
-            })
+        viewModel.toObservable(NimEvent.OnMessageStatusEvent::class.java, Observer {
+            val message = it.message
+            if (message.sessionId == arg.contactId) {
+                viewModel.addMessage(listOf(it.message), false)
+            }
+        })
 
         /**
          * 点击Emoji事件
          */
-        LiveDataBus.toObservable(EventEmoticon.OnClickEmojiEvent::class.java)
-            .observe(this, Observer {
-                appendText(it.text)
-                center_input.setSelection(center_input.length())
-            })
+        viewModel.toObservable(EventEmoticon.OnClickEmojiEvent::class.java, Observer {
+            appendText(it.text)
+            center_input.setSelection(center_input.length())
+        })
 
         /**
          * 点击贴图事件
          */
-        LiveDataBus.toObservable(EventEmoticon.OnClickStickerEvent::class.java)
-            .observe(this, Observer {
-                sendStickerMessage(it.stickerItem)
-            })
+        viewModel.toObservable(EventEmoticon.OnClickStickerEvent::class.java, Observer {
+            sendStickerMessage(it.stickerItem)
+        })
 
         /**
          * 录音计时事件
          */
-        LiveDataBus.toObservable(EventMessage.OnRecordAudioEvent::class.java)
-            .observe(this, Observer {
-                var isShownRecord = false
-                when (it.recordType) {
-                    EventMessage.RECORD_SEND -> {
-                        //发送语言
-                        isShownRecord = false
-                        recordAnima.stop()
-                    }
-                    EventMessage.RECORD_RECORDING -> {
-                        //正在录制语言
-                        isShownRecord = true
-                        recordAnima.start()
-                    }
-                    EventMessage.RECORD_CANCEL -> {
-                        //取消发送
-                        isShownRecord = false
-                        recordAnima.stop()
-                    }
+        viewModel.toObservable(EventMessage.OnRecordAudioEvent::class.java, Observer {
+            var isShownRecord = false
+            when (it.recordType) {
+                EventMessage.RECORD_SEND -> {
+                    //发送语言
+                    isShownRecord = false
+                    recordAnima.stop()
                 }
-                viewModel.isShownRecord.value = isShownRecord
-                viewModel.recordTime.value = it.recordSecond.toString()
-            })
+                EventMessage.RECORD_RECORDING -> {
+                    //正在录制语言
+                    isShownRecord = true
+                    recordAnima.start()
+                }
+                EventMessage.RECORD_CANCEL -> {
+                    //取消发送
+                    isShownRecord = false
+                    recordAnima.stop()
+                }
+            }
+            viewModel.isShownRecord.value = isShownRecord
+            viewModel.recordTime.value = it.recordSecond.toString()
+        })
 
         /**
          * 监听是否可以取消录制事件
          */
-        LiveDataBus.toObservable(EventMessage.OnRecordCancelChangeEvent::class.java)
-            .observe(this, Observer {
-                updateTimerTip(it.cancelled)
-            })
+        viewModel.toObservable(EventMessage.OnRecordCancelChangeEvent::class.java, Observer {
+            updateTimerTip(it.cancelled)
+        })
 
         /**
          * 键盘高度改变事件
          */
-        LiveDataBus.toObservable(OnKeyboardChangeEvent::class.java)
-            .observe(this, Observer {
-                message_input.setInputType(ViewMessageInput.TYPE_INPUT)
-            })
+        viewModel.toObservable(OnKeyboardChangeEvent::class.java, Observer {
+            message_input.setInputType(ViewMessageInput.TYPE_INPUT)
+        })
 
         /**
          *  点击更多中的item事件
          */
-        LiveDataBus.toObservable(EventMore.OnClickItemMoreEvent::class.java)
-            .observe(this, Observer {
-                when (it.type) {
-                    ViewModelMore.TYPE_ALBUM -> {
-                        startAlbum()
-                    }
-                    ViewModelMore.TYPE_LOCAL -> {
-                        startLocation()
-                    }
-                    else -> {
-                    }
+        viewModel.toObservable(EventMore.OnClickItemMoreEvent::class.java, Observer {
+            when (it.type) {
+                ViewModelMore.TYPE_ALBUM -> {
+                    startAlbum()
                 }
-            })
+                ViewModelMore.TYPE_LOCAL -> {
+                    startLocation()
+                }
+                ViewModelMore.TYPE_VIDEO -> {
+                    startCamera()
+                }
+            }
+        })
 
         /**
          * 发送地图消息
          */
-        LiveDataBus.toObservable(EventMap.OnSendLocationEvent::class.java)
-            .observe(this, Observer {
-                val latLon = it.itemViewModelPoi.latLonPoint
-                val message = MessageBuilder.createLocationMessage(
-                    arg.contactId,
-                    sessionType,
-                    latLon.latitude,
-                    latLon.longitude,
-                    it.itemViewModelPoi.poiItem.title
-                )
-                viewModel.sendMessage(message)
-            })
+        viewModel.toObservable(EventMap.OnSendLocationEvent::class.java, Observer {
+            val latLon = it.itemViewModelPoi.latLonPoint
+            val message = MessageBuilder.createLocationMessage(
+                arg.contactId,
+                sessionType,
+                latLon.latitude,
+                latLon.longitude,
+                it.itemViewModelPoi.poiItem.title
+            )
+            viewModel.sendMessage(message)
+        })
 
+    }
+
+    /**
+     * 跳转到相机录屏界面
+     */
+    private fun startCamera() {
+        RxPermissions(requireActivity()).request(
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ).autoDispose(viewModel).subscribe {
+            if (it) {
+                start(R.id.action_fragmentMessage_to_activityCamera)
+            } else {
+                FragmentPermissions().show("相机,录音,文件读写", parentFragmentManager)
+            }
+        }
     }
 
     private fun startLocation() {
