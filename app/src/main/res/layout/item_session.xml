@@ -15,14 +15,14 @@
         android:background="@color/color_background_primary"
         android:layout_height="68dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.hiwitech.android.widget.qmui.QMUIRadiusImageView
             android:id="@+id/header"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:error="@{item.error}"
-            app:isCircle="@{true}"
             app:placeholder="@{item.placeholder}"
             app:url="@{item.avatar}"
+            app:qmui_is_circle="true"
             android:layout_marginStart="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

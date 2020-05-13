@@ -16,15 +16,15 @@
         android:padding="14dp"
         app:layoutDirection="@{item.layoutDirection}">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.hiwitech.android.widget.qmui.QMUIRadiusImageView
             android:id="@+id/header"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:error="@{item.error}"
-            app:isCircle="@{true}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:placeholder="@{item.placeholder}"
+            app:qmui_is_circle="true"
             app:url="@{item.avatar}"
             tools:background="@mipmap/ic_launcher" />
 
@@ -55,22 +55,44 @@
                 android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:currentView="@{item.initImageView}"
                 app:layoutHeight="@{item.imageHeight}"
                 app:layoutWidth="@{item.imageWidth}"
+                app:onClickViewCommand="@{item.onClickImageCommand}"
                 app:qmui_border_color="@color/color_divider"
                 app:qmui_border_width="1dp"
                 app:qmui_corner_radius="8dp"
-                app:onClickViewCommand="@{item.onClickImageCommand}"
                 app:srcCompat="@drawable/shape_bg_message_image"
                 app:url="@{item.imageUrl}" />
 
-            <androidx.core.widget.ContentLoadingProgressBar
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:isShown="@{item.attachStatus}"
-                tools:visibility="visible" />
+                app:displayChild="@{item.attachStatus}">
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reload"
+                    android:visibility="gone"
+                    android:textColor="@color/color_font_primary"
+                    app:onClickCommand="@{item.onClickAttachFailedCommand}" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
 
         </FrameLayout>
 
@@ -95,7 +117,7 @@
                 android:src="@mipmap/nim_message_failed"
                 android:visibility="gone" />
 
-            <View
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />

@@ -2,6 +2,7 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.widget.page.PageHelper
@@ -12,8 +13,7 @@ import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.audio.NimAudioManager
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.domain.*
-import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
-import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum
+import com.netease.nim.demo.ui.photobrowser.domain.UseCaseGetImageAndVideoMessage
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
@@ -31,6 +31,7 @@ class ViewModelMessage @Inject constructor(
     private val useCaseGetMessageList: UseCaseGetMessageList,
     private val useCaseSendMessage: UseCaseSendMessage,
     private val useCaseDowloadAttachment: UseCaseDowloadAttachment,
+    private val useCaseGetImageAndVideoMessage: UseCaseGetImageAndVideoMessage,
     private val nimAudioManager: NimAudioManager
 ) : ViewModelBase<ArgMessage>() {
 
@@ -247,18 +248,37 @@ class ViewModelMessage @Inject constructor(
      * 将IMesasge转换成ItemViewModelImageMessage
      */
     private fun convertItemViewModelImageMessage(item: IMMessage): ItemViewModelImageMessage {
-        val attachment = item.attachment as ImageAttachment
-        val thumbPath = attachment.thumbPath
-        if (thumbPath.isNullOrEmpty() && (item.attachStatus == AttachStatusEnum.def || item.attachStatus == AttachStatusEnum.transferred)) {
-            //缩略图不存在，开启下载缩略图
-            useCaseDowloadAttachment.execute(
-                UseCaseDowloadAttachment.Parameters(item, true)
-            ).autoDispose(this)
-                .subscribe {
+        return ItemViewModelImageMessage(
+            this,
+            item,
+            useCaseDowloadAttachment,
+            useCaseGetImageAndVideoMessage
+        )
+    }
 
-                }
+    /**
+     * 通过Message获取下标位置
+     */
+    fun getIndexByMessage(message: IMMessage): Int? {
+        messageList.forEachIndexed { index, item ->
+            if ((item as ItemViewModelBaseMessage).uuid == message.uuid) {
+                return index
+            }
         }
-        return ItemViewModelImageMessage(this, item)
+        return null
+    }
+
+    /**
+     * 通过下标获取ItemViewModel
+     */
+    fun getItemViewModelByIndex(index: Int): ItemViewModelBaseMessage? {
+        if (index < 0) {
+            return null
+        }
+        if (index >= messageList.size) {
+            return null
+        }
+        return messageList[index].toCast()
     }
 
 }

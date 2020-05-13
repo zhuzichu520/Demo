@@ -10,21 +10,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.hiwitech.android.shared.glide.GlideApp
 import com.hiwitech.android.widget.sharp.Sharp
 
-@BindingAdapter(value = ["url", "isCircle", "placeholder", "error"], requireAll = false)
+@BindingAdapter(value = ["url", "placeholder", "error"], requireAll = false)
 fun bindImageViewGlide(
     imageView: ImageView,
     url: Any?,
-    isCircle: Boolean?,
     placeholder: Int?,
     error: Int?
 ) {
     url?.apply {
         val requestOptions = RequestOptions()
         val glide = GlideApp.with(imageView).load(url)
-        if (true == isCircle) {
-            requestOptions.circleCrop()
-        }
-
         placeholder?.let {
             glide.thumbnail(GlideApp.with(imageView).load(placeholder).apply(requestOptions))
         }

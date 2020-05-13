@@ -37,6 +37,7 @@
         android:id="@+id/activityPhotoBrowser"
         android:name="com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser"
         android:label="ActivityPhotoBrowser"
-        tools:layout="@layout/fragment_photo_browser" />
+        tools:layout="@layout/fragment_photo_browser"/>
+
 
 </navigation>

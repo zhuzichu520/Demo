@@ -23,6 +23,11 @@ import androidx.annotation.RequiresApi;
 
 import java.util.Map;
 
+/**
+ * Created by 大灯泡 on 2019/8/22
+ * <p>
+ * Description：
+ */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class ImageViewTransition extends Transition {
     private static final String PROPNAME_SCALE_TYPE = "hw:changeImageTransform:scaletype";

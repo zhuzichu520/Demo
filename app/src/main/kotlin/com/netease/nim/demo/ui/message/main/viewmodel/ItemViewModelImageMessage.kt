@@ -1,14 +1,27 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
+import android.app.Activity
+import android.view.View
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.ActivityNavigator
 import com.hiwitech.android.mvvm.base.BaseViewModel
+import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.createTypeCommand
+import com.hiwitech.android.shared.tools.Weak
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolImage
-import com.netease.nim.demo.ui.message.main.arg.ArgPhotoBrowser
+import com.netease.nim.demo.ui.message.main.domain.UseCaseDowloadAttachment
+import com.netease.nim.demo.ui.photobrowser.arg.ArgPhotoBrowser
+import com.netease.nim.demo.ui.photobrowser.domain.UseCaseGetImageAndVideoMessage
+import com.netease.nim.demo.ui.photobrowser.fragment.FragmentPhotoBrowser.Companion.TRANSITION_NAME
 import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
+import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
+import com.uber.autodispose.autoDispose
 
 /**
  * desc 图片消息
@@ -18,8 +31,12 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
  */
 class ItemViewModelImageMessage(
     viewModel: BaseViewModel<*>,
-    message: IMMessage
+    message: IMMessage,
+    useCaseDowloadAttachment: UseCaseDowloadAttachment,
+    useCaseGetImageAndVideoMessage: UseCaseGetImageAndVideoMessage
 ) : ItemViewModelBaseMessage(viewModel, message) {
+
+    var photoView by Weak<ImageView>()
 
     var attachment = (message.attachment as ImageAttachment)
 
@@ -55,11 +72,48 @@ class ItemViewModelImageMessage(
         } else if (!thumbPath.isNullOrEmpty()) {
             thumbPath
         } else {
+            if (message.attachStatus == AttachStatusEnum.transferred || message.attachStatus == AttachStatusEnum.def) {
+                useCaseDowloadAttachment.execute(UseCaseDowloadAttachment.Parameters(message, true))
+                    .autoDispose(viewModel).subscribe { }
+            }
             R.drawable.shape_bg_message_image
         }
     }
 
-    val onClickImageCommand = createTypeCommand<ImageView> {
-        start(R.id.action_fragmentMessage_to_activityPhotoBrowser, arg = ArgPhotoBrowser(listOf()))
+    val onClickAttachFailedCommand = createCommand {
+        useCaseDowloadAttachment.execute(UseCaseDowloadAttachment.Parameters(message, true))
+            .autoDispose(viewModel).subscribe { }
     }
+
+    val onClickImageCommand = createTypeCommand<ImageView> {
+        useCaseGetImageAndVideoMessage.execute(message).autoDispose(viewModel)
+            .subscribe {
+                ActivityCompat.setExitSharedElementCallback(this.context as Activity, object :
+                    SharedElementCallback() {
+                    override fun onMapSharedElements(
+                        names: MutableList<String>,
+                        sharedElements: MutableMap<String, View>
+                    ) {
+                        sharedElements.clear()
+                        sharedElements[TRANSITION_NAME] = this@createTypeCommand
+                    }
+                })
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this.context as Activity, this, TRANSITION_NAME
+                    )
+                start(
+                    R.id.action_fragmentMessage_to_activityPhotoBrowser,
+                    arg = ArgPhotoBrowser(message, it),
+                    extras = ActivityNavigator.Extras.Builder()
+                        .setActivityOptions(optionsCompat)
+                        .build()
+                )
+            }
+    }
+
+    val initImageView = createTypeCommand<ImageView> {
+        photoView = this
+    }
+
 }

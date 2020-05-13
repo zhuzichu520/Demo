@@ -27,5 +27,7 @@
     <color name="color_divider">#e5e5e5</color>
 
     <color name="transparent">#00000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 
 </resources>

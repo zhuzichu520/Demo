@@ -32,6 +32,15 @@ open class ItemViewModelBaseMessage(
 
         //发送完成
         private const val STATE_SEND_NORMAL = 2
+
+        //发送中
+        private const val STATE_ATTACH_LOADING = 0
+
+        //发送失败
+        private const val STATE_ATTACH_FAILED = 1
+
+        //发送完成
+        private const val STATE_ATTACH_NORMAL = 2
     }
 
     private val userInfo = ToolUserInfo.getUserInfo(message.fromAccount)
@@ -117,13 +126,21 @@ open class ItemViewModelBaseMessage(
     /**
      * 附件下载状态
      */
-    val attachStatus = MutableLiveData<Boolean>(false).apply {
+    val attachStatus = MutableLiveData<Int>().apply {
         value = when (message.attachStatus) {
             AttachStatusEnum.transferring -> {
-                true
+                STATE_ATTACH_LOADING
+            }
+            AttachStatusEnum.fail -> {
+                if (message.status != MsgStatusEnum.fail) {
+                    STATE_ATTACH_FAILED
+                } else {
+                    STATE_ATTACH_NORMAL
+                }
+
             }
             else -> {
-                false
+                STATE_ATTACH_NORMAL
             }
         }
     }

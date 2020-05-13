@@ -7,7 +7,10 @@ import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
+import android.view.View
 import androidx.activity.addCallback
+import androidx.core.app.ActivityCompat
+import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
@@ -27,6 +30,7 @@ import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
 import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.event.EventMessage
+import com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelImageMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
 import com.netease.nim.demo.ui.message.more.event.EventMore
 import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
@@ -35,6 +39,8 @@ import com.netease.nim.demo.ui.message.view.ViewMessageInput
 import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_EMOJI
 import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_MORE
 import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
+import com.netease.nim.demo.ui.photobrowser.event.EventPhotoBrowser
+import com.netease.nim.demo.ui.photobrowser.fragment.FragmentPhotoBrowser.Companion.TRANSITION_NAME
 import com.netease.nimlib.sdk.media.record.AudioRecorder
 import com.netease.nimlib.sdk.media.record.IAudioRecordCallback
 import com.netease.nimlib.sdk.media.record.RecordType
@@ -331,6 +337,34 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 it.itemViewModelPoi.poiItem.title
             )
             viewModel.sendMessage(message)
+        })
+
+        /**
+         * 更新共享元素退出动画
+         */
+        viewModel.toObservable(EventPhotoBrowser.OnUpdateEnterSharedElement::class.java, Observer {
+            val message = it.message
+            ActivityCompat.setExitSharedElementCallback(requireActivity(), object :
+                SharedElementCallback() {
+                override fun onMapSharedElements(
+                    names: MutableList<String>,
+                    sharedElements: MutableMap<String, View>
+                ) {
+                    sharedElements.clear()
+                    //下标错误返回null
+                    val index = viewModel.getIndexByMessage(message) ?: return
+                    //不在屏幕内返回null
+                    if (recycler.layoutManager?.findViewByPosition(index) == null) {
+                        return
+                    }
+                    val itemViewModel = viewModel.getItemViewModelByIndex(index) ?: return
+                    if (itemViewModel is ItemViewModelImageMessage) {
+                        itemViewModel.photoView?.let { view ->
+                            sharedElements.put(TRANSITION_NAME, view)
+                        }
+                    }
+                }
+            })
         })
 
     }

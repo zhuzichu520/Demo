@@ -61,12 +61,18 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.2.2"
 
-    const val DEVELOPER = "1.1.3"
+    const val DEVELOPER = "1.1.4"
 
     const val LIVEEVENTBUS = "1.6.1"
 
-    const val MATISSE="0.5.3-beta3"
+    const val MATISSE = "0.5.3-beta3"
     const val LUBAN = "1.1.8"
+
+    const val PHOTOVIEW = "2.3.0"
+
+    const val SUBSAMPLING = "3.10.0"
+
+    const val IMAGEZOOM = "1.0.4"
 }
 
 /**
@@ -196,7 +202,14 @@ object Libs {
     //matisse
     const val MATISSE = "com.zhihu.android:matisse:${Versions.MATISSE}"
     //Luban
-    const val LUBAN= "top.zibin:Luban:${Versions.LUBAN}"
+    const val LUBAN = "top.zibin:Luban:${Versions.LUBAN}"
+    //PhotoView
+    const val PHOTOVIEW = "com.github.chrisbanes:PhotoView:${Versions.PHOTOVIEW}"
+    //subsampling
+    const val SUBSAMPLING =
+        "com.davemorrissey.labs:subsampling-scale-image-view:${Versions.SUBSAMPLING}"
+
+    const val IMAGEZOOM = "it.sephiroth.android.library.imagezoom:library:${Versions.IMAGEZOOM}"
 }
 
 

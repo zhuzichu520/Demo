@@ -1,8 +1,10 @@
 package com.netease.nim.demo.nim.tools
 
+import android.text.TextUtils
 import com.hiwitech.android.libs.qmui.QMUIDisplayHelper.getScreenWidth
 import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.shared.global.AppGlobal.context
+import java.util.*
 
 class ToolImage {
 
@@ -76,5 +78,11 @@ class ToolImage {
         fun getImageMinEdge(): Int {
             return (76.0 / 320.0 * getScreenWidth(context)).toCast()
         }
+
+        fun isGif(extension: String): Boolean {
+            return !TextUtils.isEmpty(extension) && extension.toLowerCase(Locale.getDefault()) == "gif"
+        }
+
     }
+
 }

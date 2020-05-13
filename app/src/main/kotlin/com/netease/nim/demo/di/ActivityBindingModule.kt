@@ -18,6 +18,8 @@ import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.message.more.module.ModuleMore
 import com.netease.nim.demo.ui.permissions.module.ModulePermissions
 import com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser
+import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseImage
+import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseVideo
 import com.netease.nim.demo.ui.photobrowser.module.ModulePhotoBrowser
 import com.netease.nim.demo.ui.session.module.ModuleSession
 import dagger.Module
@@ -74,7 +76,9 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(
         modules = [
-            ModulePhotoBrowser::class
+            ModulePhotoBrowser::class,
+            ModuleBrowseImage::class,
+            ModuleBrowseVideo::class
         ]
     )
     internal abstract fun photoBrowserActivity(): ActivityPhotoBrowser

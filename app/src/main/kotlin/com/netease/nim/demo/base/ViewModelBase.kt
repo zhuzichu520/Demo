@@ -1,10 +1,13 @@
 package com.netease.nim.demo.base
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.hiwitech.android.libs.tool.getStatusBarHeight
 import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.mvvm.base.BaseArg
 import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.toast
+import com.hiwitech.android.shared.global.AppGlobal.context
 import com.hiwitech.android.shared.http.exception.BusinessThrowable
 import com.jeremyliao.liveeventbus.LiveEventBus
 
@@ -17,6 +20,8 @@ import com.jeremyliao.liveeventbus.LiveEventBus
 abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>() {
 
     private val observers = hashMapOf<Class<Any>, Observer<Any>>()
+
+    val statusBarHeight = MutableLiveData<Int>(getStatusBarHeight(context = context))
 
     fun <T : Any> toObservable(eventType: Class<T>, observer: Observer<T>) {
         observers[eventType.toCast()] = observer.toCast()

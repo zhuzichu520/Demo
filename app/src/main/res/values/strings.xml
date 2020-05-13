@@ -24,6 +24,8 @@
     <string name="send">发送</string>
     <string name="cancel">取消</string>
 
+    <string name="reload">重新加载</string>
+
     <string name="input_panel_call">呼 叫</string>
     <string name="input_panel_album">相 册</string>
     <string name="input_panel_video">拍 摄</string>

@@ -16,12 +16,12 @@
         android:padding="14dp"
         app:layoutDirection="@{item.layoutDirection}">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.hiwitech.android.widget.qmui.QMUIRadiusImageView
             android:id="@+id/header"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:error="@{item.error}"
-            app:isCircle="@{true}"
+            app:qmui_is_circle="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:placeholder="@{item.placeholder}"
