@@ -126,7 +126,7 @@ data class ItemViewModelSession(
      */
     val onClickCommand = createCommand {
         start(
-            R.id.action_fragmentMain_to_navigation_message,
+            R.id.action_fragmentMain_to_activityMessage,
             arg = ArgMessage(contact.contactId, contact.sessionType.value)
         )
     }

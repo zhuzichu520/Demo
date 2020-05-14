@@ -126,6 +126,8 @@
 
         <activity android:name=".ui.camera.ActivityCamera" />
 
+        <activity android:name=".ui.message.ActivityMessage" />
+
         <activity
             android:name=".ui.photobrowser.ActivityPhotoBrowser"
             android:theme="@style/PhotoBrowser" />

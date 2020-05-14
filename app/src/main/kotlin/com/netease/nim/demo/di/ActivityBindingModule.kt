@@ -13,6 +13,7 @@ import com.netease.nim.demo.ui.main.module.ModuleMain
 import com.netease.nim.demo.ui.map.ActivityAmap
 import com.netease.nim.demo.ui.map.module.ModuleAmap
 import com.netease.nim.demo.ui.me.main.module.ModuleMe
+import com.netease.nim.demo.ui.message.ActivityMessage
 import com.netease.nim.demo.ui.message.emoticon.module.ModuleEmoticon
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.message.more.module.ModuleMore
@@ -45,12 +46,7 @@ abstract class ActivityBindingModule {
             ModuleRegister::class,
             ModuleSession::class,
             ModuleContact::class,
-            ModuleMessage::class,
-            ModuleMore::class,
-            ModuleEmoticon::class,
-            ModuleAmap::class,
-            ModulePermissions::class,
-            ModuleAmap::class
+            ModulePermissions::class
         ]
     )
     internal abstract fun launcherActivity(): ActivityLauncher
@@ -82,4 +78,15 @@ abstract class ActivityBindingModule {
         ]
     )
     internal abstract fun photoBrowserActivity(): ActivityPhotoBrowser
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleMore::class,
+            ModuleMessage::class,
+            ModuleEmoticon::class
+        ]
+    )
+    internal abstract fun messageActivity(): ActivityMessage
+
 }

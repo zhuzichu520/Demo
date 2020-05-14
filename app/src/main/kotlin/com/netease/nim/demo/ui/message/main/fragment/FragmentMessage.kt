@@ -187,7 +187,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             if (TYPE_EMOJI == message_input.getInputType() || TYPE_MORE == message_input.getInputType()) {
                 message_input.setInputType(ViewMessageInput.TYPE_DEFAULT)
             } else {
-                navController.popBackStack()
+                requireActivity().finish()
             }
         }
     }
