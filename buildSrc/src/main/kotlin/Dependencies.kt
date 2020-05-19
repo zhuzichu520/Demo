@@ -21,7 +21,7 @@ object Versions {
 
     const val DAGGER = "2.27"
 
-    const val OKHTTP = "4.5.0"
+    const val OKHTTP = "4.6.0"
 
     const val RXJAVA = "2.2.19"
     const val RXANDROID = "2.1.1"
@@ -31,7 +31,7 @@ object Versions {
 
     const val FASTJSON = "1.2.68"
 
-    const val NAVIGATION = "2.2.1"
+    const val NAVIGATION = "2.2.2"
 
     const val AUTODISPOSE = "1.4.0"
 
@@ -50,18 +50,18 @@ object Versions {
     const val FLEXBOX = "2.0.1"
     const val CONSTRAINTLAYOUT = "2.0.0-beta4"
 
-    const val MMKV = "1.1.0"
+    const val MMKV = "1.1.1"
     const val MULTIDEX = "2.0.1"
     const val ONCE = "1.3.0"
     const val AUTOSIZE = "1.2.1"
 
-    const val AGENTWEB = "4.1.2"
+    const val AGENTWEB = "4.1.3"
 
     const val GUAVA = "27.0.1-android"
 
-    const val POPUPWINDOW = "2.2.2.2"
+    const val POPUPWINDOW = "2.2.3"
 
-    const val DEVELOPER = "1.1.5"
+    const val DEVELOPER = "1.1.6"
 
     const val LIVEEVENTBUS = "1.6.1"
 
@@ -70,18 +70,21 @@ object Versions {
 
     const val PHOTOVIEW = "2.3.0"
 
-    const val SUBSAMPLING = "3.10.0"
+    const val CAMERAX = "1.0.0-beta03"
+    const val CAMERAX_VIEWA = "1.0.0-alpha10"
+    const val CAMERAX_EXTENSIONS = "1.0.0-alpha10"
+    const val CAMERAVIEW = "2.6.2"
 
-    const val IMAGEZOOM = "1.0.4"
+    const val EXOPLAYER = "2.10.4"
 }
 
 /**
  * 插件版本
  */
 object BuildPluginsVersion {
-    const val AGP = "3.6.2"
+    const val AGP = "3.6.3"
     const val DETEKT = "1.7.4"
-    const val KOTLIN = "1.3.71"
+    const val KOTLIN = "1.3.72"
     const val KTLINT = "9.2.1"
     const val VERSIONS_PLUGIN = "0.28.0"
     const val ANDROID_MAVEN = "2.1"
@@ -205,11 +208,16 @@ object Libs {
     const val LUBAN = "top.zibin:Luban:${Versions.LUBAN}"
     //PhotoView
     const val PHOTOVIEW = "com.github.chrisbanes:PhotoView:${Versions.PHOTOVIEW}"
-    //subsampling
-    const val SUBSAMPLING =
-        "com.davemorrissey.labs:subsampling-scale-image-view:${Versions.SUBSAMPLING}"
 
-    const val IMAGEZOOM = "it.sephiroth.android.library.imagezoom:library:${Versions.IMAGEZOOM}"
+    const val CAMERAVIEW = "com.otaliastudios:cameraview:${Versions.CAMERAVIEW}"
+    const val CAMERAX_CORE = "androidx.camera:camera-core:${Versions.CAMERAX}"
+    const val CAMERAX_CAMERA2 = "androidx.camera:camera-camera2:${Versions.CAMERAX}"
+    const val CAMERAX_VIEW = "androidx.camera:camera-view:${Versions.CAMERAX_VIEWA}"
+    const val CAMERAX_EXTENSIONS =
+        "androidx.camera:camera-extensions:${Versions.CAMERAX_EXTENSIONS}"
+
+    const val EXOPLAYER = "com.google.android.exoplayer:exoplayer:${Versions.EXOPLAYER}"
+
 }
 
 

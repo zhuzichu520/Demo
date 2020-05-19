@@ -11,9 +11,11 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.audio.NimAudioManager
+import com.netease.nim.demo.nim.tools.ToolImage
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.domain.*
 import com.netease.nim.demo.ui.photobrowser.domain.UseCaseGetImageAndVideoMessage
+import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
@@ -111,12 +113,19 @@ class ViewModelMessage @Inject constructor(
      */
     val itemBinding = pageHelper.pageItemBinding.apply {
         map<ItemViewModelTextMessage>(BR.item, R.layout.item_message_text)
+        map<ItemViewModelImageGifMessage>(BR.item, R.layout.item_message_image_gif)
         map<ItemViewModelImageMessage>(BR.item, R.layout.item_message_image)
+        map<ItemViewModelVideoMessage>(BR.item, R.layout.item_message_video)
         map<ItemViewModelStickerMessage>(BR.item, R.layout.item_message_sticker)
         map<ItemViewModelAudioMessage>(BR.item, R.layout.item_message_audio)
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
         map<ItemViewModelLocationMessage>(BR.item, R.layout.item_message_location)
     }
+
+    /**
+     * 共享元素消息的uuid
+     */
+    val shareElementUuid = MutableLiveData<String>()
 
     /**
      * 加载用户详情信息
@@ -229,6 +238,14 @@ class ViewModelMessage @Inject constructor(
                 MsgTypeEnum.location -> {
                     ItemViewModelLocationMessage(this, item)
                 }
+                MsgTypeEnum.video -> {
+                    ItemViewModelVideoMessage(
+                        this,
+                        item,
+                        useCaseDowloadAttachment,
+                        useCaseGetImageAndVideoMessage
+                    )
+                }
                 MsgTypeEnum.custom -> {
                     val attachment = item.attachment
                     if (attachment is StickerAttachment) {
@@ -248,20 +265,29 @@ class ViewModelMessage @Inject constructor(
      * 将IMesasge转换成ItemViewModelImageMessage
      */
     private fun convertItemViewModelImageMessage(item: IMMessage): ItemViewModelImageMessage {
-        return ItemViewModelImageMessage(
-            this,
-            item,
-            useCaseDowloadAttachment,
-            useCaseGetImageAndVideoMessage
-        )
+        return if (ToolImage.isGif((item.attachment as ImageAttachment).extension)) {
+            ItemViewModelImageGifMessage(
+                this,
+                item,
+                useCaseDowloadAttachment,
+                useCaseGetImageAndVideoMessage
+            )
+        } else {
+            ItemViewModelImageMessage(
+                this,
+                item,
+                useCaseDowloadAttachment,
+                useCaseGetImageAndVideoMessage
+            )
+        }
     }
 
     /**
      * 通过Message获取下标位置
      */
-    fun getIndexByMessage(message: IMMessage): Int? {
+    fun getIndexByUuid(uuid: String): Int? {
         messageList.forEachIndexed { index, item ->
-            if ((item as ItemViewModelBaseMessage).uuid == message.uuid) {
+            if ((item as ItemViewModelBaseMessage).uuid == uuid) {
                 return index
             }
         }

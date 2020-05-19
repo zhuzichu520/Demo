@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager
 import com.hiwitech.android.mvvm.Mvvm.KEY_ARG
 import com.hiwitech.android.shared.base.DefaultIntFragmentPagerAdapter
 import com.hiwitech.android.shared.bus.LiveDataBus
+import com.hiwitech.android.shared.ext.fitSystemWindows
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
@@ -44,6 +45,7 @@ class FragmentPhotoBrowser :
 
     override fun initView() {
         super.initView()
+        adjustInsets()
         var position = 0
         messageList = arg.messageList.reversed()
         fragments = messageList.mapIndexed { index, item ->
@@ -64,6 +66,10 @@ class FragmentPhotoBrowser :
         pager.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments)
         pager.setCurrentItem(position, false)
         updateEnterSharedElement(position)
+    }
+
+    private fun adjustInsets() {
+        pager.fitSystemWindows()
     }
 
     override fun initListener() {

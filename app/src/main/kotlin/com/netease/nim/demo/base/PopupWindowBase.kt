@@ -14,8 +14,28 @@ abstract class PopupWindowBase(context: Context) : BasePopupWindow(context) {
 
     abstract fun setLayoutId(): Int
 
+    abstract fun initView()
+
+    open fun onCreateView(view: View) {}
+
     override fun onCreateContentView(): View {
-        return createPopupById(setLayoutId())
+        return createPopupById(setLayoutId()).apply {
+            onCreateView(this)
+        }
     }
 
+    fun show() {
+        initView()
+        showPopupWindow()
+    }
+
+    fun show(anchorView: View) {
+        initView()
+        showPopupWindow(anchorView)
+    }
+
+    fun show(x: Int, y: Int) {
+        initView()
+        showPopupWindow(x, y)
+    }
 }

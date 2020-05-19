@@ -34,8 +34,4 @@ class NimEvent {
     data class OnUserInfoUpdateEvent(val list:  List<NimUserInfo>)
     data class OnAddedOrUpdatedFriendsEvent(val list: List<Friend>)
     data class OnDeletedFriendsEvent(val list: List<String>)
-
-    data class OnAudioPlayerEvent(
-        val itemViewModelAudioMessage: ItemViewModelAudioMessage
-    )
 }

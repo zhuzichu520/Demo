@@ -48,6 +48,13 @@ private class ErrorObservableResponseFunc<T> : Function<Throwable, Observable<T>
     }
 }
 
+private class ErrorSingleResponseFunc<T> : Function<Throwable, Single<T>> {
+    override fun apply(t: Throwable): Single<T> {
+        return Single.error(handleException(t))
+    }
+}
+
+
 fun <T> Flowable<T>.bindToException(): Flowable<T> =
     this.compose<T> {
         it.onErrorResumeNext(ErrorFlowableResponseFunc<T>())
@@ -58,9 +65,19 @@ fun <T> Observable<T>.bindToException(): Observable<T> =
         it.onErrorResumeNext(ErrorObservableResponseFunc<T>())
     }
 
+fun <T> Single<T>.bindToException(): Single<T> =
+    this.compose<T> {
+        it.onErrorResumeNext(ErrorSingleResponseFunc<T>())
+    }
+
 fun <T> Observable<T>.toFlowable(): Flowable<T> = this.toFlowable(BackpressureStrategy.ERROR)
 
 fun <T> Flowable<T>.bindToSchedulers(): Flowable<T> =
+    this.compose<T> {
+        it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    }
+
+fun <T> Single<T>.bindToSchedulers(): Single<T> =
     this.compose<T> {
         it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }

@@ -51,18 +51,16 @@ class ViewModelBrowseImage @Inject constructor(
 
     fun updateView(message: IMMessage) {
         val attachment = message.attachment as ImageAttachment
-        val thumbPath = attachment.thumbPath
         val path = attachment.path
         imagePath.value = if (!path.isNullOrEmpty()) {
             path
-        } else if (!thumbPath.isNullOrEmpty()) {
-            thumbPath
         } else {
             if (message.attachStatus == AttachStatusEnum.transferred || message.attachStatus == AttachStatusEnum.def) {
-                useCaseDowloadAttachment.execute(UseCaseDowloadAttachment.Parameters(message, true))
-                    .autoDispose(this).subscribe { }
+                useCaseDowloadAttachment.execute(
+                    UseCaseDowloadAttachment.Parameters(message, false)
+                ).autoDispose(this).subscribe { }
             }
-            R.drawable.shape_bg_message_image
+            R.drawable.transparent
         }
 
         attachStatus.value = when (message.attachStatus) {

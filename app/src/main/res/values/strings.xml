@@ -44,4 +44,11 @@
 
     <string name="location_open_map_error">打开地图出错</string>
 
+    <string name="sticky_on_top">置顶</string>
+    <string name="clear_sticky_on_top">取消置顶</string>
+    <string name="clear_disturb">取消免打扰</string>
+    <string name="on_disturb">免打扰</string>
+    <string name="remove">移除</string>
+    <string name="camera_tips" >轻触拍照 长按摄像</string>
+
 </resources>

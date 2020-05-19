@@ -8,6 +8,7 @@ import com.hiwitech.android.libs.tool.replaceAt
 import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.shared.ext.autoLoading
+import com.hiwitech.android.shared.ext.itemDiffOf
 import com.hiwitech.android.shared.ext.map
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
@@ -51,6 +52,11 @@ class ViewModelSession @Inject constructor(
      */
     val itemBinding = OnItemBindClass<Any>().apply {
         map<ItemViewModelSession>(BR.item, R.layout.item_session)
+    }
+
+    val diff = itemDiffOf<ItemViewModelSession> { oldItem, newItem ->
+        oldItem.contactId == newItem.contactId && oldItem.messageId == newItem.messageId
+                && oldItem.number.value == newItem.number.value
     }
 
     /**
@@ -123,4 +129,16 @@ class ViewModelSession @Inject constructor(
         }
     }
 
+    /**
+     * 删除某个会话
+     * @param session 会话
+     */
+    fun deleteSession(session: ItemViewModelSession) {
+        val contract = session.contact
+        msgService.deleteRecentContact(contract)
+        msgService.clearChattingHistory(contract.contactId, contract.sessionType)
+        sessionList.value?.let {
+            sessionList.value = it - session
+        }
+    }
 }

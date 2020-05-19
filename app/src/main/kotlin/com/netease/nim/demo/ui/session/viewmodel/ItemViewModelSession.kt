@@ -1,6 +1,6 @@
 package com.netease.nim.demo.ui.session.viewmodel
 
-import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.shared.ext.createCommand
@@ -30,7 +30,10 @@ data class ItemViewModelSession(
     val contact: RecentContact
 ) : ItemViewModelBase(viewModel) {
 
-    private val contactId = contact.contactId
+    val contactId: String = contact.contactId
+
+    val messageId: String = contact.recentMessageId
+
     val time = contact.time
     /**
      * 头像
@@ -51,28 +54,39 @@ data class ItemViewModelSession(
     /**
      * 会话内容
      */
-    val content = MutableLiveData<String>()
+    val content = MutableLiveData<String>().apply {
+        val attachment = contact.attachment
+        value = if (attachment is StickerAttachment) {
+            "[贴图]"
+        } else {
+            contact.content
+        }
+    }
     /**
      * 会话时间
      */
-    val date = MutableLiveData<String>()
+    val date = MutableLiveData<String>().apply {
+        value = ToolDate.getTimeShowString(contact.time, false)
+    }
     /**
      * 置顶标记
      */
-    val isTop = MutableLiveData<Boolean>()
+    val isTop = MutableLiveData<Boolean>().apply {
+        value = isOnTop()
+    }
     /**
      * 会话未读书
      */
-    val number = MutableLiveData<Int>()
+    val number = MutableLiveData<Int>().apply {
+        value = contact.unreadCount
+    }
+
+    private val touchPostionArr = arrayOf(0f, 0f)
 
     /**
      * 初始化数据
      */
     init {
-        val contactId = contact.contactId
-        date.value = ToolDate.getTimeShowString(contact.time, false)
-        isTop.value = isOnTop()
-        number.value = contact.unreadCount
         when (contact.sessionType) {
             P2P -> {
                 val userInfo = ToolUserInfo.getUserInfo(contactId)
@@ -88,15 +102,7 @@ data class ItemViewModelSession(
                 error.value = R.mipmap.nim_avatar_group
                 placeholder.value = R.mipmap.nim_avatar_group
             }
-            else -> {
-
-            }
-        }
-        val attachment = contact.attachment
-        if (attachment is StickerAttachment) {
-            content.value = "[贴图]"
-        } else {
-            content.value = contact.content
+            else -> {}
         }
     }
 
@@ -109,16 +115,21 @@ data class ItemViewModelSession(
         }
     }
 
+    val onTouchCommmand = createTypeCommand<MotionEvent> {
+        if (this.action == MotionEvent.ACTION_DOWN) {
+            touchPostionArr[0] = this.rawX
+            touchPostionArr[1] = this.rawY
+        }
+    }
+
     /**
      * 会话长点击处理
      */
     val onLongClickCommand = createTypeCommand<View> {
-        this?.let {
-            val popupSession = PopupSession(it.context, this@ItemViewModelSession)
-            popupSession.setPopupGravity(Gravity.CENTER)
-                .setBackgroundColor(android.R.color.transparent)
-                .showPopupWindow()
-        }
+        PopupSession(context, this@ItemViewModelSession).show(
+            touchPostionArr[0].toInt(),
+            touchPostionArr[1].toInt()
+        )
     }
 
     /**
@@ -179,7 +190,7 @@ data class ItemViewModelSession(
     }
 
     override fun hashCode(): Int {
-        return contactId?.hashCode() ?: 0
+        return contactId.hashCode()
     }
 
 

@@ -1,17 +1,12 @@
 package com.netease.nim.demo.ui.launcher
 
 import android.os.Bundle
-import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.hiwitech.android.shared.ext.createFlowable
-import com.hiwitech.android.shared.ext.logi
 import com.hiwitech.android.shared.ext.toast
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ActivityBase
 import com.netease.nim.demo.nim.emoji.EmojiManager
-import com.netease.nim.demo.storage.NimUserStorage
-import com.netease.nim.demo.tools.ToolKeyboard
-import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
 import com.uber.autodispose.android.lifecycle.autoDispose
 
 
@@ -27,7 +22,6 @@ class ActivityLauncher : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        registKeyboardListener()
         initSchedulers()
     }
 
@@ -48,21 +42,5 @@ class ActivityLauncher : ActivityBase() {
             }
     }
 
-    private fun registKeyboardListener() {
-        ToolKeyboard(
-            this,
-            onKeyboardShow = {
-                NimUserStorage.softKeyboardHeight = this
-                ("onKeyboardShow:$this").logi("StatusBar")
-            },
-            onKeyboardChange = {
-                NimUserStorage.softKeyboardHeight = this
-                ("onKeyboardChange:$this").logi("StatusBar")
-                LiveDataBus.post(OnKeyboardChangeEvent())
-            },
-            onKeyboardHide = {
 
-            }
-        )
-    }
 }

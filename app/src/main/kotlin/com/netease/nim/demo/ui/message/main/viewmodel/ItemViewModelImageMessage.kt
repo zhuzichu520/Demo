@@ -29,7 +29,7 @@ import com.uber.autodispose.autoDispose
  * time: 2020/4/5 7:48 PM
  * since: v 1.0.0
  */
-class ItemViewModelImageMessage(
+open class ItemViewModelImageMessage(
     viewModel: BaseViewModel<*>,
     message: IMMessage,
     useCaseDowloadAttachment: UseCaseDowloadAttachment,
@@ -88,16 +88,7 @@ class ItemViewModelImageMessage(
     val onClickImageCommand = createTypeCommand<ImageView> {
         useCaseGetImageAndVideoMessage.execute(message).autoDispose(viewModel)
             .subscribe {
-                ActivityCompat.setExitSharedElementCallback(this.context as Activity, object :
-                    SharedElementCallback() {
-                    override fun onMapSharedElements(
-                        names: MutableList<String>,
-                        sharedElements: MutableMap<String, View>
-                    ) {
-                        sharedElements.clear()
-                        sharedElements[TRANSITION_NAME] = this@createTypeCommand
-                    }
-                })
+                (viewModel as? ViewModelMessage)?.shareElementUuid?.value = uuid
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this.context as Activity, this, TRANSITION_NAME
@@ -114,6 +105,18 @@ class ItemViewModelImageMessage(
 
     val initImageView = createTypeCommand<ImageView> {
         photoView = this
+        if (uuid == (viewModel as? ViewModelMessage)?.shareElementUuid?.value) {
+            ActivityCompat.setExitSharedElementCallback(this.context as Activity, object :
+                SharedElementCallback() {
+                override fun onMapSharedElements(
+                    names: MutableList<String>,
+                    sharedElements: MutableMap<String, View>
+                ) {
+                    sharedElements.clear()
+                    sharedElements[TRANSITION_NAME] = this@createTypeCommand
+                }
+            })
+        }
     }
 
 }

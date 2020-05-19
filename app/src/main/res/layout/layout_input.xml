@@ -6,10 +6,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <View
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/color_divider" />
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/divider_horizontal" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_input"

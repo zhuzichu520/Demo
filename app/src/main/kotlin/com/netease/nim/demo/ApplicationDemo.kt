@@ -1,6 +1,8 @@
 package com.netease.nim.demo
 
 import android.content.Context
+import androidx.camera.camera2.Camera2Config
+import androidx.camera.core.CameraXConfig
 import androidx.multidex.MultiDex
 import androidx.navigation.AnimBuilder
 import com.hiwitech.android.mvvm.Mvvm
@@ -29,7 +31,7 @@ import java.util.concurrent.TimeUnit
  * time: 2020/4/4 11:48 PM
  * since: v 1.0.0
  */
-class ApplicationDemo : DaggerApplication() {
+class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider  {
 
     override fun onCreate() {
         super.onCreate()
@@ -96,5 +98,9 @@ class ApplicationDemo : DaggerApplication() {
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
+    }
+
+    override fun getCameraXConfig(): CameraXConfig {
+        return Camera2Config.defaultConfig()
     }
 }

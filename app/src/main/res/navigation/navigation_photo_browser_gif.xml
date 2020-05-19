@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_photo_browser_gif"
+    app:startDestination="@id/fragmentBrowseImageGif">
+
+    <fragment
+        android:id="@+id/fragmentBrowseImageGif"
+        android:name="com.netease.nim.demo.ui.photobrowser.fragment.FragmentBrowseImageGif"
+        android:label="FragmentBrowseImageGif"
+        tools:layout="@layout/fragment_browse_image_gif"/>
+
+</navigation>

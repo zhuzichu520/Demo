@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_fragmentMessage_to_activityPhotoBrowser"
             app:destination="@id/activityPhotoBrowser" />
+        <action
+            android:id="@+id/action_fragmentMessage_to_activityPhotoBrowserGif"
+            app:destination="@id/activityPhotoBrowserGif" />
     </fragment>
 
     <activity
@@ -37,7 +40,12 @@
         android:id="@+id/activityPhotoBrowser"
         android:name="com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser"
         android:label="ActivityPhotoBrowser"
-        tools:layout="@layout/fragment_photo_browser"/>
+        tools:layout="@layout/fragment_photo_browser" />
 
+    <activity
+        android:id="@+id/activityPhotoBrowserGif"
+        android:name="com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowserGif"
+        android:label="ActivityPhotoBrowserGif"
+        tools:layout="@layout/fragment_browse_image_gif" />
 
 </navigation>

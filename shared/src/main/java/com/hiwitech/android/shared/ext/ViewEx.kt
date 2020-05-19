@@ -1,14 +1,20 @@
 package com.hiwitech.android.shared.ext
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
+import android.os.Build
+import android.view.*
+import android.view.View.*
 import android.webkit.WebView
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.view.forEachIndexed
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -20,6 +26,7 @@ import com.hiwitech.android.libs.tool.showKeyboard
 import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.shared.R
 import com.hiwitech.android.shared.global.AppGlobal.context
+import com.hiwitech.android.shared.tools.MainExecutor
 import com.hiwitech.android.widget.badge.Badge
 import com.hiwitech.android.widget.badge.QBadgeView
 import com.hiwitech.android.widget.toast.toast
@@ -27,6 +34,11 @@ import com.just.agentweb.AgentWeb
 import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.WebChromeClient
 import com.just.agentweb.WebViewClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executor
 
 
 fun BottomNavigationView.setupWithViewPager(viewPager: ViewPager) {
@@ -128,4 +140,118 @@ fun RecyclerView.closeDefaultAnimator() {
     this.itemAnimator?.let {
         (it as? SimpleItemAnimator)?.supportsChangeAnimations = false
     }
+}
+
+fun View.fitSystemWindows() {
+    systemUiVisibility =
+        SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+}
+
+fun View.onWindowInsets(action: (View, WindowInsets) -> Unit) {
+    this.requestApplyInsets()
+    this.setOnApplyWindowInsetsListener { v, insets ->
+        action(v, insets)
+        insets
+    }
+}
+
+var View.topMargin: Int
+    get() = (this.layoutParams as ViewGroup.MarginLayoutParams).topMargin
+    set(value) {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+        params.topMargin = value
+        this.layoutParams = params
+    }
+
+var View.bottomMargin: Int
+    get() = (this.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin
+    set(value) {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+        params.bottomMargin = value
+        this.layoutParams = params
+    }
+
+var View.startMargin: Int
+    get() = (this.layoutParams as ViewGroup.MarginLayoutParams).marginStart
+    set(value) {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+        params.marginStart = value
+        this.layoutParams = params
+    }
+
+var View.endMargin: Int
+    get() = (this.layoutParams as ViewGroup.MarginLayoutParams).marginEnd
+    set(value) {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+        params.marginEnd = value
+        this.layoutParams = params
+    }
+
+fun ImageButton.toggleButton(
+    flag: Boolean, rotationAngle: Float, @DrawableRes firstIcon: Int, @DrawableRes secondIcon: Int,
+    action: (Boolean) -> Unit
+) {
+    if (flag) {
+        if (rotationY == 0f) rotationY = rotationAngle
+        animate().rotationY(0f).apply {
+            setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    action(!flag)
+                }
+            })
+        }.duration = 200
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(100)
+            setImageResource(firstIcon)
+        }
+    } else {
+        if (rotationY == rotationAngle) rotationY = 0f
+        animate().rotationY(rotationAngle).apply {
+            setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    action(!flag)
+                }
+            })
+        }.duration = 200
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(100)
+            setImageResource(secondIcon)
+        }
+    }
+}
+
+fun ViewGroup.circularReveal(button: ImageButton) {
+    this.visibility = VISIBLE
+    ViewAnimationUtils.createCircularReveal(
+        this,
+        button.x.toInt() + button.width / 2,
+        button.y.toInt() + button.height / 2,
+        0f,
+        if (button.context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) this.width.toFloat() else this.height.toFloat()
+    ).apply {
+        duration = 500
+    }.start()
+}
+
+fun ViewGroup.circularClose(button: ImageButton, action: () -> Unit = {}) {
+    ViewAnimationUtils.createCircularReveal(
+        this,
+        button.x.toInt() + button.width / 2,
+        button.y.toInt() + button.height / 2,
+        if (button.context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) this.width.toFloat() else this.height.toFloat(),
+        0f
+    ).apply {
+        duration = 500
+        doOnStart { action() }
+        doOnEnd { this@circularClose.visibility = INVISIBLE }
+    }.start()
+}
+
+
+fun Context.mainExecutor(): Executor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    mainExecutor
+} else {
+    MainExecutor()
 }

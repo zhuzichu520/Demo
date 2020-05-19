@@ -4,6 +4,7 @@ import android.util.LayoutDirection
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.BaseViewModel
+import com.hiwitech.android.shared.ext.createCommand
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ItemViewModelBase
 import com.netease.nim.demo.nim.tools.ToolUserInfo
@@ -23,6 +24,7 @@ open class ItemViewModelBaseMessage(
     viewModel: BaseViewModel<*>,
     val message: IMMessage
 ) : ItemViewModelBase(viewModel) {
+    
     companion object {
         //发送中
         private const val STATE_SEND_LOADING = 0
@@ -34,7 +36,7 @@ open class ItemViewModelBaseMessage(
         private const val STATE_SEND_NORMAL = 2
 
         //发送中
-        private const val STATE_ATTACH_LOADING = 0
+        const val STATE_ATTACH_LOADING = 0
 
         //发送失败
         private const val STATE_ATTACH_FAILED = 1
@@ -137,12 +139,23 @@ open class ItemViewModelBaseMessage(
                 } else {
                     STATE_ATTACH_NORMAL
                 }
-
             }
             else -> {
                 STATE_ATTACH_NORMAL
             }
         }
+    }
+
+    val progress = MutableLiveData<String>()
+
+    /**
+     * 重新发送消息
+     */
+    val onClickResendCommand = createCommand {
+        message.status = MsgStatusEnum.sending
+        message.attachStatus = AttachStatusEnum.def
+        (viewModel as? ViewModelMessage)?.sendMessage(message, true)
+
     }
 
     fun isMine(): Boolean {

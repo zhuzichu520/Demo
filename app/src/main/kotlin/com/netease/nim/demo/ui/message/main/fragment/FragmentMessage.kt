@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.media.MediaPlayer
+import android.net.Uri
 import android.text.TextUtils
 import android.view.View
 import androidx.activity.addCallback
@@ -14,6 +16,8 @@ import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
+import com.hiwitech.android.libs.tool.getFileByPath
+import com.hiwitech.android.libs.tool.md5
 import com.hiwitech.android.shared.ext.toEditable
 import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.CacheGlobal
@@ -24,6 +28,7 @@ import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.camera.event.EventCamera
 import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
 import com.netease.nim.demo.ui.map.event.EventMap
 import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
@@ -31,6 +36,7 @@ import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.event.EventMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelImageMessage
+import com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelVideoMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
 import com.netease.nim.demo.ui.message.more.event.EventMore
 import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
@@ -46,6 +52,7 @@ import com.netease.nimlib.sdk.media.record.IAudioRecordCallback
 import com.netease.nimlib.sdk.media.record.RecordType
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.autoDispose
@@ -233,6 +240,32 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         })
 
         /**
+         * 设置共享元素跳转View
+         */
+        viewModel.shareElementUuid.observe(viewLifecycleOwner, Observer {
+            ActivityCompat.setExitSharedElementCallback(requireActivity(), object :
+                SharedElementCallback() {
+                override fun onMapSharedElements(
+                    names: MutableList<String>,
+                    sharedElements: MutableMap<String, View>
+                ) {
+                    sharedElements.clear()
+                    val index = viewModel.getIndexByUuid(it) ?: return
+                    val itemViewModel = viewModel.getItemViewModelByIndex(index) ?: return
+                    if (itemViewModel is ItemViewModelImageMessage) {
+                        itemViewModel.photoView?.let { view ->
+                            sharedElements[TRANSITION_NAME] = view
+                        }
+                    } else if (itemViewModel is ItemViewModelVideoMessage) {
+                        itemViewModel.photoView?.let { view ->
+                            sharedElements[TRANSITION_NAME] = view
+                        }
+                    }
+                }
+            })
+        })
+
+        /**
          * 消息接收监听
          */
         viewModel.toObservable(NimEvent.OnReceiveMessageEvent::class.java, Observer {
@@ -325,6 +358,20 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         })
 
         /**
+         * 拍摄中选择图片发送
+         */
+        viewModel.toObservable(EventCamera.OnCameraImageEvent::class.java, Observer {
+            sendImageMessage(listOf(it.path))
+        })
+
+        /**
+         * 拍摄中选择
+         */
+        viewModel.toObservable(EventCamera.OnCameraVideoEvent::class.java, Observer {
+            sendVideoMessage(listOf(it.path))
+        })
+
+        /**
          * 发送地图消息
          */
         viewModel.toObservable(EventMap.OnSendLocationEvent::class.java, Observer {
@@ -352,7 +399,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 ) {
                     sharedElements.clear()
                     //下标错误返回null
-                    val index = viewModel.getIndexByMessage(message) ?: return
+                    val index = viewModel.getIndexByUuid(message.uuid) ?: return
                     //不在屏幕内返回null
                     if (recycler.layoutManager?.findViewByPosition(index) == null) {
                         return
@@ -362,9 +409,21 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                         itemViewModel.photoView?.let { view ->
                             sharedElements.put(TRANSITION_NAME, view)
                         }
+                    } else if (itemViewModel is ItemViewModelVideoMessage) {
+                        itemViewModel.photoView?.let { view ->
+                            sharedElements.put(TRANSITION_NAME, view)
+                        }
                     }
                 }
             })
+        })
+
+        viewModel.toObservable(NimEvent.OnAttachmentProgressEvent::class.java, Observer {
+            val attachment = it.attachment
+            val index = viewModel.getIndexByUuid(attachment.uuid) ?: return@Observer
+            val itemViewModel = viewModel.getItemViewModelByIndex(index) ?: return@Observer
+            val percent = attachment.transferred.toFloat() / attachment.total.toFloat()
+            itemViewModel.progress.value = String.format(Locale.US, "%d%%", (percent * 100).toInt())
         })
 
     }
@@ -459,6 +518,31 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     }
 
     /**
+     * 发送视频消息
+     */
+    private fun sendVideoMessage(paths: List<String>) {
+        paths.forEach {
+            val file = getFileByPath(it) ?: return@forEach
+            val mediaPlayer = getVideoMediaPlayer(file) ?: return@forEach
+            val md5: String = md5(it)
+            val duration = mediaPlayer.duration.toLong()
+            val height = mediaPlayer.videoHeight
+            val width = mediaPlayer.videoWidth
+            val message = MessageBuilder.createVideoMessage(
+                arg.contactId,
+                sessionType,
+                file,
+                duration,
+                width,
+                height,
+                md5
+            )
+            message.attachStatus = AttachStatusEnum.transferring
+            viewModel.sendMessage(message)
+        }
+    }
+
+    /**
      * 发送图片消息
      */
     private fun sendImageMessage(paths: List<String>) {
@@ -472,6 +556,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 override fun onSuccess(file: File) {
                     val message =
                         MessageBuilder.createImageMessage(arg.contactId, sessionType, file)
+                    message.attachStatus = AttachStatusEnum.transferring
                     viewModel.sendMessage(message, false)
                 }
 
@@ -546,6 +631,18 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 sendImageMessage(Matisse.obtainPathResult(it))
             }
         }
+    }
+
+    /**
+     * 获取文件MediaPlayer
+     */
+    private fun getVideoMediaPlayer(file: File?): MediaPlayer? {
+        try {
+            return MediaPlayer.create(activity, Uri.fromFile(file))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 
 }

@@ -3,8 +3,12 @@
 
     <!--Components-->
 
-    <style name="Widget.MyTheme.AppBarLayout" parent="Widget.Design.AppBarLayout">
+    <style name="Widget.MyTheme.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Surface">
+        <item name="elevation">0dp</item>
+    </style>
 
+    <style name="Widget.MyTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <item name="divider">@drawable/divider_horizontal</item>
     </style>
 
     <!--Bottom Sheets-->
@@ -29,18 +33,13 @@
         <item name="itemTextAppearance">?textAppearanceBody2</item>
     </style>
 
-    <!--Navigation Drawer-->
-    <style name="Widget.MyTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
-
-    </style>
-
     <style name="Widget.MyTheme.Zhihu" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">?colorSurface</item>
-        <item name="colorPrimaryDark">?colorSurface</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_variant</item>
         <item name="toolbar">@style/Toolbar.Zhihu</item>
         <item name="album.dropdown.title.color">?colorFontPrimary</item>
         <item name="album.dropdown.count.color">?colorFontSecondary</item>
-        <item name="album.element.color">?colorFontPrimary</item>
+        <item name="album.element.color">@color/white</item>
         <item name="album.thumbnail.placeholder">?colorFontPrimary</item>
         <item name="album.emptyView">@drawable/ic_empty_zhihu</item>
         <item name="album.emptyView.textColor">?colorFontPrimary</item>
@@ -51,10 +50,11 @@
         <item name="bottomToolbar.bg">@color/color_background_secondary</item>
         <item name="bottomToolbar.preview.textColor">?colorFontPrimary</item>
         <item name="bottomToolbar.apply.textColor">@color/color_primary</item>
-        <item name="preview.bottomToolbar.back.textColor">?colorFontPrimary</item>
-        <item name="preview.bottomToolbar.apply.textColor">?colorPrimary</item>
+        <item name="preview.bottomToolbar.back.textColor">@color/white</item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/white</item>
         <item name="listPopupWindowStyle">@style/Popup.Zhihu</item>
         <item name="capture.textColor">@color/zhihu_capture</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
 

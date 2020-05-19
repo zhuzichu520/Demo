@@ -9,5 +9,6 @@
         android:id="@+id/fragmentCamera"
         android:name="com.netease.nim.demo.ui.camera.fragment.FragmentCamera"
         android:label="FragmentCamera"
-        tools:layout="@layout/fragment_camera"/>
+        tools:layout="@layout/fragment_camera" />
+
 </navigation>

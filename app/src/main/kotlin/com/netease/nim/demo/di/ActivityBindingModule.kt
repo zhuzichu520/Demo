@@ -19,7 +19,9 @@ import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.message.more.module.ModuleMore
 import com.netease.nim.demo.ui.permissions.module.ModulePermissions
 import com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser
+import com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowserGif
 import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseImage
+import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseImageGif
 import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseVideo
 import com.netease.nim.demo.ui.photobrowser.module.ModulePhotoBrowser
 import com.netease.nim.demo.ui.session.module.ModuleSession
@@ -78,6 +80,14 @@ abstract class ActivityBindingModule {
         ]
     )
     internal abstract fun photoBrowserActivity(): ActivityPhotoBrowser
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleBrowseImageGif::class
+        ]
+    )
+    internal abstract fun photoBrowserGifActivity(): ActivityPhotoBrowserGif
 
     @ActivityScoped
     @ContributesAndroidInjector(

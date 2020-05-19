@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reload"
-                android:textColor="@color/color_font_primary"
+                android:textColor="@color/white"
                 android:visibility="gone"
                 app:onClickCommand="@{viewModel.onClickAttachFailedCommand}" />
 

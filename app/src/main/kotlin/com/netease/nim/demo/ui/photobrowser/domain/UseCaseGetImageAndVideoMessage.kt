@@ -4,6 +4,8 @@ import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
 import com.netease.nim.demo.nim.repository.NimRepository
+import com.netease.nim.demo.nim.tools.ToolImage
+import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import io.reactivex.Flowable
 import javax.inject.Inject
@@ -21,7 +23,13 @@ class UseCaseGetImageAndVideoMessage @Inject constructor(
     override fun execute(parameters: IMMessage): Flowable<List<IMMessage>> {
         return nimRepository.getImageAndVideoMessage(
             parameters
-        ).bindToSchedulers().bindToException()
+        ).flatMap {
+            Flowable.fromIterable(it)
+        }.filter {
+            (it.attachment as? ImageAttachment)?.let { attach ->
+                !ToolImage.isGif(attach.extension)
+            } ?: true
+        }.toList().toFlowable().bindToSchedulers().bindToException()
     }
 
 

@@ -76,10 +76,10 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="上午 10:32" />
 
-        <View
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="?attr/dividerHorizontal"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/name" />
@@ -91,6 +91,7 @@
             app:onClickCommand="@{item.onClickCommand}"
             android:foreground="@drawable/ripple_light_with_border"
             app:onLongClickViewCommand="@{item.onLongClickCommand}"
+            app:onTouchCommmand="@{item.onTouchCommmand}"
             app:onDragStateChangedCommamnd="@{item.onDragStateChangedCommamnd}" />
 
         <androidx.appcompat.widget.AppCompatImageView

@@ -10,7 +10,6 @@ import com.hiwitech.android.mvvm.databinding.BindingCommand
 import com.hiwitech.android.shared.ext.logi
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
-import com.jakewharton.rxbinding3.view.touches
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -61,8 +60,9 @@ fun onClickCommand(
     }
 
     onTouchCommmand?.apply {
-        view.touches().isThrottleFirst(isThrottleFirst ?: true).subscribe {
-            execute(it)
+        view.setOnTouchListener { _, motionEvent ->
+            execute(motionEvent)
+            false
         }
     }
 }

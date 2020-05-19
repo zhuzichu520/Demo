@@ -21,10 +21,10 @@ fun bindImageViewGlide(
         val requestOptions = RequestOptions()
         val glide = GlideApp.with(imageView).load(url)
         placeholder?.let {
-            glide.thumbnail(GlideApp.with(imageView).load(placeholder).apply(requestOptions))
+            requestOptions.placeholder(it)
         }
         error?.let {
-            glide.thumbnail(GlideApp.with(imageView).load(error).apply(requestOptions))
+            requestOptions.error(it)
         }
         glide.apply(requestOptions)
         glide.into(imageView)

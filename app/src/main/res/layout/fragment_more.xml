@@ -14,11 +14,11 @@
         android:layout_height="match_parent"
         android:background="@color/color_background">
 
-        <View
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/color_divider"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/divider_horizontal" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

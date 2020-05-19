@@ -118,8 +118,15 @@ dependencies {
     api(Libs.LUBAN)
 
     api(Libs.PHOTOVIEW)
-    api(Libs.IMAGEZOOM)
-    api(Libs.SUBSAMPLING)
+
+    api(Libs.CAMERAVIEW)
+    api(Libs.CAMERAX_CORE)
+    api(Libs.CAMERAX_VIEW)
+    api(Libs.CAMERAX_CAMERA2)
+    api(Libs.CAMERAX_EXTENSIONS)
+
+    api(Libs.EXOPLAYER)
+
 
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)
