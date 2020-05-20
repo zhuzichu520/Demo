@@ -20,6 +20,7 @@ import com.netease.nim.demo.ui.photobrowser.viewmodel.ViewModelPhotoBrowser
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import kotlinx.android.synthetic.main.fragment_browse_image.*
+import kotlinx.android.synthetic.main.fragment_browse_video.*
 import kotlinx.android.synthetic.main.fragment_photo_browser.*
 
 /**
@@ -113,10 +114,11 @@ class FragmentPhotoBrowser :
             ) {
                 super.onMapSharedElements(names, sharedElements)
                 sharedElements.clear()
-                fragments[index].photo?.let {
-                    sharedElements.put(
-                        TRANSITION_NAME, it
-                    )
+                val fragment = fragments[index]
+                if (fragment is FragmentBrowseImage) {
+                    fragment.photo?.let { sharedElements.put(TRANSITION_NAME, it) }
+                } else if (fragment is FragmentBrowseVideo) {
+                    fragment.view_image?.let { sharedElements.put(TRANSITION_NAME, it) }
                 }
             }
         })

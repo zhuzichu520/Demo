@@ -418,6 +418,9 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             })
         })
 
+        /**
+         * 图片下载进度
+         */
         viewModel.toObservable(NimEvent.OnAttachmentProgressEvent::class.java, Observer {
             val attachment = it.attachment
             val index = viewModel.getIndexByUuid(attachment.uuid) ?: return@Observer

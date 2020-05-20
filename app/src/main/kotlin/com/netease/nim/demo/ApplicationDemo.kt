@@ -16,6 +16,7 @@ import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.util.NIMUtil
+import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import jonathanfinerty.once.Once
@@ -23,7 +24,9 @@ import okhttp3.OkHttpClient
 import rxhttp.wrapper.param.RxHttp
 import rxhttp.wrapper.ssl.SSLSocketFactoryImpl
 import rxhttp.wrapper.ssl.X509TrustManagerImpl
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import java.util.concurrent.TimeUnit
+
 
 /**
  * desc Application
@@ -35,6 +38,7 @@ class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider  {
 
     override fun onCreate() {
         super.onCreate()
+        PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         AppGlobal.init(this)
         RxHttp.init(getDefaultOkHttpClient(), BuildConfig.DEBUG)
         Once.initialise(this)

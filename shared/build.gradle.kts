@@ -126,6 +126,8 @@ dependencies {
     api(Libs.CAMERAX_EXTENSIONS)
 
     api(Libs.EXOPLAYER)
+    api(Libs.GSYVIDEOPLAYER_JAVA)
+    api(Libs.GSYVIDEOPLAYER_EXO)
 
 
     api(MyLibs.DEVELOPER_LIBS)

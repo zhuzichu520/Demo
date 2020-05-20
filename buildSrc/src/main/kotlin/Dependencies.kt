@@ -61,7 +61,7 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.3"
 
-    const val DEVELOPER = "1.1.6"
+    const val DEVELOPER = "1.1.7"
 
     const val LIVEEVENTBUS = "1.6.1"
 
@@ -76,6 +76,8 @@ object Versions {
     const val CAMERAVIEW = "2.6.2"
 
     const val EXOPLAYER = "2.10.4"
+
+    const val GSYVIDEOPLAYER = "7.1.4"
 }
 
 /**
@@ -218,6 +220,8 @@ object Libs {
 
     const val EXOPLAYER = "com.google.android.exoplayer:exoplayer:${Versions.EXOPLAYER}"
 
+    const val GSYVIDEOPLAYER_JAVA = "com.shuyu:gsyVideoPlayer-java:${Versions.GSYVIDEOPLAYER}"
+    const val GSYVIDEOPLAYER_EXO = "com.shuyu:GSYVideoPlayer-exo2:${Versions.GSYVIDEOPLAYER}"
 }
 
 
