@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_file"
+    app:startDestination="@id/fragmentFile">
+
+    <fragment
+        android:id="@+id/fragmentFile"
+        android:name="com.netease.nim.demo.ui.file.fragment.FragmentFile"
+        android:label="FragmentFile"
+        tools:layout="@layout/fragment_file" >
+        <action
+            android:id="@+id/action_fragmentFile_to_activityBrowseFile"
+            app:destination="@id/activityBrowseFile" />
+    </fragment>
+    <activity
+        android:id="@+id/activityBrowseFile"
+        android:name="com.netease.nim.demo.ui.file.ActivityBrowseFile"
+        android:label="ActivityBrowseFile"
+        tools:layout="@layout/fragment_browse_file"/>
+</navigation>

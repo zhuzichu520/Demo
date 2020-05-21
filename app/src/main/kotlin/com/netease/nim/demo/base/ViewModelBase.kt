@@ -9,6 +9,7 @@ import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.AppGlobal.context
 import com.hiwitech.android.shared.http.exception.BusinessThrowable
+import com.hiwitech.android.shared.widget.decoration.SuperOffsetDecoration
 import com.jeremyliao.liveeventbus.LiveEventBus
 
 /**
@@ -44,4 +45,9 @@ abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>() {
             LiveEventBus.get(it.key.simpleName, it.key).removeObserver(it.value)
         }
     }
+
+    fun dividerNone(): Int = SuperOffsetDecoration.SHOW_DIVIDER_NONE
+    fun dividerBeginning(): Int = SuperOffsetDecoration.SHOW_DIVIDER_BEGINNING
+    fun dividerMiddle(): Int = SuperOffsetDecoration.SHOW_DIVIDER_MIDDLE
+    fun dividerEnd(): Int = SuperOffsetDecoration.SHOW_DIVIDER_END
 }

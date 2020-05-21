@@ -137,9 +137,25 @@
 
         <activity android:name=".ui.photobrowser.ActivityPhotoBrowserGif" />
 
+        <activity android:name=".ui.file.ActivityFile" />
+
+        <activity android:name=".ui.message.filedownload.ActivityFileDownload" />
+
+        <activity android:name=".ui.file.ActivityBrowseFile" />
+
         <activity
             android:name=".ui.photobrowser.ActivityPhotoBrowser"
             android:theme="@style/ThemePhotoBrowser" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provide_file_paths" />
+        </provider>
 
         <!-- 声明云信后台服务 -->
         <service

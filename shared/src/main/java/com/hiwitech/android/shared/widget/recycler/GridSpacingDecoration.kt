@@ -8,7 +8,7 @@ import com.hiwitech.android.libs.tool.toFloat
 
 class GridSpacingDecoration(
     private val spanCount: Int = 3,
-    private val spacing: Int = 20,
+    private val spacing: Float = 20f,
     private val includeEdge: Boolean = false
 ) : RecyclerView.ItemDecoration() {
 
@@ -21,7 +21,7 @@ class GridSpacingDecoration(
         //这里是关键，需要根据你有几列来判断
         val position = parent.getChildAdapterPosition(view) // item position
         val column = position % spanCount // item column
-        val spacing = dp2px(view.context, toFloat(spacing))
+        val spacing = dp2px(view.context, spacing)
         if (includeEdge) {
             outRect.left =
                 spacing - column * spacing / spanCount // spacing - column * ((1f / spanCount) * spacing)

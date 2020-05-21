@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.netease.nim.demo.ui.file.viewmodel.ItemViewModelFileNav" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        app:onClickCommand="@{item.onClickCommand}">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:drawableStart="@drawable/ic_file_picker_arrow_right"
+            android:drawablePadding="16dp"
+            android:ellipsize="middle"
+            android:gravity="center"
+            android:maxEms="12"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:text="@{item.fileName}"
+            android:textAllCaps="false"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/color_font_primary"
+            android:textStyle="bold"
+            tools:text="SD 存储卡SD 存储卡SD 存储卡SD 存储卡" />
+    </LinearLayout>
+</layout>

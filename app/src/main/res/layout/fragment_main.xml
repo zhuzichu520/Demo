@@ -26,10 +26,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/navigation" />
 
-        <View
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/line"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider_horizontal"
             app:layout_constraintBottom_toTopOf="@id/bottom" />
 
         <androidx.viewpager.widget.ViewPager

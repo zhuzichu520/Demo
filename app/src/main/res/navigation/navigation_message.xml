@@ -23,6 +23,12 @@
         <action
             android:id="@+id/action_fragmentMessage_to_activityPhotoBrowserGif"
             app:destination="@id/activityPhotoBrowserGif" />
+        <action
+            android:id="@+id/action_fragmentMessage_to_activityFile"
+            app:destination="@id/activityFile" />
+        <action
+            android:id="@+id/action_fragmentMessage_to_activityFileDownload"
+            app:destination="@id/activityFileDownload" />
     </fragment>
 
     <activity
@@ -47,5 +53,15 @@
         android:name="com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowserGif"
         android:label="ActivityPhotoBrowserGif"
         tools:layout="@layout/fragment_browse_image_gif" />
+    <activity
+        android:id="@+id/activityFile"
+        android:name="com.netease.nim.demo.ui.file.ActivityFile"
+        android:label="ActivityFile"
+        tools:layout="@layout/fragment_file" />
+    <activity
+        android:id="@+id/activityFileDownload"
+        android:name="com.netease.nim.demo.ui.message.filedownload.ActivityFileDownload"
+        android:label="ActivityFileDownload"
+        tools:layout="@layout/fragment_file_download" />
 
 </navigation>

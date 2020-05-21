@@ -21,10 +21,10 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:error="@{item.error}"
-            app:qmui_is_circle="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:placeholder="@{item.placeholder}"
+            app:qmui_is_circle="true"
             app:url="@{item.avatar}"
             tools:background="@mipmap/ic_launcher" />
 
@@ -76,7 +76,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@mipmap/nim_message_failed"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:onClickCommand="@{item.onClickResendCommand}" />
 
             <View
                 android:layout_width="wrap_content"

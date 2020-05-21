@@ -11,7 +11,8 @@ class LineManager {
 
     companion object {
 
-        fun both(dividerSize: Int): Factory {
+        @JvmStatic
+        fun both(dividerSize: Float): Factory {
             return object : Factory {
                 override fun create(recyclerView: RecyclerView): ItemDecoration {
                     return DividerLine(
@@ -23,7 +24,8 @@ class LineManager {
             }
         }
 
-        fun horizontal(dividerSize: Int): Factory {
+        @JvmStatic
+        fun horizontal(dividerSize: Float): Factory {
             return object : Factory {
                 override fun create(recyclerView: RecyclerView): ItemDecoration {
                     return DividerLine(
@@ -35,7 +37,8 @@ class LineManager {
             }
         }
 
-        fun vertical(dividerSize: Int): Factory {
+        @JvmStatic
+        fun vertical(dividerSize: Float): Factory {
             return object : Factory {
                 override fun create(recyclerView: RecyclerView): ItemDecoration {
                     return DividerLine(
@@ -47,7 +50,8 @@ class LineManager {
             }
         }
 
-        fun gridSpacing(spanCount: Int, spacing: Int): Factory {
+        @JvmStatic
+        fun gridSpacing(spanCount: Int, spacing: Float): Factory {
             return object : Factory {
                 override fun create(recyclerView: RecyclerView): ItemDecoration {
                     return GridSpacingDecoration(

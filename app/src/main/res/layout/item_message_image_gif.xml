@@ -132,9 +132,10 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@mipmap/nim_message_failed"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:onClickCommand="@{item.onClickResendCommand}" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />

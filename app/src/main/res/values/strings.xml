@@ -49,6 +49,9 @@
     <string name="clear_disturb">取消免打扰</string>
     <string name="on_disturb">免打扰</string>
     <string name="remove">移除</string>
-    <string name="camera_tips" >轻触拍照 长按摄像</string>
+    <string name="camera_tips">轻触拍照 长按摄像</string>
+    <string name="file">文件</string>
+    <string name="see">查看</string>
+    <string name="empty">空空如也</string>
 
 </resources>

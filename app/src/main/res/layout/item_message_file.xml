@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelFileMessage" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        app:layoutDirection="@{item.layoutDirection}">
+
+        <com.hiwitech.android.widget.qmui.QMUIRadiusImageView
+            android:id="@+id/header"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:error="@{item.error}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholder="@{item.placeholder}"
+            app:qmui_is_circle="true"
+            app:url="@{item.avatar}"
+            tools:background="@mipmap/ic_launcher" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@{item.name}"
+            app:layout_constraintStart_toEndOf="@+id/header"
+            app:layout_constraintTop_toTopOf="@+id/header"
+            app:visibility="@{item.displayName}"
+            tools:text="一二三" />
+
+        <FrameLayout
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/header"
+            app:layout_constraintTop_toBottomOf="@+id/name">
+
+            <com.hiwitech.android.widget.qmui.layout.QMUIRelativeLayout
+                android:layout_width="240dp"
+                android:layout_height="80dp"
+                android:background="@color/color_background_primary"
+                android:layoutDirection="ltr"
+                app:qmui_borderColor="@color/color_divider"
+                app:qmui_radius="5dp"
+                app:qmui_shadowAlpha="0.5"
+                app:onClickCommand="@{item.onClickFileCommand}"
+                app:qmui_shadowElevation="1dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/icon"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="14dp"
+                    app:url="@{item.fileIcon}"
+                    tools:src="@mipmap/file_ic_detail_apk" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_toEndOf="@+id/icon"
+                    android:layout_weight="1"
+                    android:ellipsize="middle"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@{item.fileName}"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textColor="@color/color_font_primary"
+                    tools:text="SD 存储卡SD 存储卡SD" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_toEndOf="@+id/icon"
+                    android:text="@{item.size}"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textColor="@color/color_font_secondary"
+                    tools:text="1.23mb" />
+
+                <com.hiwitech.android.widget.qmui.layout.QMUIFrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:displayChild="@{item.attachStatus}"
+                    app:qmui_radius="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#80000000"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="10dp"
+                            android:text="@{item.progress}"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/white"
+                            tools:text="80%" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/reload"
+                        android:textColor="@color/color_font_primary"
+                        android:visibility="gone"
+                        app:onClickCommand="@{item.onClickAttachFailedCommand}" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
+                </com.hiwitech.android.widget.qmui.layout.QMUIFrameLayout>
+
+            </com.hiwitech.android.widget.qmui.layout.QMUIRelativeLayout>
+
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:displayChild="@{item.messageStatus}"
+            app:layout_constraintBottom_toBottomOf="@id/content"
+            app:layout_constraintStart_toEndOf="@+id/content"
+            app:layout_constraintTop_toTopOf="@id/content">
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/nim_message_failed"
+                android:visibility="gone"
+                app:onClickCommand="@{item.onClickResendCommand}" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

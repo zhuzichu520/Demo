@@ -29,6 +29,7 @@ import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.ui.camera.event.EventCamera
+import com.netease.nim.demo.ui.file.event.EventFile
 import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
 import com.netease.nim.demo.ui.map.event.EventMap
 import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
@@ -354,6 +355,9 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 ViewModelMore.TYPE_VIDEO -> {
                     startCamera()
                 }
+                ViewModelMore.TYPE_FILE -> {
+                    startFile()
+                }
             }
         })
 
@@ -383,6 +387,16 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 latLon.longitude,
                 it.itemViewModelPoi.poiItem.title
             )
+            viewModel.sendMessage(message)
+        })
+
+        /**
+         * 发送文件消息
+         */
+        viewModel.toObservable(EventFile.OnSendFileEvent::class.java, Observer {
+            val message =
+                MessageBuilder.createFileMessage(arg.contactId, sessionType, it.file, it.file.name)
+            message.attachStatus = AttachStatusEnum.transferring
             viewModel.sendMessage(message)
         })
 
@@ -419,7 +433,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         })
 
         /**
-         * 图片下载进度
+         * 附件下载进度
          */
         viewModel.toObservable(NimEvent.OnAttachmentProgressEvent::class.java, Observer {
             val attachment = it.attachment
@@ -429,6 +443,22 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             itemViewModel.progress.value = String.format(Locale.US, "%d%%", (percent * 100).toInt())
         })
 
+    }
+
+    /**
+     * 跳转到文件列表界面
+     */
+    private fun startFile() {
+        RxPermissions(requireActivity()).request(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ).autoDispose(viewModel).subscribe {
+            if (it) {
+                start(R.id.action_fragmentMessage_to_activityFile)
+            } else {
+                FragmentPermissions().show("文件读写", parentFragmentManager)
+            }
+        }
     }
 
     /**

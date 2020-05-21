@@ -13,7 +13,7 @@ import com.hiwitech.android.shared.ext.toColorByResId
 
 class DividerLine(
     val context: Context,
-    private val dividerSize: Int = 0,
+    private val dividerSize: Float = 0f,
     val mode: LineDrawMode = LineDrawMode.VERTICAL
 ) : ItemDecoration() {
 
@@ -46,7 +46,7 @@ class DividerLine(
                 .layoutParams as RecyclerView.LayoutParams
             val top = child.top - params.topMargin
             val left = child.right + params.rightMargin
-            val bottom = child.bottom + params.bottomMargin + dp2px(context, toFloat(dividerSize))
+            val bottom = child.bottom + params.bottomMargin + dp2px(context, dividerSize)
             val right: Int = left + dp2px(context, toFloat(dividerSize))
             dividerDrawable?.setBounds(left, top, right, bottom)
             dividerDrawable?.draw(c)

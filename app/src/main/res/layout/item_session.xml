@@ -76,14 +76,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="上午 10:32" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/divider_horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/name" />
-
         <com.netease.nim.demo.ui.session.view.ViewSessionBadge
             android:layout_width="match_parent"
             android:layout_height="match_parent"

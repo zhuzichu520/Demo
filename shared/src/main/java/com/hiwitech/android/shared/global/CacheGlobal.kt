@@ -18,6 +18,8 @@ object CacheGlobal {
 
     private const val CACHE_CAMERA_FILE_NAME = "cache_camera"
 
+    private const val CACHE_TBSREADERTEMP_FILE_NAME="TbsReaderTemp"
+
     fun initDir() {
         getGlideCacheDir()
     }
@@ -44,6 +46,10 @@ object CacheGlobal {
 
     fun getLubanCacheDir(): String {
         return getDiskCacheDir(child = CACHE_LUBAN_FILE_NAME).absolutePath
+    }
+
+    fun getTbsReaderTempCacheDir(): String {
+        return getDiskCacheDir(child = CACHE_TBSREADERTEMP_FILE_NAME).absolutePath
     }
 
     fun getCameraDir(): String {

@@ -5,6 +5,10 @@ import com.hiwitech.android.mvvm.di.ActivityScoped
 import com.netease.nim.demo.ui.camera.ActivityCamera
 import com.netease.nim.demo.ui.camera.module.ModuleCamera
 import com.netease.nim.demo.ui.contact.module.ModuleContact
+import com.netease.nim.demo.ui.file.ActivityBrowseFile
+import com.netease.nim.demo.ui.file.ActivityFile
+import com.netease.nim.demo.ui.file.module.ModuleBrowseFile
+import com.netease.nim.demo.ui.file.module.ModuleFile
 import com.netease.nim.demo.ui.launcher.ActivityLauncher
 import com.netease.nim.demo.ui.launcher.module.ModuleLauncher
 import com.netease.nim.demo.ui.login.main.module.ModuleLogin
@@ -15,6 +19,8 @@ import com.netease.nim.demo.ui.map.module.ModuleAmap
 import com.netease.nim.demo.ui.me.main.module.ModuleMe
 import com.netease.nim.demo.ui.message.ActivityMessage
 import com.netease.nim.demo.ui.message.emoticon.module.ModuleEmoticon
+import com.netease.nim.demo.ui.message.filedownload.ActivityFileDownload
+import com.netease.nim.demo.ui.message.filedownload.module.ModuleFileDownload
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.message.more.module.ModuleMore
 import com.netease.nim.demo.ui.permissions.module.ModulePermissions
@@ -94,9 +100,34 @@ abstract class ActivityBindingModule {
         modules = [
             ModuleMore::class,
             ModuleMessage::class,
-            ModuleEmoticon::class
+            ModuleEmoticon::class,
+            ModulePermissions::class
         ]
     )
     internal abstract fun messageActivity(): ActivityMessage
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleFile::class
+        ]
+    )
+    internal abstract fun fileActivity(): ActivityFile
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleBrowseFile::class
+        ]
+    )
+    internal abstract fun browseFileActivity(): ActivityBrowseFile
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleFileDownload::class
+        ]
+    )
+    internal abstract fun fileDownloadActivity(): ActivityFileDownload
 
 }

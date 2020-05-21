@@ -137,8 +137,11 @@ class FragmentBrowseVideo :
 
     private fun updateView() {
         val attachment = message.attachment as VideoAttachment
+        val path = attachment.path
         val thumbPath = attachment.thumbPath
-        viewModel.imagePath.value = if (!thumbPath.isNullOrEmpty()) {
+        viewModel.imagePath.value = if (!path.isNullOrEmpty()) {
+            path
+        } else if (!thumbPath.isNullOrEmpty()) {
             thumbPath
         } else {
             if (message.attachStatus == AttachStatusEnum.transferred || message.attachStatus == AttachStatusEnum.def) {

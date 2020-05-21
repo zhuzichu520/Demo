@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.netease.nim.demo.ui.file.viewmodel.ItemViewModelFile" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:onClickCommand="@{item.onClickCommand}">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:url="@{item.fileIcon}"
+            tools:src="@mipmap/file_ic_detail_apk" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@{item.fileName}"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/color_font_primary"
+            app:layout_constraintBottom_toTopOf="@+id/size"
+            app:layout_constraintEnd_toStartOf="@+id/see"
+            app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="SD 存储卡SD 存储卡SD" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@{item.size}"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/color_font_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="1.23mb" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{item.date}"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/color_font_secondary"
+            app:layout_constraintBottom_toBottomOf="@+id/size"
+            app:layout_constraintEnd_toStartOf="@+id/see"
+            app:layout_constraintStart_toEndOf="@+id/size"
+            app:layout_constraintTop_toTopOf="@+id/size"
+            tools:text="星期一" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/see"
+            android:layout_width="64dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/shape_bg_file_tab_check"
+            android:gravity="center"
+            android:text="@string/see"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/color_font_primary"
+            app:isShown="@{item.see}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClickCommand="@{item.onClickSeeCommand}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

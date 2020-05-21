@@ -17,6 +17,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.util.NIMUtil
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
+import com.tencent.smtt.sdk.QbSdk
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import jonathanfinerty.once.Once
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit
  * time: 2020/4/4 11:48 PM
  * since: v 1.0.0
  */
-class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider  {
+class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider {
 
     override fun onCreate() {
         super.onCreate()
@@ -61,6 +62,18 @@ class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider  {
             NIMClient.getService(MsgService::class.java)
                 .registerCustomAttachmentParser(NimAttachParser())
         }
+
+        QbSdk.initX5Environment(applicationContext, object : QbSdk.PreInitCallback {
+
+            override fun onCoreInitFinished() {
+
+            }
+
+            override fun onViewInitFinished(isInit: Boolean) {
+
+            }
+        })
+
     }
 
     /**

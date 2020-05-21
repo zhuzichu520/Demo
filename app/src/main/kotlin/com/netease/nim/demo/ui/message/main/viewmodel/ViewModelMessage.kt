@@ -119,6 +119,7 @@ class ViewModelMessage @Inject constructor(
         map<ItemViewModelStickerMessage>(BR.item, R.layout.item_message_sticker)
         map<ItemViewModelAudioMessage>(BR.item, R.layout.item_message_audio)
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
+        map<ItemViewModelFileMessage>(BR.item, R.layout.item_message_file)
         map<ItemViewModelLocationMessage>(BR.item, R.layout.item_message_location)
     }
 
@@ -237,6 +238,9 @@ class ViewModelMessage @Inject constructor(
                 }
                 MsgTypeEnum.location -> {
                     ItemViewModelLocationMessage(this, item)
+                }
+                MsgTypeEnum.file -> {
+                    ItemViewModelFileMessage(this, item, useCaseDowloadAttachment)
                 }
                 MsgTypeEnum.video -> {
                     ItemViewModelVideoMessage(

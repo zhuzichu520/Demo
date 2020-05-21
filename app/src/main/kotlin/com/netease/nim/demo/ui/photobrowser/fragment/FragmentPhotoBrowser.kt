@@ -6,7 +6,7 @@ import androidx.core.app.SharedElementCallback
 import androidx.core.os.bundleOf
 import androidx.viewpager.widget.ViewPager
 import com.hiwitech.android.mvvm.Mvvm.KEY_ARG
-import com.hiwitech.android.shared.base.DefaultIntFragmentPagerAdapter
+import com.hiwitech.android.shared.base.DefaultIntFragmentStatePagerAdapter
 import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.fitSystemWindows
 import com.netease.nim.demo.BR
@@ -20,7 +20,6 @@ import com.netease.nim.demo.ui.photobrowser.viewmodel.ViewModelPhotoBrowser
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import kotlinx.android.synthetic.main.fragment_browse_image.*
-import kotlinx.android.synthetic.main.fragment_browse_video.*
 import kotlinx.android.synthetic.main.fragment_photo_browser.*
 
 /**
@@ -64,7 +63,7 @@ class FragmentPhotoBrowser :
             }
         }
 
-        pager.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments)
+        pager.adapter = DefaultIntFragmentStatePagerAdapter(childFragmentManager, fragments)
         pager.setCurrentItem(position, false)
         updateEnterSharedElement(position)
     }

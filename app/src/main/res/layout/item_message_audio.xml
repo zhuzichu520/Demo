@@ -21,10 +21,10 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:error="@{item.error}"
-            app:qmui_is_circle="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:placeholder="@{item.placeholder}"
+            app:qmui_is_circle="true"
             app:url="@{item.avatar}"
             tools:background="@mipmap/ic_launcher" />
 
@@ -48,10 +48,10 @@
             android:layout_marginEnd="50dp"
             android:gravity="center_vertical"
             android:maxWidth="240dp"
-            app:onClickCommand="@{item.onClickAudioCommand}"
             app:background="@{item.background}"
             app:layout_constraintStart_toEndOf="@+id/header"
-            app:layout_constraintTop_toBottomOf="@+id/name">
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:onClickCommand="@{item.onClickAudioCommand}">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image"
@@ -67,7 +67,6 @@
                 android:text="@{item.duration}" />
 
         </LinearLayout>
-
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -88,7 +87,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@mipmap/nim_message_failed"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:onClickCommand="@{item.onClickResendCommand}" />
 
             <View
                 android:layout_width="wrap_content"
@@ -96,7 +96,6 @@
                 android:visibility="gone" />
 
         </FrameLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

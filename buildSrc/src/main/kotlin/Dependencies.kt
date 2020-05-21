@@ -78,6 +78,7 @@ object Versions {
     const val EXOPLAYER = "2.10.4"
 
     const val GSYVIDEOPLAYER = "7.1.4"
+
 }
 
 /**
@@ -222,6 +223,7 @@ object Libs {
 
     const val GSYVIDEOPLAYER_JAVA = "com.shuyu:gsyVideoPlayer-java:${Versions.GSYVIDEOPLAYER}"
     const val GSYVIDEOPLAYER_EXO = "com.shuyu:GSYVideoPlayer-exo2:${Versions.GSYVIDEOPLAYER}"
+
 }
 
 
