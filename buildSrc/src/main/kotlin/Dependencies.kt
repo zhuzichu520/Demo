@@ -61,7 +61,7 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.3"
 
-    const val DEVELOPER = "1.1.7"
+    const val DEVELOPER = "1.1.8"
 
     const val LIVEEVENTBUS = "1.6.1"
 

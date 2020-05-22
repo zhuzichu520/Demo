@@ -31,6 +31,8 @@ import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseImageGif
 import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseVideo
 import com.netease.nim.demo.ui.photobrowser.module.ModulePhotoBrowser
 import com.netease.nim.demo.ui.session.module.ModuleSession
+import com.netease.nim.demo.ui.web.ActivityWeb
+import com.netease.nim.demo.ui.web.module.ModuleWeb
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -109,7 +111,8 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(
         modules = [
-            ModuleFile::class
+            ModuleFile::class,
+            ModulePermissions::class
         ]
     )
     internal abstract fun fileActivity(): ActivityFile
@@ -117,7 +120,8 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(
         modules = [
-            ModuleBrowseFile::class
+            ModuleBrowseFile::class,
+            ModulePermissions::class
         ]
     )
     internal abstract fun browseFileActivity(): ActivityBrowseFile
@@ -125,9 +129,19 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(
         modules = [
-            ModuleFileDownload::class
+            ModuleFileDownload::class,
+            ModulePermissions::class
         ]
     )
     internal abstract fun fileDownloadActivity(): ActivityFileDownload
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleWeb::class
+        ]
+    )
+    internal abstract fun webActivity(): ActivityWeb
+
 
 }

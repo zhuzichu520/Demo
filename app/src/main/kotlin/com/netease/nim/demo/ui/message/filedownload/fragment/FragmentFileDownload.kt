@@ -4,6 +4,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import com.hiwitech.android.libs.tool.copyFile
 import com.hiwitech.android.libs.tool.deleteQuietly
+import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.CacheGlobal
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
@@ -53,7 +54,6 @@ class FragmentFileDownload :
         view_content.removeAllViews()
         view_tbs = TbsReaderView(requireContext(), this)
         view_content.addView(view_tbs)
-
         view_progress.setQMUIProgressBarTextGenerator { _, value, maxValue ->
             val percent = value.toFloat() / maxValue.toFloat()
             String.format(Locale.US, "%d%%", (percent * 100).toInt())
@@ -110,6 +110,8 @@ class FragmentFileDownload :
                     TbsReaderView.KEY_TEMP_PATH to CacheGlobal.getTbsReaderTempCacheDir()
                 )
             )
+        } else {
+            "无法预览".toast()
         }
     }
 

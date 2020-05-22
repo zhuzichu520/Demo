@@ -2,6 +2,8 @@ package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.BaseViewModel
+import com.hiwitech.android.shared.ext.createTypeCommand
+import com.netease.nim.demo.R
 import com.netease.nimlib.sdk.msg.model.IMMessage
 
 /**
@@ -13,11 +15,16 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 class ItemViewModelTextMessage(
     viewModel: BaseViewModel<*>,
     message: IMMessage
-) : ItemViewModelBaseMessage(viewModel,message) {
+) : ItemViewModelBaseMessage(viewModel, message) {
 
     val text = MutableLiveData<String>()
 
     init {
         text.value = message.content
     }
+
+    val onClickLinkUrlCommand = createTypeCommand<String> {
+        start(R.id.action_global_activityWeb)
+    }
+
 }

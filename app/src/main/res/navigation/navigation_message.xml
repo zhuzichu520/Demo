@@ -64,4 +64,13 @@
         android:label="ActivityFileDownload"
         tools:layout="@layout/fragment_file_download" />
 
+    <activity
+        android:id="@+id/activityWeb"
+        android:name="com.netease.nim.demo.ui.web.ActivityWeb"
+        android:label="ActivityWeb" />
+
+    <action
+        android:id="@+id/action_global_activityWeb"
+        app:destination="@id/activityWeb" />
+
 </navigation>

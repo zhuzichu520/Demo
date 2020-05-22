@@ -17,7 +17,6 @@ import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.util.NIMUtil
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
-import com.tencent.smtt.sdk.QbSdk
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import jonathanfinerty.once.Once
@@ -62,17 +61,6 @@ class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider {
             NIMClient.getService(MsgService::class.java)
                 .registerCustomAttachmentParser(NimAttachParser())
         }
-
-        QbSdk.initX5Environment(applicationContext, object : QbSdk.PreInitCallback {
-
-            override fun onCoreInitFinished() {
-
-            }
-
-            override fun onViewInitFinished(isInit: Boolean) {
-
-            }
-        })
 
     }
 

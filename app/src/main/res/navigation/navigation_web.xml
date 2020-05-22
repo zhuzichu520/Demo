@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_web"
+    app:startDestination="@id/fragmentWeb">
+
+    <fragment
+        android:id="@+id/fragmentWeb"
+        android:name="com.netease.nim.demo.ui.web.fragment.FragmentWeb"
+        android:label="FragmentWeb"
+        tools:layout="@layout/fragment_web" />
+
+</navigation>

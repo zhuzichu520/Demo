@@ -449,7 +449,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
      * 跳转到文件列表界面
      */
     private fun startFile() {
-        RxPermissions(requireActivity()).request(
+        RxPermissions(this).request(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).autoDispose(viewModel).subscribe {
@@ -465,7 +465,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
      * 跳转到相机录屏界面
      */
     private fun startCamera() {
-        RxPermissions(requireActivity()).request(
+        RxPermissions(this).request(
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -480,7 +480,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     }
 
     private fun startLocation() {
-        RxPermissions(requireActivity()).request(
+        RxPermissions(this).request(
             Manifest.permission.ACCESS_FINE_LOCATION
         ).autoDispose(viewModel).subscribe {
             if (it) {
