@@ -68,7 +68,7 @@ class FragmentFile : FragmentBase<FragmentFileBinding, ViewModelFile, ArgDefault
             viewModel.list.update(listOf())
             when (it) {
                 0 -> {
-                    CacheGlobal.getNimCacheDir()
+                    CacheGlobal.getDownloadDir()
                 }
                 1 -> {
                     Environment.getExternalStorageDirectory().absolutePath + "/tencent/MicroMsg/Download"

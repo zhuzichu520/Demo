@@ -7,6 +7,8 @@ import com.hiwitech.android.shared.ext.toast
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ActivityBase
 import com.netease.nim.demo.nim.emoji.EmojiManager
+import com.tencent.smtt.sdk.TbsReaderView
+import com.tencent.smtt.sdk.WebView
 import com.uber.autodispose.android.lifecycle.autoDispose
 
 
@@ -23,6 +25,10 @@ class ActivityLauncher : ActivityBase() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSchedulers()
+        //加载内核
+        WebView(this)
+        TbsReaderView(this, TbsReaderView.ReaderCallback { _, _, _ ->
+        })
     }
 
     /**

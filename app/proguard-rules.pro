@@ -188,3 +188,7 @@
 -keep class com.amap.api.services.**{*;}
 -keep class com.amap.api.navi.**{*;}
 -keep class com.autonavi.**{*;}
+
+#TBS
+-keep class com.tencent.smtt.**{*;}
+-keep class com.tencent.tbs.**{*;}

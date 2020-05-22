@@ -8,7 +8,7 @@ package com.netease.nim.demo.ui.file.type
  */
 object ToolFileType {
 
-    val allFileType: ArrayList<FileType> by lazy {
+    private val allFileType: ArrayList<FileType> by lazy {
         val fileTypes = ArrayList<FileType>()
         fileTypes.add(ApkFileType())
         fileTypes.add(AppFileType())
@@ -35,10 +35,29 @@ object ToolFileType {
     }
 
     /**
+     * 通过文件名获取文件类型
+     * @param fileName 文件名
+     */
+    fun getFileTypeByFileName(fileName: String): FileType? {
+        var fileType: FileType? = null
+        allFileType.forEach {
+            if (it.verify(fileName)) {
+                fileType = it
+                return@forEach
+            }
+        }
+        return fileType
+    }
+
+    /**
      * 获取文件后缀名
      * @param fileName 文件名称
      */
-    fun getSuffix(fileName: String): String {
+    fun getSuffix(fileName: String): String? {
+        val isHasSuffix = fileName.contains(".")
+        if (!isHasSuffix) {
+            return null
+        }
         return fileName.substring(fileName.lastIndexOf(".") + 1)
     }
 

@@ -41,8 +41,6 @@ class FragmentBrowseFile :
                     TbsReaderView.KEY_TEMP_PATH to CacheGlobal.getTbsReaderTempCacheDir()
                 )
             )
-        } else {
-
         }
     }
 

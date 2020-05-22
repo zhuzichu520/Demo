@@ -29,12 +29,7 @@ class ItemViewModelFileMessage(
     private val fileAttachment = message.attachment as FileAttachment
 
     init {
-        ToolFileType.allFileType.forEach {
-            if (it.verify(fileAttachment.displayName)) {
-                fileType = it
-                return@forEach
-            }
-        }
+        fileType = ToolFileType.getFileTypeByFileName(fileAttachment.displayName)
     }
 
     val fileName = MutableLiveData<String>(fileAttachment.displayName)

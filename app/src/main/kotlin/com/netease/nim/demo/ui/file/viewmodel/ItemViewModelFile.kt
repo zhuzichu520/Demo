@@ -27,13 +27,8 @@ class ItemViewModelFile(
     private var suffix: String? = null
 
     init {
-        ToolFileType.allFileType.forEach {
-            if (it.verify(file.name)) {
-                fileType = it
-                suffix = ToolFileType.getSuffix(file.name)
-                return@forEach
-            }
-        }
+        fileType = ToolFileType.getFileTypeByFileName(file.name)
+        suffix = ToolFileType.getSuffix(file.name)
     }
 
     val fileName = MutableLiveData<String>(file.name)

@@ -79,6 +79,8 @@ object Versions {
 
     const val GSYVIDEOPLAYER = "7.1.4"
 
+    const val TBS = "43903"
+
 }
 
 /**
@@ -223,6 +225,8 @@ object Libs {
 
     const val GSYVIDEOPLAYER_JAVA = "com.shuyu:gsyVideoPlayer-java:${Versions.GSYVIDEOPLAYER}"
     const val GSYVIDEOPLAYER_EXO = "com.shuyu:GSYVideoPlayer-exo2:${Versions.GSYVIDEOPLAYER}"
+
+    const val TBS = "com.tencent.tbs.tbssdk:sdk:${Versions.TBS}"
 
 }
 

@@ -129,6 +129,8 @@ dependencies {
     api(Libs.GSYVIDEOPLAYER_JAVA)
     api(Libs.GSYVIDEOPLAYER_EXO)
 
+    api(Libs.TBS)
+
 
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)
