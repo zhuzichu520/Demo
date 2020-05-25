@@ -70,7 +70,7 @@
         android:label="ActivityWeb" />
 
     <action
-        android:id="@+id/action_global_activityWeb"
+        android:id="@+id/action_global_fragmentMessage_activityWeb"
         app:destination="@id/activityWeb" />
 
 </navigation>

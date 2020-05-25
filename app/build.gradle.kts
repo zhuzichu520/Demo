@@ -99,5 +99,5 @@ dependencies {
     kapt(Kapts.DAGGER_ANDROID_PROCESSOR)
     kapt(Kapts.DAGGER_COMPILER)
     kapt(Kapts.RXHTTP_COMPILER)
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.2")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.3")
 }

@@ -139,7 +139,10 @@
 
         <activity android:name=".ui.file.ActivityFile" />
 
-        <activity android:name=".ui.web.ActivityWeb" />
+        <activity
+            android:name=".ui.web.ActivityWeb"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true" />
 
         <activity android:name=".ui.message.filedownload.ActivityFileDownload" />
 

@@ -107,7 +107,6 @@ dependencies {
     api(Libs.MULTIDEX)
     api(Libs.MMKV)
 
-    api(Libs.AGENTWEB)
     api(Libs.POPUPWINDOW)
 
     api(Libs.GUAVA)
@@ -130,7 +129,10 @@ dependencies {
     api(Libs.GSYVIDEOPLAYER_EXO)
 
     api(Libs.TBS)
+    api(Libs.SONIC)
 
+    api(Libs.AGENTWEB)
+    api(Libs.AGENTWEB_DOWNLOADER)
 
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)

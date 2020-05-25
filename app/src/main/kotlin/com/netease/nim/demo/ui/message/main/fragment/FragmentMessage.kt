@@ -501,7 +501,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         ).autoDispose(viewModel).subscribe {
             if (it) {
                 Matisse.from(this)
-                    .choose(MimeType.ofImage())
+                    .choose(MimeType.ofAll())
                     .countable(true)
                     .maxSelectable(9)
                     .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)

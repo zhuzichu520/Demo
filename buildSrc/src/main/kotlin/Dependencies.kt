@@ -80,6 +80,7 @@ object Versions {
     const val GSYVIDEOPLAYER = "7.1.4"
 
     const val TBS = "43903"
+    const val SONIC = "3.1.0"
 
 }
 
@@ -199,8 +200,7 @@ object Libs {
     const val MULTIDEX = "androidx.multidex:multidex:${Versions.MULTIDEX}"
     //mmkv
     const val MMKV = "com.tencent:mmkv-static:${Versions.MMKV}"
-    //agentweb
-    const val AGENTWEB = "com.just.agentweb:agentweb:${Versions.AGENTWEB}"
+
     //guava
     const val GUAVA = "com.google.guava:guava:${Versions.GUAVA}"
     //popupWindow
@@ -227,6 +227,11 @@ object Libs {
     const val GSYVIDEOPLAYER_EXO = "com.shuyu:GSYVideoPlayer-exo2:${Versions.GSYVIDEOPLAYER}"
 
     const val TBS = "com.tencent.tbs.tbssdk:sdk:${Versions.TBS}"
+    const val SONIC = "com.tencent.sonic:sdk:${Versions.SONIC}"
+    //agentweb
+    const val AGENTWEB = "com.just.agentweb:agentweb:${Versions.AGENTWEB}"
+    const val AGENTWEB_DOWNLOADER = "com.download.library:Downloader:${Versions.AGENTWEB}"
+    const val AGENTWEB_FILECHOOSER = "com.just.agentweb:filechooser:${Versions.AGENTWEB}"
 
 }
 

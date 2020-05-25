@@ -14,7 +14,6 @@ import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.WebView
 import com.uber.autodispose.autoDispose
 
 /**
@@ -58,7 +57,6 @@ class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, Ar
                 val map = mutableMapOf<String, Any>()
                 map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
                 QbSdk.initTbsSettings(map)
-                WebView(requireContext())
             }
 
             override fun onViewInitFinished(isInit: Boolean) {
