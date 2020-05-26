@@ -1,15 +1,16 @@
 package com.netease.nim.demo.ui.camera.fragment
 
 import android.annotation.SuppressLint
-import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.loge
-import com.hiwitech.android.shared.widget.camera.FlowCameraView.BUTTON_STATE_BOTH
+import com.hiwitech.android.shared.widget.camera.CustomCameraView.BUTTON_STATE_BOTH
+import com.hiwitech.android.shared.widget.camera.CustomCameraView.BUTTON_STATE_ONLY_CAPTURE
 import com.hiwitech.android.shared.widget.camera.listener.FlowCameraListener
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentCameraBinding
+import com.netease.nim.demo.ui.camera.arg.ArgCamera
 import com.netease.nim.demo.ui.camera.event.EventCamera
 import com.netease.nim.demo.ui.camera.viewmodel.ViewModelCamera
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -22,12 +23,13 @@ import java.io.File
  * since: v 1.0.0
  */
 @SuppressLint("RestrictedApi")
-class FragmentCamera : FragmentBase<FragmentCameraBinding, ViewModelCamera, ArgDefault>() {
+class FragmentCamera : FragmentBase<FragmentCameraBinding, ViewModelCamera, ArgCamera>() {
 
     companion object {
         private val TAG: String = FragmentCamera::class.java.simpleName
     }
 
+    private lateinit var onCameraEvent: EventCamera.OnCameraEvent
 
     override fun bindVariableId(): Int = BR.viewModel
 
@@ -35,13 +37,25 @@ class FragmentCamera : FragmentBase<FragmentCameraBinding, ViewModelCamera, ArgD
 
     override fun initView() {
         super.initView()
+        onCameraEvent = EventCamera.OnCameraEvent(arg.type, "", EventCamera.TYPE_NULL)
         // 绑定生命周期 您就不用关心Camera的开启和关闭了 不绑定无法预览
         view_camera.setBindToLifecycle(this)
         // 设置白平衡模式
 //        flowCamera.setWhiteBalance(WhiteBalance.AUTO)
         // 设置只支持单独拍照拍视频还是都支持
         // BUTTON_STATE_ONLY_CAPTURE  BUTTON_STATE_ONLY_RECORDER  BUTTON_STATE_BOTH
-        view_camera.setCaptureMode(BUTTON_STATE_BOTH)
+        when (arg.type) {
+            ArgCamera.TYPE_MESSAGE -> {
+                view_camera.setCaptureMode(BUTTON_STATE_BOTH)
+            }
+            ArgCamera.TYPE_WEB -> {
+                view_camera.setCaptureMode(BUTTON_STATE_ONLY_CAPTURE)
+            }
+            else -> {
+                view_camera.setCaptureMode(BUTTON_STATE_BOTH)
+            }
+        }
+
         // 开启HDR
 //        flowCamera.setHdrEnable(Hdr.ON)
         // 设置最大可拍摄小视频时长 S
@@ -50,7 +64,10 @@ class FragmentCamera : FragmentBase<FragmentCameraBinding, ViewModelCamera, ArgD
         view_camera.setFlowCameraListener(object : FlowCameraListener {
             // 录制完成视频文件返回
             override fun recordSuccess(file: File) {
-                LiveDataBus.post(EventCamera.OnCameraVideoEvent(file.path))
+                onCameraEvent.apply {
+                    path = file.path
+                    cameraType = EventCamera.TYPE_VIDEO
+                }
                 requireActivity().finish()
             }
 
@@ -63,7 +80,10 @@ class FragmentCamera : FragmentBase<FragmentCameraBinding, ViewModelCamera, ArgD
 
             // 拍照返回
             override fun captureSuccess(file: File) {
-                LiveDataBus.post(EventCamera.OnCameraImageEvent(file.path))
+                onCameraEvent.apply {
+                    path = file.path
+                    cameraType = EventCamera.TYPE_IMAGE
+                }
                 requireActivity().finish()
             }
         })
@@ -72,5 +92,11 @@ class FragmentCamera : FragmentBase<FragmentCameraBinding, ViewModelCamera, ArgD
             requireActivity().finish()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LiveDataBus.post(onCameraEvent)
+    }
+
 
 }

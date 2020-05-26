@@ -1,7 +1,7 @@
 package com.netease.nim.demo.ui.camera.viewmodel
 
-import com.hiwitech.android.mvvm.base.ArgDefault
 import com.netease.nim.demo.base.ViewModelBase
+import com.netease.nim.demo.ui.camera.arg.ArgCamera
 import javax.inject.Inject
 
 /**
@@ -11,7 +11,7 @@ import javax.inject.Inject
  * since: v 1.0.0
  */
 class ViewModelCamera @Inject constructor(
-) : ViewModelBase<ArgDefault>() {
+) : ViewModelBase<ArgCamera>() {
 
 
 }

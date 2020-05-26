@@ -28,6 +28,7 @@ import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.camera.arg.ArgCamera
 import com.netease.nim.demo.ui.camera.event.EventCamera
 import com.netease.nim.demo.ui.file.event.EventFile
 import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
@@ -78,7 +79,7 @@ import javax.inject.Inject
 class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, ArgMessage>() {
 
     companion object {
-        const val REQUEST_CODE_CHOOSE = 0x11
+        private const val REQUEST_CODE_CHOOSE = 0x11
     }
 
     override fun bindVariableId(): Int = BR.viewModel
@@ -362,17 +363,21 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         })
 
         /**
-         * 拍摄中选择图片发送
-         */
-        viewModel.toObservable(EventCamera.OnCameraImageEvent::class.java, Observer {
-            sendImageMessage(listOf(it.path))
-        })
-
-        /**
          * 拍摄中选择
          */
-        viewModel.toObservable(EventCamera.OnCameraVideoEvent::class.java, Observer {
-            sendVideoMessage(listOf(it.path))
+        viewModel.toObservable(EventCamera.OnCameraEvent::class.java, Observer {
+            if (it.type != ArgCamera.TYPE_MESSAGE) {
+                return@Observer
+            }
+            when (it.cameraType) {
+                EventCamera.TYPE_IMAGE -> {
+                    sendImageMessage(listOf(it.path))
+                }
+                EventCamera.TYPE_VIDEO -> {
+                    sendVideoMessage(listOf(it.path))
+                }
+            }
+
         })
 
         /**
@@ -472,7 +477,10 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).autoDispose(viewModel).subscribe {
             if (it) {
-                start(R.id.action_fragmentMessage_to_activityCamera)
+                start(
+                    R.id.action_fragmentMessage_to_activityCamera,
+                    arg = ArgCamera(ArgCamera.TYPE_MESSAGE)
+                )
             } else {
                 FragmentPermissions().show("相机,录音,文件读写", parentFragmentManager)
             }

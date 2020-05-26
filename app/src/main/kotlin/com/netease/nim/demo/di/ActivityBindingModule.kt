@@ -5,6 +5,7 @@ import com.hiwitech.android.mvvm.di.ActivityScoped
 import com.netease.nim.demo.ui.camera.ActivityCamera
 import com.netease.nim.demo.ui.camera.module.ModuleCamera
 import com.netease.nim.demo.ui.contact.module.ModuleContact
+import com.netease.nim.demo.ui.dialog.module.ModuleOptions
 import com.netease.nim.demo.ui.file.ActivityBrowseFile
 import com.netease.nim.demo.ui.file.ActivityFile
 import com.netease.nim.demo.ui.file.module.ModuleBrowseFile
@@ -138,7 +139,9 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(
         modules = [
-            ModuleWeb::class
+            ModuleWeb::class,
+            ModulePermissions::class,
+            ModuleOptions::class
         ]
     )
     internal abstract fun webActivity(): ActivityWeb
