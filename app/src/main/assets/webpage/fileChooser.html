@@ -11,26 +11,29 @@
             -webkit-background-clip: border-box;
 
         }
+
     </style>
-    <script >
+    <script>
         var display=function (){
             var path=document.getElementById("file_chooser").textContent;
             document.getElementById("filechooser_display").innerHTML("<b>"+path+"</b>");
         }
+
     </script>
 </head>
 <body>
-    <ul class="listview">
-        <li class="listviewItem">
-            <fieldset class="itemset">
-                <input class="filechooser" id="file_chooser" type="file" placeholder="file path" onchange="display()" oninput="display()"><br>
-                <p id="filechooser_display"></p>
-                <div class="line_black"></div>
+<ul class="listview">
+    <li class="listviewItem">
+        <fieldset class="itemset">
+            <input class="filechooser" id="file_chooser" type="file" placeholder="file path"
+                   onchange="display()" oninput="display()" accept="*/*"><br>
+            <p id="filechooser_display"></p>
+            <div class="line_black"></div>
 
-            </fieldset>
-        </li>
+        </fieldset>
+    </li>
 
-    </ul>
+</ul>
 
 </body>
 

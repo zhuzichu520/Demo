@@ -106,7 +106,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
             acceptType: String?,
             capture: String?
         ) {
-            openFileInput(uploadFile, null)
+            openFileInput(uploadFile, null, arrayOf(acceptType))
         }
 
         // Android 5.0 (API level 21)以上版本会触发该方法，该方法为公开方法
@@ -116,7 +116,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
             filePathCallback: ValueCallback<Array<Uri>>?,
             fileChooserParams: FileChooserParams?
         ): Boolean {
-            openFileInput(null, filePathCallback)
+            openFileInput(null, filePathCallback, fileChooserParams?.acceptTypes)
             return true
         }
 
@@ -124,15 +124,21 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
 
     private fun openFileInput(
         uploadFile: ValueCallback<Uri>?,
-        uploadMultipleFile: ValueCallback<Array<Uri>>?
+        uploadMultipleFile: ValueCallback<Array<Uri>>?,
+        acceptTypes: Array<String?>?
+
     ) {
-        this.uploadFile = uploadFile
-        this.uploadMultipleFile = uploadMultipleFile
-        FragmentOptions().let {
-            it.show(options, childFragmentManager)
-            it.dialog?.setOnCancelListener {
-                cancleChooseFile()
+        if (acceptTypes != null && acceptTypes.contains("image/*")) {
+            this.uploadFile = uploadFile
+            this.uploadMultipleFile = uploadMultipleFile
+            FragmentOptions().let {
+                it.show(options, childFragmentManager)
+                it.dialog?.setOnCancelListener {
+                    cancleChooseFile()
+                }
             }
+        } else {
+            start(R.id.action_fragmentWeb_to_activityFile)
         }
     }
 
@@ -151,7 +157,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
             .interceptUnkownUrl()
             .createAgentWeb()
             .ready()
-            .go(arg.url)
+            .go("file:///android_asset/webpage/fileChooser.html")
         initBackListener()
     }
 
@@ -204,6 +210,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
      */
     @SuppressLint("ObsoleteSdkInt")
     private fun startAlbum() {
+
         RxPermissions(requireActivity()).request(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -223,12 +230,14 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
                 FragmentPermissions().show("文件读写", childFragmentManager)
             }
         }
+
     }
 
     /**
      * 跳转到相机录屏界面
      */
     private fun startCamera() {
+
         RxPermissions(this).request(
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
@@ -244,6 +253,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
                 FragmentPermissions().show("相机,录音,文件读写", childFragmentManager)
             }
         }
+        
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -279,7 +289,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
                 } else if (uploadMultipleFile != null) {
                     uploadMultipleFile?.onReceiveValue(it.toCast())
                 }
-            },{
+            }, {
                 it.message.toString().toast()
             })
     }
