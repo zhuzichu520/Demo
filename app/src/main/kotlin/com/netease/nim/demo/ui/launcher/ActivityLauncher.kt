@@ -44,5 +44,12 @@ class ActivityLauncher : ActivityBase() {
             }
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(
+            R.anim.no_anim,
+            R.anim.no_anim
+        )
+    }
 
 }

@@ -48,7 +48,7 @@
   </style>
 
   <style name="ShapeAppearanceComponent.LargeCornerSize" parent="">
-    <item name="cornerSize">16dp</item>
+    <item name="cornerSize">12dp</item>
 
   </style>
 

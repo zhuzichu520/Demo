@@ -18,7 +18,8 @@
         android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:onClickCommand="@{item.onClickCommand}">
+        app:onClickCommand="@{item.onClickSeeCommand}">
+
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon"
@@ -46,7 +47,7 @@
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textColor="@color/color_font_primary"
             app:layout_constraintBottom_toTopOf="@+id/size"
-            app:layout_constraintEnd_toStartOf="@+id/see"
+            app:layout_constraintEnd_toStartOf="@+id/right"
             app:layout_constraintStart_toEndOf="@+id/icon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="SD 存储卡SD 存储卡SD" />
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@{item.size}"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="@color/color_font_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/name"
@@ -71,29 +72,45 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:text="@{item.date}"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="@color/color_font_secondary"
             app:layout_constraintBottom_toBottomOf="@+id/size"
-            app:layout_constraintEnd_toStartOf="@+id/see"
+            app:layout_constraintEnd_toStartOf="@+id/right"
             app:layout_constraintStart_toEndOf="@+id/size"
             app:layout_constraintTop_toTopOf="@+id/size"
             tools:text="星期一" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/see"
-            android:layout_width="64dp"
-            android:layout_height="28dp"
-            android:layout_marginEnd="14dp"
-            android:background="@drawable/shape_bg_file_tab_check"
-            android:gravity="center"
-            android:text="@string/see"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:textColor="@color/color_font_primary"
-            app:isShown="@{item.see}"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="80dp"
+            android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onClickCommand="@{item.onClickSeeCommand}" />
+            app:srcCompat="@drawable/divider_vertical" />
+
+        <FrameLayout
+            android:id="@+id/right"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClickCommand="@{item.onClickCommand}">
+
+            <com.hiwitech.android.shared.widget.CheckRadioView
+                android:id="@+id/checkbox"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                app:CheckRadioView_SelectedColor="?attr/colorSecondary"
+                app:CheckRadioView_UnSelectUdColor="@color/color_font_tertiary"
+                app:checked="@{item.checked}" />
+
+        </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

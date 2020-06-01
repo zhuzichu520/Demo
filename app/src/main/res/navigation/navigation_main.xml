@@ -9,18 +9,6 @@
         android:id="@+id/fragmentMain"
         android:name="com.netease.nim.demo.ui.main.fragment.FragmentMain"
         android:label="FragmentMain"
-        tools:layout="@layout/fragment_main">
-
-        <action
-            android:id="@+id/action_fragmentMain_to_activityMessage"
-            app:destination="@id/activityMessage" />
-    </fragment>
-
-    <activity
-        android:id="@+id/activityMessage"
-        android:name="com.netease.nim.demo.ui.message.ActivityMessage"
-        android:label="ActivityMessage"
-        tools:layout="@layout/fragment_message" />
-
+        tools:layout="@layout/fragment_main" />
 
 </navigation>

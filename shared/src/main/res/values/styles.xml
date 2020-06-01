@@ -11,6 +11,11 @@
         <item name="divider">@drawable/divider_horizontal</item>
     </style>
 
+    <style name="Widget.MyTheme.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">38dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
     <!--Bottom Sheets-->
     <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="android:windowIsFloating">false</item>
@@ -34,8 +39,8 @@
     </style>
 
     <style name="Widget.MyTheme.Zhihu" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryDark">@color/color_primary_variant</item>
+        <item name="colorPrimary">?colorFontPrimary</item>
+        <item name="colorPrimaryDark">?attr/colorFontPrimary</item>
         <item name="toolbar">@style/Toolbar.Zhihu</item>
         <item name="album.dropdown.title.color">?colorFontPrimary</item>
         <item name="album.dropdown.count.color">?colorFontSecondary</item>
@@ -44,12 +49,12 @@
         <item name="album.emptyView">@drawable/ic_empty_zhihu</item>
         <item name="album.emptyView.textColor">?colorFontPrimary</item>
         <item name="item.placeholder">?colorFontPrimary</item>
-        <item name="item.checkCircle.borderColor">?colorSurface</item>
-        <item name="item.checkCircle.backgroundColor">?colorSecondary</item>
+        <item name="item.checkCircle.backgroundColor">?attr/colorFontPrimary</item>
+        <item name="item.checkCircle.borderColor">@color/zhihu_item_checkCircle_borderColor</item>
         <item name="page.bg">@color/color_background</item>
         <item name="bottomToolbar.bg">@color/color_background_secondary</item>
         <item name="bottomToolbar.preview.textColor">?colorFontPrimary</item>
-        <item name="bottomToolbar.apply.textColor">@color/color_primary</item>
+        <item name="bottomToolbar.apply.textColor">@color/bottom_toolbar_apply</item>
         <item name="preview.bottomToolbar.back.textColor">@color/white</item>
         <item name="preview.bottomToolbar.apply.textColor">@color/white</item>
         <item name="listPopupWindowStyle">@style/Popup.Zhihu</item>

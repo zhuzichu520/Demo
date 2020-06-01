@@ -7,7 +7,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.ActivityNavigator
 import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.createTypeCommand
@@ -15,6 +14,7 @@ import com.hiwitech.android.shared.tools.Weak
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.tools.ToolImage
 import com.netease.nim.demo.ui.message.main.domain.UseCaseDowloadAttachment
+import com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser
 import com.netease.nim.demo.ui.photobrowser.arg.ArgPhotoBrowser
 import com.netease.nim.demo.ui.photobrowser.domain.UseCaseGetImageAndVideoMessage
 import com.netease.nim.demo.ui.photobrowser.fragment.FragmentPhotoBrowser.Companion.TRANSITION_NAME
@@ -93,12 +93,10 @@ open class ItemViewModelImageMessage(
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this.context as Activity, this, TRANSITION_NAME
                     )
-                start(
-                    R.id.action_fragmentMessage_to_activityPhotoBrowser,
+                startActivity(
+                    ActivityPhotoBrowser::class.java,
                     arg = ArgPhotoBrowser(message, it),
-                    extras = ActivityNavigator.Extras.Builder()
-                        .setActivityOptions(optionsCompat)
-                        .build()
+                    options = optionsCompat.toBundle()
                 )
             }
     }

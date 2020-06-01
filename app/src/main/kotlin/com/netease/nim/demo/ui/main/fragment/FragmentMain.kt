@@ -16,7 +16,10 @@ import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
 import com.netease.nim.demo.databinding.FragmentMainBinding
+import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.nim.event.NimEventManager
+import com.netease.nim.demo.ui.avchat.ActivityAvchat
+import com.netease.nim.demo.ui.avchat.arg.ArgAvchat
 import com.netease.nim.demo.ui.contact.fragment.FragmentContact
 import com.netease.nim.demo.ui.main.viewmodel.ViewModelMain
 import com.netease.nim.demo.ui.me.main.fragment.FragmentMe
@@ -76,12 +79,12 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        NimEventManager.regist()
+        NimEventManager.registerObserves(true)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        NimEventManager.unRegist()
+        NimEventManager.registerObserves(false)
     }
 
     /**
@@ -99,4 +102,11 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
         }
     }
 
+    override fun initViewObservable() {
+        super.initViewObservable()
+        viewModel.toObservable(NimEvent.OnInComingCallEvent::class.java, Observer {
+            it.data.toString().toast()
+            startActivity(ActivityAvchat::class.java, arg = ArgAvchat(it.data))
+        })
+    }
 }

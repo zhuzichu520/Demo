@@ -8,6 +8,7 @@ import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.request.RequestOptions
 import com.hiwitech.android.shared.glide.GlideApp
+import com.hiwitech.android.shared.widget.CheckRadioView
 import com.hiwitech.android.widget.sharp.Sharp
 
 @BindingAdapter(value = ["url", "placeholder", "error"], requireAll = false)
@@ -79,5 +80,15 @@ fun bindImageViewSrcDrawable(
 ) {
     drawable?.let {
         imageView.setImageDrawable(it)
+    }
+}
+
+@BindingAdapter(value = ["checked"], requireAll = false)
+fun bindCheckRadioView(
+    checkRadioView: CheckRadioView,
+    checked: Boolean?
+) {
+    checked?.let {
+        checkRadioView.setChecked(it)
     }
 }

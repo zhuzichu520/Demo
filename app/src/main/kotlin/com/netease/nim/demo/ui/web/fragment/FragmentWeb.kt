@@ -28,10 +28,13 @@ import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentWebBinding
+import com.netease.nim.demo.ui.camera.ActivityCamera
 import com.netease.nim.demo.ui.camera.arg.ArgCamera
 import com.netease.nim.demo.ui.camera.event.EventCamera
 import com.netease.nim.demo.ui.dialog.entity.EntityOptions
 import com.netease.nim.demo.ui.dialog.fragment.FragmentOptions
+import com.netease.nim.demo.ui.file.ActivityFile
+import com.netease.nim.demo.ui.file.arg.ArgFile
 import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.netease.nim.demo.ui.web.AgentWebSettings
 import com.netease.nim.demo.ui.web.arg.ArgWeb
@@ -138,7 +141,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
                 }
             }
         } else {
-            start(R.id.action_fragmentWeb_to_activityFile)
+            startActivity(ActivityFile::class.java, ArgFile(ArgFile.TYPE_WEB))
         }
     }
 
@@ -245,15 +248,15 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).autoDispose(viewModel).subscribe {
             if (it) {
-                start(
-                    R.id.action_fragmentWeb_to_activityCamera,
+                startActivity(
+                    ActivityCamera::class.java,
                     arg = ArgCamera(ArgCamera.TYPE_WEB)
                 )
             } else {
                 FragmentPermissions().show("相机,录音,文件读写", childFragmentManager)
             }
         }
-        
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

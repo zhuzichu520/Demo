@@ -1,12 +1,13 @@
 package com.netease.nim.demo.ui.message.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import com.hiwitech.android.libs.tool.byteCountToDisplaySize
+import com.hiwitech.android.libs.tool.byteCountToDisplaySizeTwo
 import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.createCommand
 import com.netease.nim.demo.R
 import com.netease.nim.demo.ui.file.type.FileType
 import com.netease.nim.demo.ui.file.type.ToolFileType
+import com.netease.nim.demo.ui.message.filedownload.ActivityFileDownload
 import com.netease.nim.demo.ui.message.filedownload.arg.ArgFileDownload
 import com.netease.nim.demo.ui.message.main.domain.UseCaseDowloadAttachment
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment
@@ -14,6 +15,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.uber.autodispose.autoDispose
 
 /**
+ * @see R.layout.item_message_file
  * desc 文本消息
  * author: 朱子楚
  * time: 2020/4/5 7:48 PM
@@ -35,7 +37,7 @@ class ItemViewModelFileMessage(
     val fileName = MutableLiveData<String>(fileAttachment.displayName)
 
     val size = MutableLiveData<String>().apply {
-        value = byteCountToDisplaySize(fileAttachment.size)
+        value = byteCountToDisplaySizeTwo(fileAttachment.size)
     }
 
     val fileIcon = MutableLiveData<Int>().apply {
@@ -53,7 +55,7 @@ class ItemViewModelFileMessage(
     }
 
     val onClickFileCommand = createCommand {
-        start(R.id.action_fragmentMessage_to_activityFileDownload, ArgFileDownload(message))
+        startActivity(ActivityFileDownload::class.java, ArgFileDownload(message))
     }
 
 }

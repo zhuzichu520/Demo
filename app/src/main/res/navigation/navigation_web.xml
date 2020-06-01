@@ -9,25 +9,6 @@
         android:id="@+id/fragmentWeb"
         android:name="com.netease.nim.demo.ui.web.fragment.FragmentWeb"
         android:label="FragmentWeb"
-        tools:layout="@layout/fragment_web">
-        <action
-            android:id="@+id/action_fragmentWeb_to_activityCamera"
-            app:destination="@id/activityCamera" />
-        <action
-            android:id="@+id/action_fragmentWeb_to_activityFile"
-            app:destination="@id/activityFile" />
-    </fragment>
-
-    <activity
-        android:id="@+id/activityCamera"
-        android:name="com.netease.nim.demo.ui.camera.ActivityCamera"
-        android:label="ActivityCamera"
-        tools:layout="@layout/fragment_camera" />
-
-    <activity
-        android:id="@+id/activityFile"
-        android:name="com.netease.nim.demo.ui.file.ActivityFile"
-        android:label="ActivityFile"
-        tools:layout="@layout/fragment_file" />
+        tools:layout="@layout/fragment_web" />
 
 </navigation>

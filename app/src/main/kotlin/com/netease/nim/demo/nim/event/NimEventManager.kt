@@ -6,6 +6,11 @@ import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.OnlineClient
+import com.netease.nimlib.sdk.avchat.AVChatManager
+import com.netease.nimlib.sdk.avchat.model.AVChatCalleeAckEvent
+import com.netease.nimlib.sdk.avchat.model.AVChatCommonEvent
+import com.netease.nimlib.sdk.avchat.model.AVChatControlEvent
+import com.netease.nimlib.sdk.avchat.model.AVChatData
 import com.netease.nimlib.sdk.friend.FriendServiceObserve
 import com.netease.nimlib.sdk.friend.model.FriendChangedNotify
 import com.netease.nimlib.sdk.msg.MsgServiceObserve
@@ -109,57 +114,65 @@ object NimEventManager {
             }
         } as Observer<FriendChangedNotify>
 
+    /**
+     * 收到对方蒂娜花
+     */
+    private val observeInComingCall =
+        Observer { data: AVChatData ->
+            LiveDataBus.post(NimEvent.OnInComingCallEvent(data))
+        }
 
-    fun regist() {
+    /**
+     * 通话过程中，收到对方挂断电话
+     */
+    private val observeHangUpNotification =
+        Observer { event: AVChatCommonEvent ->
+            LiveDataBus.post(NimEvent.OnHangUpNotificationEvent(event))
+        }
+
+    private val observeCalleeAckNotification =
+        Observer { event: AVChatCalleeAckEvent ->
+            LiveDataBus.post(NimEvent.OnCalleeAckNotificationEvent(event))
+        }
+
+    private val observeControlNotification =
+        Observer { event: AVChatControlEvent ->
+            LiveDataBus.post(NimEvent.OnControlNotificationEvent(event))
+        }
+
+    fun registerObserves(register: Boolean) {
         NIMClient.getService(MsgServiceObserve::class.java)
-            .observeAttachmentProgress(observerAttachmentProgress, true)
+            .observeAttachmentProgress(observerAttachmentProgress, register)
 
         NIMClient.getService(MsgServiceObserve::class.java)
-            .observeReceiveMessage(observeReceiveMessage, true)
+            .observeReceiveMessage(observeReceiveMessage, register)
 
         NIMClient.getService(MsgServiceObserve::class.java)
-            .observeMsgStatus(observeMessageStatus, true)
+            .observeMsgStatus(observeMessageStatus, register)
 
         NIMClient.getService(MsgServiceObserve::class.java)
-            .observeRecentContact(observerRecentContact, true)
+            .observeRecentContact(observerRecentContact, register)
 
         NIMClient.getService(AuthServiceObserver::class.java)
-            .observeOnlineStatus(observeOnlineStatus, true)
+            .observeOnlineStatus(observeOnlineStatus, register)
 
         NIMClient.getService(AuthServiceObserver::class.java)
-            .observeOtherClients(observeOnlineClient, true)
+            .observeOtherClients(observeOnlineClient, register)
 
         NIMClient.getService(UserServiceObserve::class.java)
-            .observeUserInfoUpdate(observerUserInfoUpdate, true)
+            .observeUserInfoUpdate(observerUserInfoUpdate, register)
 
         NIMClient.getService(FriendServiceObserve::class.java)
-            .observeFriendChangedNotify(observerFriendChangedNotify, true)
+            .observeFriendChangedNotify(observerFriendChangedNotify, register)
 
+        AVChatManager.getInstance().observeIncomingCall(observeInComingCall, register)
+
+        AVChatManager.getInstance().observeHangUpNotification(observeHangUpNotification, register)
+
+        AVChatManager.getInstance()
+            .observeCalleeAckNotification(observeCalleeAckNotification, register)
+
+        AVChatManager.getInstance().observeControlNotification(observeControlNotification, register)
     }
 
-    fun unRegist() {
-        NIMClient.getService(MsgServiceObserve::class.java)
-            .observeAttachmentProgress(observerAttachmentProgress, false)
-
-        NIMClient.getService(MsgServiceObserve::class.java)
-            .observeReceiveMessage(observeReceiveMessage, false)
-
-        NIMClient.getService(MsgServiceObserve::class.java)
-            .observeMsgStatus(observeMessageStatus, false)
-
-        NIMClient.getService(MsgServiceObserve::class.java)
-            .observeRecentContact(observerRecentContact, false)
-
-        NIMClient.getService(AuthServiceObserver::class.java)
-            .observeOnlineStatus(observeOnlineStatus, false)
-
-        NIMClient.getService(AuthServiceObserver::class.java)
-            .observeOtherClients(observeOnlineClient, false)
-
-        NIMClient.getService(UserServiceObserve::class.java)
-            .observeUserInfoUpdate(observerUserInfoUpdate, false)
-
-        NIMClient.getService(FriendServiceObserve::class.java)
-            .observeFriendChangedNotify(observerFriendChangedNotify, false)
-    }
 }

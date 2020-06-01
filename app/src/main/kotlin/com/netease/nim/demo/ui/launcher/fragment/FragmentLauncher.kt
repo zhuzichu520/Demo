@@ -1,7 +1,7 @@
 package com.netease.nim.demo.ui.launcher.fragment
 
 import android.Manifest
-import androidx.navigation.AnimBuilder
+import android.app.Activity
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.netease.nim.demo.BR
@@ -10,6 +10,8 @@ import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMainBinding
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.launcher.viewmodel.ViewModelLauncher
+import com.netease.nim.demo.ui.login.ActivityLogin
+import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.tencent.smtt.export.external.TbsCoreSettings
@@ -38,9 +40,9 @@ class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, Ar
                 initX5WebView()
                 MainHandler.postDelayed {
                     if (!NimUserStorage.isLogin()) {
-                        start(R.id.action_fragmentLauncher_to_navigation_login)
+                        start(ActivityLogin::class.java)
                     } else {
-                        start(R.id.action_fragmentLauncher_to_navigation_main)
+                        start(ActivityMain::class.java)
                     }
                 }
             } else {
@@ -65,17 +67,10 @@ class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, Ar
         })
     }
 
-    private fun start(actionId: Int) {
-        start(
-            actionId,
-            animBuilder = AnimBuilder().apply {
-                enter = R.anim.no_anim
-                exit = R.anim.no_anim
-                popEnter = R.anim.no_anim
-                popExit = R.anim.no_anim
-            },
-            popUpTo = R.id.fragmentLauncher,
-            inclusive = true
+    private fun start(clazz: Class<out Activity>) {
+        startActivity(
+            clazz,
+            isPop = true
         )
     }
 }

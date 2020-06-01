@@ -1,3 +1,4 @@
+
 package com.hiwitech.android.shared.databinding.recycler
 
 import androidx.databinding.BindingAdapter

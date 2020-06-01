@@ -1,6 +1,8 @@
 package com.netease.nim.demo.ui.me.main.viewmodel
 
 import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.mvvm.event.SingleLiveEvent
+import com.hiwitech.android.shared.ext.createCommand
 import com.netease.nim.demo.base.ViewModelBase
 import javax.inject.Inject
 
@@ -12,5 +14,11 @@ import javax.inject.Inject
  */
 class ViewModelMe @Inject constructor(
 ) : ViewModelBase<ArgDefault>() {
+
+    val onClickThemeEvent = SingleLiveEvent<Unit>()
+
+    val onClickThemeCommand = createCommand {
+        onClickThemeEvent.call()
+    }
 
 }

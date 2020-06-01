@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_avchat"
+    app:startDestination="@id/fragmentAvchat">
+
+    <fragment
+        android:id="@+id/fragmentAvchat"
+        android:name="com.netease.nim.demo.ui.avchat.fragment.FragmentAvchat"
+        android:label="FragmentAvchat"
+        tools:layout="@layout/fragment_avchat" />
+
+</navigation>

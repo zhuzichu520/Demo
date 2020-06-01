@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.getFileByPath
 import com.hiwitech.android.libs.tool.md5
+import com.hiwitech.android.mvvm.event.SingleLiveEvent
 import com.hiwitech.android.shared.ext.toEditable
 import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.CacheGlobal
@@ -28,10 +29,16 @@ import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.camera.ActivityCamera
 import com.netease.nim.demo.ui.camera.arg.ArgCamera
 import com.netease.nim.demo.ui.camera.event.EventCamera
+import com.netease.nim.demo.ui.dialog.entity.EntityOptions
+import com.netease.nim.demo.ui.dialog.fragment.FragmentOptions
+import com.netease.nim.demo.ui.file.ActivityFile
+import com.netease.nim.demo.ui.file.arg.ArgFile
 import com.netease.nim.demo.ui.file.event.EventFile
 import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
+import com.netease.nim.demo.ui.map.ActivityAmap
 import com.netease.nim.demo.ui.map.event.EventMap
 import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
 import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
@@ -80,7 +87,24 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
 
     companion object {
         private const val REQUEST_CODE_CHOOSE = 0x11
+        private const val OPTIONS_CALL_VOICE = 1
+        private const val OPTIONS_CALL_VIDEO = 2
     }
+
+    private val onClickItemOptionsEvent = SingleLiveEvent<EntityOptions>()
+
+    private val options = listOf(
+        EntityOptions(
+            OPTIONS_CALL_VOICE,
+            R.string.call_voice,
+            onClickItemOptionsEvent
+        ),
+        EntityOptions(
+            OPTIONS_CALL_VIDEO,
+            R.string.call_video,
+            onClickItemOptionsEvent
+        )
+    )
 
     override fun bindVariableId(): Int = BR.viewModel
 
@@ -242,6 +266,20 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         })
 
         /**
+         * 呼叫
+         */
+        onClickItemOptionsEvent.observe(viewLifecycleOwner, Observer {
+            when (it.option) {
+                //视频呼叫
+                OPTIONS_CALL_VIDEO -> {
+                }
+                //语音呼叫
+                OPTIONS_CALL_VOICE -> {
+                }
+            }
+        })
+
+        /**
          * 设置共享元素跳转View
          */
         viewModel.shareElementUuid.observe(viewLifecycleOwner, Observer {
@@ -359,6 +397,9 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
                 ViewModelMore.TYPE_FILE -> {
                     startFile()
                 }
+                ViewModelMore.TYPE_CALL -> {
+                    showCallDialog()
+                }
             }
         })
 
@@ -398,11 +439,18 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
         /**
          * 发送文件消息
          */
-        viewModel.toObservable(EventFile.OnSendFileEvent::class.java, Observer {
-            val message =
-                MessageBuilder.createFileMessage(arg.contactId, sessionType, it.file, it.file.name)
-            message.attachStatus = AttachStatusEnum.transferring
-            viewModel.sendMessage(message)
+        viewModel.toObservable(EventFile.OnSelectFileEvent::class.java, Observer {
+            it.files.forEach { item ->
+                val message =
+                    MessageBuilder.createFileMessage(
+                        arg.contactId,
+                        sessionType,
+                        item,
+                        item.name
+                    )
+                message.attachStatus = AttachStatusEnum.transferring
+                viewModel.sendMessage(message)
+            }
         })
 
         /**
@@ -451,6 +499,13 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     }
 
     /**
+     * 弹出通话dialog
+     */
+    private fun showCallDialog() {
+        FragmentOptions().show(options, childFragmentManager)
+    }
+
+    /**
      * 跳转到文件列表界面
      */
     private fun startFile() {
@@ -459,7 +514,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).autoDispose(viewModel).subscribe {
             if (it) {
-                start(R.id.action_fragmentMessage_to_activityFile)
+                startActivity(ActivityFile::class.java, ArgFile(ArgFile.TYPE_MESSAGE))
             } else {
                 FragmentPermissions().show("文件读写", parentFragmentManager)
             }
@@ -477,8 +532,8 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).autoDispose(viewModel).subscribe {
             if (it) {
-                start(
-                    R.id.action_fragmentMessage_to_activityCamera,
+                startActivity(
+                    ActivityCamera::class.java,
                     arg = ArgCamera(ArgCamera.TYPE_MESSAGE)
                 )
             } else {
@@ -492,7 +547,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             Manifest.permission.ACCESS_FINE_LOCATION
         ).autoDispose(viewModel).subscribe {
             if (it) {
-                start(R.id.action_fragmentMessage_to_activityAmap)
+                startActivity(ActivityAmap::class.java)
             } else {
                 FragmentPermissions().show("定位", parentFragmentManager)
             }

@@ -9,68 +9,6 @@
         android:id="@+id/fragmentMessage"
         android:name="com.netease.nim.demo.ui.message.main.fragment.FragmentMessage"
         android:label="FragmentMessage"
-        tools:layout="@layout/fragment_message">
-
-        <action
-            android:id="@+id/action_fragmentMessage_to_activityAmap"
-            app:destination="@id/activityAmap" />
-        <action
-            android:id="@+id/action_fragmentMessage_to_activityCamera"
-            app:destination="@id/activityCamera" />
-        <action
-            android:id="@+id/action_fragmentMessage_to_activityPhotoBrowser"
-            app:destination="@id/activityPhotoBrowser" />
-        <action
-            android:id="@+id/action_fragmentMessage_to_activityPhotoBrowserGif"
-            app:destination="@id/activityPhotoBrowserGif" />
-        <action
-            android:id="@+id/action_fragmentMessage_to_activityFile"
-            app:destination="@id/activityFile" />
-        <action
-            android:id="@+id/action_fragmentMessage_to_activityFileDownload"
-            app:destination="@id/activityFileDownload" />
-    </fragment>
-
-    <activity
-        android:id="@+id/activityAmap"
-        android:name="com.netease.nim.demo.ui.map.ActivityAmap"
-        android:label="ActivityAmap"
-        tools:layout="@layout/fragment_amap" />
-    <activity
-        android:id="@+id/activityCamera"
-        android:name="com.netease.nim.demo.ui.camera.ActivityCamera"
-        android:label="ActivityCamera"
-        tools:layout="@layout/fragment_camera" />
-
-    <activity
-        android:id="@+id/activityPhotoBrowser"
-        android:name="com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser"
-        android:label="ActivityPhotoBrowser"
-        tools:layout="@layout/fragment_photo_browser" />
-
-    <activity
-        android:id="@+id/activityPhotoBrowserGif"
-        android:name="com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowserGif"
-        android:label="ActivityPhotoBrowserGif"
-        tools:layout="@layout/fragment_browse_image_gif" />
-    <activity
-        android:id="@+id/activityFile"
-        android:name="com.netease.nim.demo.ui.file.ActivityFile"
-        android:label="ActivityFile"
-        tools:layout="@layout/fragment_file" />
-    <activity
-        android:id="@+id/activityFileDownload"
-        android:name="com.netease.nim.demo.ui.message.filedownload.ActivityFileDownload"
-        android:label="ActivityFileDownload"
-        tools:layout="@layout/fragment_file_download" />
-
-    <activity
-        android:id="@+id/activityWeb"
-        android:name="com.netease.nim.demo.ui.web.ActivityWeb"
-        android:label="ActivityWeb" />
-
-    <action
-        android:id="@+id/action_global_fragmentMessage_activityWeb"
-        app:destination="@id/activityWeb" />
+        tools:layout="@layout/fragment_message" />
 
 </navigation>

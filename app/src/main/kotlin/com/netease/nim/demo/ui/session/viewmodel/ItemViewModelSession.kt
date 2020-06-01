@@ -3,6 +3,7 @@ package com.netease.nim.demo.ui.session.viewmodel
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.AnimBuilder
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.createTypeCommand
 import com.hiwitech.android.shared.tools.ToolDate
@@ -12,9 +13,9 @@ import com.netease.nim.demo.base.ItemViewModelBase
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.tools.ToolTeam
 import com.netease.nim.demo.nim.tools.ToolUserInfo
+import com.netease.nim.demo.ui.message.ActivityMessage
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.session.Constants.SESSION_ON_TOP
-import com.netease.nim.demo.ui.session.popup.PopupSession
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.P2P
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.Team
 import com.netease.nimlib.sdk.msg.model.RecentContact
@@ -31,8 +32,6 @@ data class ItemViewModelSession(
 ) : ItemViewModelBase(viewModel) {
 
     val contactId: String = contact.contactId
-
-    val messageId: String = contact.recentMessageId
 
     val time = contact.time
     /**
@@ -81,7 +80,7 @@ data class ItemViewModelSession(
         value = contact.unreadCount
     }
 
-    private val touchPostionArr = arrayOf(0f, 0f)
+    val touchPostionArr = arrayOf(0f, 0f)
 
     /**
      * 初始化数据
@@ -102,7 +101,8 @@ data class ItemViewModelSession(
                 error.value = R.mipmap.nim_avatar_group
                 placeholder.value = R.mipmap.nim_avatar_group
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 
@@ -126,18 +126,15 @@ data class ItemViewModelSession(
      * 会话长点击处理
      */
     val onLongClickCommand = createTypeCommand<View> {
-        PopupSession(context, this@ItemViewModelSession).show(
-            touchPostionArr[0].toInt(),
-            touchPostionArr[1].toInt()
-        )
+        viewModel.onLongClickItemEvent.value = this@ItemViewModelSession
     }
 
     /**
      * 会话点击处理
      */
     val onClickCommand = createCommand {
-        start(
-            R.id.action_fragmentMain_to_activityMessage,
+        startActivity(
+            ActivityMessage::class.java,
             arg = ArgMessage(contact.contactId, contact.sessionType.value)
         )
     }

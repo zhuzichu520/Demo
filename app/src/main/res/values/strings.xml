@@ -32,6 +32,9 @@
     <string name="input_panel_file">文 件</string>
     <string name="input_panel_local">位 置</string>
 
+    <string name="call_voice">语音通话</string>
+    <string name="call_video">视频通话</string>
+
 
     <string name="start_session_record">我发起了白板演示</string>
     <string name="session_end_record">白板演示已结束</string>
@@ -44,8 +47,8 @@
 
     <string name="location_open_map_error">打开地图出错</string>
 
-    <string name="sticky_on_top">置顶</string>
-    <string name="clear_sticky_on_top">取消置顶</string>
+    <string name="on_sticky_top">置顶</string>
+    <string name="clear_sticky_top">取消置顶</string>
     <string name="clear_disturb">取消免打扰</string>
     <string name="on_disturb">免打扰</string>
     <string name="remove">移除</string>
@@ -53,5 +56,14 @@
     <string name="file">文件</string>
     <string name="see">查看</string>
     <string name="empty">空空如也</string>
+
+    <string name="cat_choose_theme_label">Choose theme</string>
+    <string name="cat_choose_theme_light">Light</string>
+    <string name="cat_choose_theme_dark">Dark</string>
+    <string name="cat_choose_theme_default">System default</string>
+
+    <string name="file_option_my">我的文件</string>
+    <string name="file_option_weixin">微信文件</string>
+    <string name="file_option_phone">手机存储</string>
 
 </resources>

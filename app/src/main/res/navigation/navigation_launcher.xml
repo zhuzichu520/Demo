@@ -9,17 +9,6 @@
         android:id="@+id/fragmentLauncher"
         android:name="com.netease.nim.demo.ui.launcher.fragment.FragmentLauncher"
         android:label="FragmentLauncher"
-        tools:layout="@layout/fragment_launcher">
-        <action
-            android:id="@+id/action_fragmentLauncher_to_navigation_login"
-            app:destination="@id/navigation_login" />
-        <action
-            android:id="@+id/action_fragmentLauncher_to_navigation_main"
-            app:destination="@id/navigation_main" />
-    </fragment>
-
-    <include app:graph="@navigation/navigation_login" />
-
-    <include app:graph="@navigation/navigation_main" />
+        tools:layout="@layout/fragment_launcher" />
 
 </navigation>

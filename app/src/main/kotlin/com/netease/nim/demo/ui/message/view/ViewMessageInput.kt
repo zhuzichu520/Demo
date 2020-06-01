@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit
  * author: 朱子楚
  * time: 2020/4/13 9:38 AM
  * since: v 1.0.0
+ * todo 待优化，还是不太流畅
  */
 class ViewMessageInput @JvmOverloads constructor(
     context: Context,

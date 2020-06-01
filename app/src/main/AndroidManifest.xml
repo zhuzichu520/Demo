@@ -139,6 +139,12 @@
 
         <activity android:name=".ui.file.ActivityFile" />
 
+        <activity android:name=".ui.avchat.ActivityAvchat" />
+
+        <activity android:name=".ui.main.ActivityMain" />
+
+        <activity android:name=".ui.login.ActivityLogin" />
+
         <activity
             android:name=".ui.web.ActivityWeb"
             android:configChanges="orientation|screenSize"

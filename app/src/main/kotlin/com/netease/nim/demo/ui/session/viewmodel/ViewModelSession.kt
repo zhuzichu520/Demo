@@ -7,8 +7,8 @@ import com.google.common.primitives.Longs
 import com.hiwitech.android.libs.tool.replaceAt
 import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.mvvm.event.SingleLiveEvent
 import com.hiwitech.android.shared.ext.autoLoading
-import com.hiwitech.android.shared.ext.itemDiffOf
 import com.hiwitech.android.shared.ext.map
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
@@ -54,10 +54,15 @@ class ViewModelSession @Inject constructor(
         map<ItemViewModelSession>(BR.item, R.layout.item_session)
     }
 
-    val diff = itemDiffOf<ItemViewModelSession> { oldItem, newItem ->
-        oldItem.contactId == newItem.contactId && oldItem.messageId == newItem.messageId
-                && oldItem.number.value == newItem.number.value
-    }
+    /**
+     * Item长点击
+     */
+    val onLongClickItemEvent = SingleLiveEvent<ItemViewModelSession>()
+
+//    val diff = itemDiffOf<ItemViewModelSession> { oldItem, newItem ->
+//        oldItem.contactId == newItem.contactId && oldItem.messageId == newItem.messageId
+//                && oldItem.number.value == newItem.number.value
+//    }
 
     /**
      * 比较器

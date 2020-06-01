@@ -9,7 +9,8 @@ import java.io.File
  * since: v 1.0.0
  */
 class EventFile {
-    data class OnSendFileEvent(
-        val file: File
+    data class OnSelectFileEvent(
+        val type: Int,
+        var files: List<File>
     )
 }

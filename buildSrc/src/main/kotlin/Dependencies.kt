@@ -61,7 +61,7 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.3"
 
-    const val DEVELOPER = "1.1.8"
+    const val DEVELOPER = "1.2.3"
 
     const val LIVEEVENTBUS = "1.6.1"
 
@@ -81,7 +81,11 @@ object Versions {
 
     const val TBS = "43903"
     const val SONIC = "3.1.0"
+    const val RECYCLICAL = "1.1.1"
 
+    const val NIM = "7.7.1"
+
+    const val AMAP = "latest.integration"
 }
 
 /**
@@ -94,6 +98,28 @@ object BuildPluginsVersion {
     const val KTLINT = "9.2.1"
     const val VERSIONS_PLUGIN = "0.28.0"
     const val ANDROID_MAVEN = "2.1"
+}
+
+/**
+ * 高德地图
+ */
+object AmapLibs {
+    const val AMAP_3D = "com.amap.api:3dmap:${Versions.AMAP}"
+    const val AMAP_LOCATION = "com.amap.api:location:${Versions.AMAP}"
+    const val AMAP_SEARCH = "com.amap.api:search:${Versions.AMAP}"
+}
+
+/**
+ * 云信IM
+ */
+object NimLibs {
+    const val NIM_BASE = "com.netease.nimlib:basesdk:${Versions.NIM}"
+    const val NIM_NRTC = "com.netease.nimlib:nrtc:${Versions.NIM}"
+    const val NIM_AVCHAT = "com.netease.nimlib:avchat:${Versions.NIM}"
+    const val NIM_CHATROOM = "com.netease.nimlib:chatroom:${Versions.NIM}"
+    const val NIM_RTS = "com.netease.nimlib:rts:${Versions.NIM}"
+    const val NIM_LUCENE = "com.netease.nimlib:lucene:${Versions.NIM}"
+    const val NIM_PUSH = "com.netease.nimlib:push:${Versions.NIM}"
 }
 
 /**
@@ -231,8 +257,8 @@ object Libs {
     //agentweb
     const val AGENTWEB = "com.just.agentweb:agentweb:${Versions.AGENTWEB}"
     const val AGENTWEB_DOWNLOADER = "com.download.library:Downloader:${Versions.AGENTWEB}"
-    const val AGENTWEB_FILECHOOSER = "com.just.agentweb:filechooser:${Versions.AGENTWEB}"
 
+    const val RECYCLICAL = "com.afollestad:recyclical:${Versions.RECYCLICAL}"
 }
 
 

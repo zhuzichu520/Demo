@@ -11,15 +11,10 @@
         android:label="FragmentLogin"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_fragmentLogin_to_navigation_main"
-            app:destination="@id/navigation_main"
-            app:launchSingleTop="false" />
-        <action
             android:id="@+id/action_fragmentLogin_to_fragmentRegister"
             app:destination="@id/fragmentRegister" />
     </fragment>
 
-    <include app:graph="@navigation/navigation_main" />
 
     <fragment
         android:id="@+id/fragmentRegister"

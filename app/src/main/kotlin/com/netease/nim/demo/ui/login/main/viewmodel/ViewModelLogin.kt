@@ -11,6 +11,7 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.login.main.domain.UseCaseLogin
+import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.uber.autodispose.autoDispose
 import javax.inject.Inject
@@ -74,11 +75,7 @@ class ViewModelLogin @Inject constructor(
      */
     private fun showMainPage() {
         MainHandler.postDelayed {
-            start(
-                R.id.action_fragmentLogin_to_navigation_main,
-                popUpTo = R.id.fragmentLogin,
-                inclusive = true
-            )
+            startActivity(ActivityMain::class.java)
         }
     }
 }

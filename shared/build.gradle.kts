@@ -134,6 +134,20 @@ dependencies {
     api(Libs.AGENTWEB)
     api(Libs.AGENTWEB_DOWNLOADER)
 
+    api(Libs.RECYCLICAL)
+
+    api(NimLibs.NIM_BASE)
+    api(NimLibs.NIM_NRTC)
+    api(NimLibs.NIM_AVCHAT)
+    api(NimLibs.NIM_CHATROOM)
+    api(NimLibs.NIM_RTS)
+    api(NimLibs.NIM_LUCENE)
+    api(NimLibs.NIM_PUSH)
+
+    api(AmapLibs.AMAP_3D)
+    api(AmapLibs.AMAP_LOCATION)
+    api(AmapLibs.AMAP_SEARCH)
+
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)
     api(MyLibs.DEVELOPER_WIDGET)

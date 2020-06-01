@@ -2,6 +2,8 @@ package com.netease.nim.demo.di
 
 
 import com.hiwitech.android.mvvm.di.ActivityScoped
+import com.netease.nim.demo.ui.avchat.ActivityAvchat
+import com.netease.nim.demo.ui.avchat.module.ModuleAvchat
 import com.netease.nim.demo.ui.camera.ActivityCamera
 import com.netease.nim.demo.ui.camera.module.ModuleCamera
 import com.netease.nim.demo.ui.contact.module.ModuleContact
@@ -12,8 +14,10 @@ import com.netease.nim.demo.ui.file.module.ModuleBrowseFile
 import com.netease.nim.demo.ui.file.module.ModuleFile
 import com.netease.nim.demo.ui.launcher.ActivityLauncher
 import com.netease.nim.demo.ui.launcher.module.ModuleLauncher
+import com.netease.nim.demo.ui.login.ActivityLogin
 import com.netease.nim.demo.ui.login.main.module.ModuleLogin
 import com.netease.nim.demo.ui.login.register.module.ModuleRegister
+import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nim.demo.ui.main.module.ModuleMain
 import com.netease.nim.demo.ui.map.ActivityAmap
 import com.netease.nim.demo.ui.map.module.ModuleAmap
@@ -32,6 +36,7 @@ import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseImageGif
 import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseVideo
 import com.netease.nim.demo.ui.photobrowser.module.ModulePhotoBrowser
 import com.netease.nim.demo.ui.session.module.ModuleSession
+import com.netease.nim.demo.ui.theme.module.ModuleTheme
 import com.netease.nim.demo.ui.web.ActivityWeb
 import com.netease.nim.demo.ui.web.module.ModuleWeb
 import dagger.Module
@@ -39,6 +44,7 @@ import dagger.android.ContributesAndroidInjector
 
 
 /**
+ * todo 按模块抽出Module
  * desc Activity Module
  * author: 朱子楚
  * time: 2020/4/5 7:48 PM
@@ -51,16 +57,31 @@ abstract class ActivityBindingModule {
     @ContributesAndroidInjector(
         modules = [
             ModuleLauncher::class,
-            ModuleLogin::class,
-            ModuleMain::class,
-            ModuleMe::class,
-            ModuleRegister::class,
-            ModuleSession::class,
-            ModuleContact::class,
             ModulePermissions::class
         ]
     )
     internal abstract fun launcherActivity(): ActivityLauncher
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleMain::class,
+            ModuleMe::class,
+            ModuleSession::class,
+            ModuleContact::class,
+            ModuleTheme::class
+        ]
+    )
+    internal abstract fun mainActivity(): ActivityMain
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleLogin::class,
+            ModuleRegister::class
+        ]
+    )
+    internal abstract fun loginActivity(): ActivityLogin
 
 
     @ActivityScoped
@@ -104,7 +125,8 @@ abstract class ActivityBindingModule {
             ModuleMore::class,
             ModuleMessage::class,
             ModuleEmoticon::class,
-            ModulePermissions::class
+            ModulePermissions::class,
+            ModuleOptions::class
         ]
     )
     internal abstract fun messageActivity(): ActivityMessage
@@ -145,6 +167,17 @@ abstract class ActivityBindingModule {
         ]
     )
     internal abstract fun webActivity(): ActivityWeb
+
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleAvchat::class,
+            ModulePermissions::class,
+            ModuleOptions::class
+        ]
+    )
+    internal abstract fun avchatActivity(): ActivityAvchat
 
 
 }

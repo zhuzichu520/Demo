@@ -99,9 +99,9 @@
                     android:layout_marginBottom="15dp"
                     android:layout_toEndOf="@+id/icon"
                     android:text="@{item.size}"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="@color/color_font_secondary"
-                    tools:text="1.23mb" />
+                    tools:text="1.23 MB" />
 
                 <com.hiwitech.android.widget.qmui.layout.QMUIFrameLayout
                     android:layout_width="match_parent"

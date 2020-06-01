@@ -8,7 +8,7 @@
             type="com.netease.nim.demo.ui.file.viewmodel.ViewModelFile" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -16,84 +16,50 @@
         android:background="@color/color_background">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title="@string/file" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="@string/cancel"
+            android:textAppearance="?attr/textAppearanceButton"
+            android:textColor="?colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/appbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appbar" />
+
+        <Button
+            android:id="@+id/submit"
+            style="@style/Widget.MyTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:enabled="@{viewModel.enable}"
+            android:text="@{viewModel.text}"
+            app:layout_constraintBottom_toBottomOf="@+id/appbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appbar"
+            tools:text="8/10" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                app:radioIndex="@={viewModel.index}">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:layout_width="64dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="14dp"
-                    android:background="@drawable/shape_bg_file_tab_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="默认"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
-                    android:textColor="@color/color_font_primary" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:layout_width="64dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="14dp"
-                    android:background="@drawable/shape_bg_file_tab_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="微信"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
-                    android:textColor="@color/color_font_primary" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:layout_width="64dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="14dp"
-                    android:background="@drawable/shape_bg_file_tab_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="本地"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
-                    android:textColor="@color/color_font_primary" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </RadioGroup>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/nav"
@@ -106,25 +72,66 @@
                 tools:listitem="@layout/item_file_nav" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/divider_horizontal" />
 
-            <com.netease.nim.demo.view.RecyclerViewEmpty
-                android:id="@+id/files"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:splitMotionEvents="false"
-                app:itemBinding="@{viewModel.itemBind}"
-                app:items="@{viewModel.list}"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:lineShowDivider="@{viewModel.dividerMiddle()}"
-                tools:listitem="@layout/item_file" />
+                android:layout_weight="1">
+
+                <com.netease.nim.demo.view.RecyclerViewEmpty
+                    android:id="@+id/files"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:splitMotionEvents="false"
+                    app:itemBinding="@{viewModel.itemBind}"
+                    app:items="@{viewModel.list}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:lineShowDivider="@{viewModel.dividerMiddle()}"
+                    tools:listitem="@layout/item_file" />
+
+            </FrameLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/color_background_secondary">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    tools:text="@string/file_option_my"
+                    android:textAppearance="?textAppearanceSubtitle2"
+                    android:textStyle="bold"
+                    android:text="@{viewModel.menuTitle}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="@{viewModel.count}"
+                    android:textAppearance="?textAppearanceBody1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="已选：199MB" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
