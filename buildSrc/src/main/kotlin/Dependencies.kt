@@ -61,7 +61,7 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.3"
 
-    const val DEVELOPER = "1.2.3"
+    const val DEVELOPER = "1.2.4"
 
     const val LIVEEVENTBUS = "1.6.1"
 
@@ -86,6 +86,8 @@ object Versions {
     const val NIM = "7.7.1"
 
     const val AMAP = "latest.integration"
+
+    const val TINYPINYIN = "2.0.3"
 }
 
 /**
@@ -259,6 +261,8 @@ object Libs {
     const val AGENTWEB_DOWNLOADER = "com.download.library:Downloader:${Versions.AGENTWEB}"
 
     const val RECYCLICAL = "com.afollestad:recyclical:${Versions.RECYCLICAL}"
+
+    const val TINYPINYIN = "com.github.promeg:tinypinyin:${Versions.TINYPINYIN}"
 }
 
 

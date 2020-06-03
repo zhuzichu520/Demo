@@ -75,7 +75,7 @@ class ViewModelLogin @Inject constructor(
      */
     private fun showMainPage() {
         MainHandler.postDelayed {
-            startActivity(ActivityMain::class.java)
+            startActivity(ActivityMain::class.java, isPop = true)
         }
     }
 }

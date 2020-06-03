@@ -30,4 +30,11 @@ class FragmentMe : FragmentBase<FragmentMeBinding, ViewModelMe, ArgDefault>() {
 
     }
 
+    override fun initOneData() {
+        super.initOneData()
+        viewModel.loadUserInfo()
+    }
+
+
+
 }

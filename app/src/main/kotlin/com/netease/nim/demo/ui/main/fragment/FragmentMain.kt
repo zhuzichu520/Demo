@@ -109,4 +109,5 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
             startActivity(ActivityAvchat::class.java, arg = ArgAvchat(it.data))
         })
     }
+
 }

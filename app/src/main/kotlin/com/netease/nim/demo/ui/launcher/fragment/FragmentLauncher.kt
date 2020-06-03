@@ -53,18 +53,20 @@ class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, Ar
     }
 
     private fun initX5WebView() {
-        QbSdk.initX5Environment(requireContext(), object : QbSdk.PreInitCallback {
+        QbSdk.initX5Environment(
+            requireContext().applicationContext,
+            object : QbSdk.PreInitCallback {
 
-            override fun onCoreInitFinished() {
-                val map = mutableMapOf<String, Any>()
-                map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
-                QbSdk.initTbsSettings(map)
-            }
+                override fun onCoreInitFinished() {
+                    val map = mutableMapOf<String, Any>()
+                    map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
+                    QbSdk.initTbsSettings(map)
+                }
 
-            override fun onViewInitFinished(isInit: Boolean) {
+                override fun onViewInitFinished(isInit: Boolean) {
 
-            }
-        })
+                }
+            })
     }
 
     private fun start(clazz: Class<out Activity>) {

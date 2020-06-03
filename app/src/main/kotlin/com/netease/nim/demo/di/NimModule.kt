@@ -6,6 +6,7 @@ import com.netease.nim.demo.nim.repository.NimRepository
 import com.netease.nim.demo.nim.repository.NimRepositoryImpl
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthService
+import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.uinfo.UserService
@@ -41,6 +42,10 @@ class NimModule {
 
     @Singleton
     @Provides
+    fun providesFriendService(): FriendService = NIMClient.getService(FriendService::class.java)
+
+    @Singleton
+    @Provides
     fun providesNimAudioManager(context: Context): NimAudioManager = NimAudioManager(context)
 
     @Singleton
@@ -49,8 +54,9 @@ class NimModule {
         teamService: TeamService,
         userService: UserService,
         authService: AuthService,
-        msgService: MsgService
+        msgService: MsgService,
+        friendService: FriendService
     ): NimRepository =
-        NimRepositoryImpl(teamService, userService, authService, msgService)
+        NimRepositoryImpl(teamService, userService, authService, msgService, friendService)
 
 }

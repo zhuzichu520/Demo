@@ -4,6 +4,7 @@ import com.hiwitech.android.shared.ext.createFlowable
 import com.netease.nim.demo.nim.NimRequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
+import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
@@ -66,13 +67,20 @@ interface NimRepository {
      * @param message 消息
      */
     fun getImageAndVideoMessage(message: IMMessage): Flowable<List<IMMessage>>
+
+    /**
+     * 获取所有好友用户资料
+     */
+    fun getFriendInfoList(): Flowable<List<NimUserInfo>>
+
 }
 
 class NimRepositoryImpl(
     private val teamService: TeamService,
     private val userService: UserService,
     private val authService: AuthService,
-    private val msgService: MsgService
+    private val msgService: MsgService,
+    private val friendService: FriendService
 ) : NimRepository {
 
     override fun login(loginInfo: LoginInfo): Flowable<LoginInfo> {
@@ -139,5 +147,11 @@ class NimRepositoryImpl(
         }
     }
 
+    override fun getFriendInfoList(): Flowable<List<NimUserInfo>> {
+        return createFlowable {
+            onNext(userService.getUserInfoList(friendService.friendAccounts))
+            onComplete()
+        }
+    }
 
 }

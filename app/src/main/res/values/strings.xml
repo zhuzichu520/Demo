@@ -8,6 +8,7 @@
     <string name="contact">通讯录</string>
     <string name="me">我的</string>
     <string name="register">注册</string>
+    <string name="logout">退出</string>
     <string name="message">消息</string>
 
     <string name="register_account">请输入帐号，限20位字母或者数字</string>
@@ -65,5 +66,22 @@
     <string name="file_option_my">我的文件</string>
     <string name="file_option_weixin">微信文件</string>
     <string name="file_option_phone">手机存储</string>
+    <string name="setting">设置</string>
+    <string name="profile">个人信息</string>
+    <string name="avatar">头像</string>
+
+    <string name="nickname">昵 称</string>
+    <string name="birthday">生 日</string>
+    <string name="phone">手 机</string>
+    <string name="email">邮 箱</string>
+    <string name="gender">性 别</string>
+    <string name="signature">签 名</string>
+
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="other">其他</string>
+    <string name="contact_info">联系人资料</string>
+    <string name="logout_info">确定要退出吗？</string>
+    <string name="confirm">确认</string>
 
 </resources>

@@ -29,6 +29,8 @@ import com.netease.nim.demo.databinding.FragmentMessageBinding
 import com.netease.nim.demo.nim.attachment.StickerAttachment
 import com.netease.nim.demo.nim.emoji.StickerItem
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.avchat.ActivityAvchat
+import com.netease.nim.demo.ui.avchat.arg.ArgAvchat
 import com.netease.nim.demo.ui.camera.ActivityCamera
 import com.netease.nim.demo.ui.camera.arg.ArgCamera
 import com.netease.nim.demo.ui.camera.event.EventCamera
@@ -41,14 +43,12 @@ import com.netease.nim.demo.ui.launcher.event.OnKeyboardChangeEvent
 import com.netease.nim.demo.ui.map.ActivityAmap
 import com.netease.nim.demo.ui.map.event.EventMap
 import com.netease.nim.demo.ui.message.emoticon.event.EventEmoticon
-import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.event.EventMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelImageMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelVideoMessage
 import com.netease.nim.demo.ui.message.main.viewmodel.ViewModelMessage
 import com.netease.nim.demo.ui.message.more.event.EventMore
-import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
 import com.netease.nim.demo.ui.message.more.viewmodel.ViewModelMore
 import com.netease.nim.demo.ui.message.view.ViewMessageInput
 import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_EMOJI
@@ -181,27 +181,11 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
      * 初始化底部布局的Fragment，有Emoji表情，有更多布局
      */
     private fun initBottomFragment() {
-        val fragmentEmoji = FragmentEmoticon()
-        val fragmentMore = FragmentMore()
         recycler.post {
             message_input.attachContentView(layout_content, recycler)
             message_input.setInputType(ViewMessageInput.TYPE_DEFAULT)
         }
         message_input.audioRecorder = audioRecorder
-        // 切换Fragment
-        message_input.onReplaceFragment = {
-            when (this) {
-                TYPE_EMOJI -> {
-                    fragmentEmoji
-                }
-                TYPE_MORE -> {
-                    fragmentMore
-                }
-                else -> {
-                    fragmentEmoji
-                }
-            }
-        }
         // 点击发送
         message_input.onClickSendListener = {
             sendTextMessage(this)
@@ -272,9 +256,11 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             when (it.option) {
                 //视频呼叫
                 OPTIONS_CALL_VIDEO -> {
+                    startActivity(ActivityAvchat::class.java, arg = ArgAvchat(null))
                 }
                 //语音呼叫
                 OPTIONS_CALL_VOICE -> {
+                    startActivity(ActivityAvchat::class.java, arg = ArgAvchat(null))
                 }
             }
         })

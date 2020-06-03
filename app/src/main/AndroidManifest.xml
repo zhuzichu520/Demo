@@ -128,6 +128,8 @@
 
         <activity android:name=".ui.map.ActivityAmap" />
 
+        <activity android:name=".ui.setting.ActivitySetting" />
+
         <activity
             android:name=".ui.camera.ActivityCamera"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -141,9 +143,15 @@
 
         <activity android:name=".ui.avchat.ActivityAvchat" />
 
-        <activity android:name=".ui.main.ActivityMain" />
+        <activity
+            android:name=".ui.main.ActivityMain"
+            android:launchMode="singleTask" />
 
         <activity android:name=".ui.login.ActivityLogin" />
+
+        <activity android:name=".ui.profile.ActivityProfile" />
+
+        <activity android:name=".ui.user.ActivityUser" />
 
         <activity
             android:name=".ui.web.ActivityWeb"

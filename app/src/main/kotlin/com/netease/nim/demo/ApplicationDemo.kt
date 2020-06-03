@@ -45,10 +45,10 @@ class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider {
         CrashConfig.Builder.create().apply()
         Mvvm.setAnimBuilder(
             AnimBuilder().apply {
-                enter = R.anim.h_enter
-                exit = R.anim.h_exit
-                popEnter = R.anim.h_pop_enter
-                popExit = R.anim.h_pop_exit
+                enter = R.anim.v_enter
+                exit = R.anim.v_exit
+                popEnter = R.anim.v_pop_enter
+                popExit = R.anim.v_pop_exit
             }
         )
 

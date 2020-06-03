@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.*
@@ -25,7 +26,9 @@ import com.jakewharton.rxbinding3.view.layoutChangeEvents
 import com.netease.nim.demo.R
 import com.netease.nim.demo.nim.emoji.ToolMoon
 import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nim.demo.ui.message.emoticon.fragment.FragmentEmoticon
 import com.netease.nim.demo.ui.message.main.event.EventMessage
+import com.netease.nim.demo.ui.message.more.fragment.FragmentMore
 import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.netease.nimlib.sdk.media.record.AudioRecorder
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -56,11 +59,11 @@ class ViewMessageInput @JvmOverloads constructor(
     /**
      * 底部emoji页面高度
      */
-//    private val emojiHeight = dp2px(context, 320f)
+    private val emojiHeight = dp2px(context, 320f)
     /**
      * 底部更多页面高度
      */
-//    private val moreHeight = dp2px(context, 240f)
+    private val moreHeight = dp2px(context, 320f)
 
     /**
      * 底部布局的高度与键盘的高度偏移量
@@ -96,7 +99,17 @@ class ViewMessageInput @JvmOverloads constructor(
 
     var onClickSendListener: (String.() -> Unit)? = null
 
-    var onReplaceFragment: (Int.() -> Fragment)? = null
+    /**
+     * emoji的Fragment
+     */
+    private val fragmentEmoji = FragmentEmoticon()
+
+    /**
+     * 更多的Fragment
+     */
+    private val fragmentMore = FragmentMore()
+
+    private var currentFragment: Fragment? = null
 
     /**
      * 录音秒数
@@ -117,6 +130,8 @@ class ViewMessageInput @JvmOverloads constructor(
      */
     private var disposableTime: Disposable? = null
 
+    private var fragmentManager: FragmentManager =
+        (context as AppCompatActivity).supportFragmentManager
 
     var audioRecorder: AudioRecorder? = null
 
@@ -257,6 +272,9 @@ class ViewMessageInput @JvmOverloads constructor(
         LiveDataBus.post(EventMessage.OnRecordCancelChangeEvent(this.cancelled))
     }
 
+    /**
+     * 是否取消
+     */
     private fun isCancelled(view: View, event: MotionEvent): Boolean {
         val location = IntArray(2)
         view.getLocationOnScreen(location)
@@ -290,6 +308,9 @@ class ViewMessageInput @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 录音
+     */
     private fun startRecord() {
         releaseTimeDisposable()
         recordSecond = 0
@@ -332,7 +353,7 @@ class ViewMessageInput @JvmOverloads constructor(
     fun setInputType(inputType: Int) {
         layout_input.post {
             when (inputType) {
-                TYPE_DEFAULT -> {
+                TYPE_DEFAULT -> {// 1969   160   771
                     showView(start_voice, center_emoji, center_input)
                     hideView(start_keyboard, center_keyboard, center_audio)
                     layout_input.post {
@@ -355,16 +376,13 @@ class ViewMessageInput @JvmOverloads constructor(
                 TYPE_EMOJI -> {
                     showView(start_voice, center_keyboard, center_input)
                     hideView(start_keyboard, center_emoji, center_audio)
-                    val emojiHeight = getSoftKeyboardHeightLocalValue() + keyboardOffset
+//                    val emojiHeight = getSoftKeyboardHeightLocalValue() + keyboardOffset
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - emojiHeight - inputHeight)
                         layout_bottom.layoutParams.height = emojiHeight
                         showView(layout_bottom)
                         closeKeyboard(center_input)
-                        onReplaceFragment?.let {
-                            val fragment = it.invoke(TYPE_EMOJI)
-                            replaceFragment(fragment)
-                        }
+                        replaceFragment(fragmentEmoji)
                         unlockRecyclerViewHeight()
                     }
                 }
@@ -375,16 +393,13 @@ class ViewMessageInput @JvmOverloads constructor(
                     }
                     showView(start_voice, center_emoji, center_input)
                     hideView(start_keyboard, center_keyboard, center_audio)
-                    val moreHeight = getSoftKeyboardHeightLocalValue()
+//                    val moreHeight = getSoftKeyboardHeightLocalValue()
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - moreHeight - inputHeight)
                         layout_bottom.layoutParams.height = moreHeight
                         showView(layout_bottom)
                         closeKeyboard(center_input)
-                        onReplaceFragment?.let {
-                            val fragment = it.invoke(TYPE_MORE)
-                            replaceFragment(fragment)
-                        }
+                        replaceFragment(fragmentMore)
                         unlockRecyclerViewHeight()
                     }
                 }
@@ -408,10 +423,19 @@ class ViewMessageInput @JvmOverloads constructor(
      * 切换Fragment
      */
     private fun replaceFragment(fragment: Fragment) {
-        val manager = (context as AppCompatActivity).supportFragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.replace(R.id.layout_bottom, fragment)
-        transaction.commitAllowingStateLoss()
+        if (fragment == currentFragment)
+            return
+        val transaction = fragmentManager.beginTransaction()
+        if (fragment.isAdded) {
+            transaction.show(fragment)
+        } else {
+            transaction.add(R.id.layout_bottom, fragment)
+        }
+        currentFragment?.let {
+            transaction.hide(it)
+        }
+        transaction.commit()
+        this.currentFragment = fragment
     }
 
     /**

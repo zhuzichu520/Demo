@@ -69,6 +69,20 @@ android {
         }
     }
 
+    flavorDimensions("CHANNEL")
+    productFlavors {
+
+        create("Demo") {
+            setDimension("CHANNEL")
+        }
+
+        create("My") {
+            setDimension("CHANNEL")
+            applicationIdSuffix = ".my"
+        }
+
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

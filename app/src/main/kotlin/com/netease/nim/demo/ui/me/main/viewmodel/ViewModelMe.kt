@@ -1,9 +1,16 @@
 package com.netease.nim.demo.ui.me.main.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
 import com.hiwitech.android.shared.ext.createCommand
+import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
+import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
+import com.netease.nim.demo.ui.profile.ActivityProfile
+import com.netease.nim.demo.ui.setting.ActivitySetting
+import com.uber.autodispose.autoDispose
 import javax.inject.Inject
 
 /**
@@ -13,12 +20,58 @@ import javax.inject.Inject
  * since: v 1.0.0
  */
 class ViewModelMe @Inject constructor(
+    private val useCaseGetUserInfo: UseCaseGetUserInfo
 ) : ViewModelBase<ArgDefault>() {
+
+    /**
+     * 头像
+     */
+    val avatar = MutableLiveData<Any>()
+
+    /**
+     * 头像错误图片
+     */
+    val error = MutableLiveData<Int>(R.mipmap.nim_avatar_default)
+
+    /**
+     * 头像占位图
+     */
+    val placeholder = MutableLiveData<Int>(R.mipmap.nim_avatar_default)
+
+    /**
+     *
+     */
+    val nickname = MutableLiveData<String>()
+
+    /**
+     *
+     */
+    val account = MutableLiveData<String>()
+
+    /**
+     *
+     */
+    val onClickHeaderCommand = createCommand {
+        startActivity(ActivityProfile::class.java)
+    }
+
+    val onClickSettingCommand = createCommand {
+        startActivity(ActivitySetting::class.java)
+    }
 
     val onClickThemeEvent = SingleLiveEvent<Unit>()
 
     val onClickThemeCommand = createCommand {
         onClickThemeEvent.call()
+    }
+
+    fun loadUserInfo() {
+        useCaseGetUserInfo.execute(NimUserStorage.account.toString()).autoDispose(this)
+            .subscribe {
+                avatar.value = it.avatar
+                nickname.value = it.name
+                account.value = "账号：".plus(it.account)
+            }
     }
 
 }

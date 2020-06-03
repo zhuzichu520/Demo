@@ -35,8 +35,14 @@ import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseImage
 import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseImageGif
 import com.netease.nim.demo.ui.photobrowser.module.ModuleBrowseVideo
 import com.netease.nim.demo.ui.photobrowser.module.ModulePhotoBrowser
+import com.netease.nim.demo.ui.profile.ActivityProfile
+import com.netease.nim.demo.ui.profile.module.ModuleProfile
 import com.netease.nim.demo.ui.session.module.ModuleSession
+import com.netease.nim.demo.ui.setting.ActivitySetting
+import com.netease.nim.demo.ui.setting.module.ModuleSetting
 import com.netease.nim.demo.ui.theme.module.ModuleTheme
+import com.netease.nim.demo.ui.user.ActivityUser
+import com.netease.nim.demo.ui.user.module.ModuleUser
 import com.netease.nim.demo.ui.web.ActivityWeb
 import com.netease.nim.demo.ui.web.module.ModuleWeb
 import dagger.Module
@@ -179,5 +185,27 @@ abstract class ActivityBindingModule {
     )
     internal abstract fun avchatActivity(): ActivityAvchat
 
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleSetting::class
+        ]
+    )
+    internal abstract fun settingActivity(): ActivitySetting
 
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleProfile::class
+        ]
+    )
+    internal abstract fun profileActivity(): ActivityProfile
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleUser::class
+        ]
+    )
+    internal abstract fun userInfoActivity(): ActivityUser
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -25,30 +26,52 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:itemBinding="@{viewModel.itemBinding}"
+                app:items="@{viewModel.items}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toStartOf="@+id/view_index"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lineShowDivider="@{viewModel.dividerMiddle()}"
+                tools:listitem="@layout/item_contact" />
 
-                <Button
+            <com.netease.nim.demo.view.QuickIndexBar
+                android:id="@+id/view_index"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                app:QuickIndexBar_textColor="?attr/colorFontPrimary"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <FrameLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/nim_contact_hit_letter_bg"
+                app:isShown="@{viewModel.showLetter}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="退出"
-                    style="@style/Widget.MyTheme.Button"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:onClickCommand="@{viewModel.onClickExitCommand}" />
+                    android:layout_gravity="center"
+                    android:text="@{viewModel.letter}"
+                    android:textAppearance="?attr/textAppearanceHeadline4"
+                    android:textColor="@color/white"
+                    tools:text="Z" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
