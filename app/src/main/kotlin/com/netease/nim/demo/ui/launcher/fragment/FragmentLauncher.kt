@@ -1,7 +1,6 @@
 package com.netease.nim.demo.ui.launcher.fragment
 
 import android.Manifest
-import android.app.Activity
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.netease.nim.demo.BR
@@ -11,6 +10,7 @@ import com.netease.nim.demo.databinding.FragmentMainBinding
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.launcher.viewmodel.ViewModelLauncher
 import com.netease.nim.demo.ui.login.ActivityLogin
+import com.netease.nim.demo.ui.login.main.arg.ArgLogin
 import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -40,9 +40,13 @@ class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, Ar
                 initX5WebView()
                 MainHandler.postDelayed {
                     if (!NimUserStorage.isLogin()) {
-                        start(ActivityLogin::class.java)
+                        startActivity(
+                            ActivityLogin::class.java,
+                            isPop = true,
+                            arg = ArgLogin(false)
+                        )
                     } else {
-                        start(ActivityMain::class.java)
+                        startActivity(ActivityMain::class.java, isPop = true)
                     }
                 }
             } else {
@@ -67,12 +71,5 @@ class FragmentLauncher : FragmentBase<FragmentMainBinding, ViewModelLauncher, Ar
 
                 }
             })
-    }
-
-    private fun start(clazz: Class<out Activity>) {
-        startActivity(
-            clazz,
-            isPop = true
-        )
     }
 }

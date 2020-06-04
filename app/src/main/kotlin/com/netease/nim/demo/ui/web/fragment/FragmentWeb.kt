@@ -160,7 +160,7 @@ class FragmentWeb : FragmentBase<FragmentWebBinding, ViewModelWeb, ArgWeb>() {
             .interceptUnkownUrl()
             .createAgentWeb()
             .ready()
-            .go("file:///android_asset/webpage/fileChooser.html")
+            .go(arg.url)
         initBackListener()
     }
 

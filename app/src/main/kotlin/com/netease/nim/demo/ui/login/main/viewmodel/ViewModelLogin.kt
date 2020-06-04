@@ -3,13 +3,13 @@ package com.netease.nim.demo.ui.login.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.md5
-import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.shared.ext.autoLoading
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.toast
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
 import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nim.demo.ui.login.main.arg.ArgLogin
 import com.netease.nim.demo.ui.login.main.domain.UseCaseLogin
 import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nimlib.sdk.auth.LoginInfo
@@ -24,7 +24,7 @@ import javax.inject.Inject
  */
 class ViewModelLogin @Inject constructor(
     private val useCaseLogin: UseCaseLogin
-) : ViewModelBase<ArgDefault>() {
+) : ViewModelBase<ArgLogin>() {
 
     /**
      * 账号

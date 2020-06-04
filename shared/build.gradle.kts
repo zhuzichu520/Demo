@@ -139,8 +139,8 @@ dependencies {
     api(NimLibs.NIM_BASE)
     api(NimLibs.NIM_NRTC)
     api(NimLibs.NIM_AVCHAT)
-    api(NimLibs.NIM_CHATROOM)
-    api(NimLibs.NIM_RTS)
+//    api(NimLibs.NIM_CHATROOM)
+//    api(NimLibs.NIM_RTS)
     api(NimLibs.NIM_LUCENE)
     api(NimLibs.NIM_PUSH)
 

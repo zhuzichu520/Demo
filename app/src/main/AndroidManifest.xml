@@ -147,11 +147,15 @@
             android:name=".ui.main.ActivityMain"
             android:launchMode="singleTask" />
 
-        <activity android:name=".ui.login.ActivityLogin" />
+        <activity
+            android:name=".ui.login.ActivityLogin"
+            android:launchMode="singleTop" />
 
         <activity android:name=".ui.profile.ActivityProfile" />
 
         <activity android:name=".ui.user.ActivityUser" />
+
+        <activity android:name=".ui.multiport.ActivityMultiport" />
 
         <activity
             android:name=".ui.web.ActivityWeb"

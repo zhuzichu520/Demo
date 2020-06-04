@@ -21,6 +21,8 @@ class ItemViewModelContact(
     nimUserInfo: NimUserInfo
 ) : ItemViewModelBase(viewModel) {
 
+    val account: String = nimUserInfo.account
+
     val pinYin = Pinyin.toPinyin(nimUserInfo.name[0])[0].toUpperCase()
 
     /**

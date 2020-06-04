@@ -4,14 +4,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.shared.ext.closeDefaultAnimator
+import com.hiwitech.android.shared.ext.createCommand
+import com.hiwitech.android.shared.ext.toStringByResId
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentSessionBinding
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.main.ActivityMain
+import com.netease.nim.demo.ui.multiport.ActivityMultiport
+import com.netease.nim.demo.ui.multiport.arg.ArgMultiport
 import com.netease.nim.demo.ui.popup.PopupMenus
 import com.netease.nim.demo.ui.session.viewmodel.ViewModelSession
+import com.netease.nimlib.sdk.StatusCode
+import com.netease.nimlib.sdk.auth.ClientType
 import kotlinx.android.synthetic.main.fragment_session.*
 
 /**
@@ -97,6 +104,71 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
                 }
             }.show(it.touchPostionArr[0].toInt(), it.touchPostionArr[1].toInt())
         })
+
+        viewModel.toObservable(NimEvent.OnLineStatusEvent::class.java, Observer {
+            if (it.statusCode.wontAutoLogin()) {
+                ActivityMain.logout(requireContext(), true)
+            } else {
+                when (it.statusCode) {
+                    StatusCode.NET_BROKEN -> {
+                        viewModel.showNetWorkBar(true)
+                        viewModel.setNetWorkText(R.string.net_broken)
+                    }
+                    StatusCode.UNLOGIN -> {
+                        viewModel.showNetWorkBar(true)
+                        viewModel.setNetWorkText(R.string.nim_status_unlogin)
+                    }
+                    StatusCode.CONNECTING -> {
+                        viewModel.showNetWorkBar(true)
+                        viewModel.setNetWorkText(R.string.nim_status_connecting)
+                    }
+                    StatusCode.LOGINING -> {
+                        viewModel.showNetWorkBar(true)
+                        viewModel.setNetWorkText(R.string.nim_status_logining)
+                    }
+                    else -> {
+                        viewModel.showNetWorkBar(false)
+                    }
+                }
+            }
+        })
+
+        viewModel.toObservable(NimEvent.OnLienClientEvent::class.java, Observer {
+            val list = it.list
+            if (list.isNullOrEmpty()) {
+                viewModel.showMultiportBar(false)
+            } else {
+                val onlineClient = list[0]
+                viewModel.updateMultiportCommand(createCommand {
+                    startActivity(ActivityMultiport::class.java, arg = ArgMultiport(list))
+                })
+                val logging = R.string.multiport_logging.toStringByResId(requireContext())
+                when (onlineClient.clientType) {
+                    ClientType.Windows, ClientType.MAC -> {
+                        viewModel.setMultiportText(
+                            logging + R.string.computer_version.toStringByResId(requireContext())
+                        )
+                        viewModel.showMultiportBar(true)
+                    }
+                    ClientType.Web -> {
+                        viewModel.setMultiportText(
+                            logging + R.string.web_version.toStringByResId(requireContext())
+                        )
+                        viewModel.showMultiportBar(true)
+                    }
+                    ClientType.iOS, ClientType.Android -> {
+                        viewModel.setMultiportText(
+                            logging + R.string.mobile_version.toStringByResId(requireContext())
+                        )
+                        viewModel.showMultiportBar(true)
+                    }
+                    else -> {
+                        viewModel.showMultiportBar(false)
+                    }
+                }
+            }
+        })
+
     }
 
 }

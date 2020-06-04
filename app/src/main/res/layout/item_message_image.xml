@@ -135,7 +135,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@mipmap/nim_message_failed"
+                android:src="@drawable/nim_icon_warn"
                 app:onClickCommand="@{item.onClickResendCommand}"
                 android:visibility="gone" />
 

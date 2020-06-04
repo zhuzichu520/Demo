@@ -1,11 +1,14 @@
 package com.netease.nim.demo.ui.contact.fragment
 
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentContactBinding
+import com.netease.nim.demo.nim.event.LoginSyncDataStatusObserver
+import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.ui.contact.viewmodel.ItemViewModelContactIndex
 import com.netease.nim.demo.ui.contact.viewmodel.ViewModelContact
 import com.netease.nim.demo.view.QuickIndexBar
@@ -25,7 +28,7 @@ class FragmentContact : FragmentBase<FragmentContactBinding, ViewModelContact, A
 
     override fun initOneData() {
         super.initOneData()
-        viewModel.loadFriends()
+        viewModel.updateFriends()
     }
 
     override fun initListener() {
@@ -60,6 +63,32 @@ class FragmentContact : FragmentBase<FragmentContactBinding, ViewModelContact, A
                 }
             }
         }
+    }
+
+    override fun initViewObservable() {
+        super.initViewObservable()
+
+        //登录同步信息完成后更新列表
+        LoginSyncDataStatusObserver.getInstance()
+            .observeSyncDataCompletedEvent {
+                viewModel.updateFriends()
+            }
+
+        //好友关系发生变化更新列表
+        viewModel.toObservable(NimEvent.OnAddedOrUpdatedFriendsEvent::class.java, Observer {
+            viewModel.updateFriends()
+        })
+
+        //好友删除更新列表
+        viewModel.toObservable(NimEvent.OnDeletedFriendsEvent::class.java, Observer {
+            viewModel.updateFriends()
+        })
+
+        //用户资料发生变化更新列表
+        viewModel.toObservable(NimEvent.OnUserInfoUpdateEvent::class.java, Observer {
+            viewModel.updateFriends()
+        })
+
     }
 
 }

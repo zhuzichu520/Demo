@@ -6,6 +6,7 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ActivityBase
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.login.ActivityLogin
+import com.netease.nim.demo.ui.login.main.arg.ArgLogin
 
 /**
  * desc
@@ -17,12 +18,15 @@ class ActivityMain : ActivityBase() {
 
     companion object {
 
-        private const val TYPE = "TYPE"
+        private const val TYPE = "type"
         private const val TYPE_LOGOUT = 1
 
-        fun logout(context: Context) {
+        private const val LOGOUT_KICKOUT = "logout_kickout"
+
+        fun logout(context: Context, isKickOut: Boolean?=false) {
             val intent = Intent(context, ActivityMain::class.java)
             intent.putExtra(TYPE, TYPE_LOGOUT)
+            intent.putExtra(LOGOUT_KICKOUT, isKickOut)
             context.startActivity(intent)
         }
     }
@@ -31,10 +35,16 @@ class ActivityMain : ActivityBase() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        when (intent?.getIntExtra(TYPE, -1)) {
+        if (intent == null)
+            return
+        when (intent.getIntExtra(TYPE, -1)) {
             TYPE_LOGOUT -> {
                 NimUserStorage.logout()
-                startActivity(ActivityLogin::class.java, isPop = true)
+                startActivity(
+                    ActivityLogin::class.java,
+                    isPop = true,
+                    arg = ArgLogin(intent.getBooleanExtra(LOGOUT_KICKOUT,false))
+                )
             }
         }
     }

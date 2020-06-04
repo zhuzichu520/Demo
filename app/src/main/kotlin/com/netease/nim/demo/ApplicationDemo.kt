@@ -11,6 +11,7 @@ import com.hiwitech.android.shared.global.AppGlobal
 import com.netease.nim.demo.di.DaggerAppComponent
 import com.netease.nim.demo.nim.attachment.NimAttachParser
 import com.netease.nim.demo.nim.config.NimSDKOptionConfig
+import com.netease.nim.demo.nim.event.LoginSyncDataStatusObserver
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.LoginInfo
@@ -60,8 +61,8 @@ class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider {
             // 注册自定义消息附件解析器
             NIMClient.getService(MsgService::class.java)
                 .registerCustomAttachmentParser(NimAttachParser())
+            LoginSyncDataStatusObserver.getInstance().registerLoginSyncDataStatus(true)
         }
-
     }
 
     /**

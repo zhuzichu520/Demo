@@ -12,21 +12,21 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:background="@color/color_background_primary"
-        android:layout_height="68dp">
+        android:layout_height="68dp"
+        android:background="@color/color_background_primary">
 
         <com.hiwitech.android.widget.qmui.QMUIRadiusImageView
             android:id="@+id/header"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:error="@{item.error}"
-            app:placeholder="@{item.placeholder}"
-            app:url="@{item.avatar}"
-            app:qmui_is_circle="true"
             android:layout_marginStart="14dp"
+            app:error="@{item.error}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:placeholder="@{item.placeholder}"
+            app:qmui_is_circle="true"
+            app:url="@{item.avatar}"
             tools:src="@mipmap/ic_launcher" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -55,12 +55,12 @@
             android:layout_marginEnd="50dp"
             android:ellipsize="end"
             android:singleLine="true"
-            app:moonText="@{item.content}"
             android:textColor="@color/color_font_tertiary"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toBottomOf="@+id/name"
+            app:moonText="@{item.content}"
             tools:text="这节课你学到哪里啦这节课你学到哪里啦这节课你学到哪里啦这节课你学到哪里啦这节课你学到哪里啦？" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -79,12 +79,12 @@
         <com.netease.nim.demo.ui.session.view.ViewSessionBadge
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:foreground="@drawable/ripple_light_with_border"
             app:number="@{item.number}"
             app:onClickCommand="@{item.onClickCommand}"
-            android:foreground="@drawable/ripple_light_with_border"
+            app:onDragStateChangedCommamnd="@{item.onDragStateChangedCommamnd}"
             app:onLongClickViewCommand="@{item.onLongClickCommand}"
-            app:onTouchCommmand="@{item.onTouchCommmand}"
-            app:onDragStateChangedCommamnd="@{item.onDragStateChangedCommamnd}" />
+            app:onTouchCommmand="@{item.onTouchCommmand}" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="10dp"
@@ -97,6 +97,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

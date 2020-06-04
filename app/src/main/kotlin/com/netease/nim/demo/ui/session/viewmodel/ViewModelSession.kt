@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.session.viewmodel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -7,8 +8,8 @@ import com.google.common.primitives.Longs
 import com.hiwitech.android.libs.tool.replaceAt
 import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.mvvm.databinding.BindingCommand
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
-import com.hiwitech.android.shared.ext.autoLoading
 import com.hiwitech.android.shared.ext.map
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
@@ -32,10 +33,15 @@ class ViewModelSession @Inject constructor(
     val msgService: MsgService
 ) : ViewModelBase<ArgDefault>() {
 
+
     /**
      * 会话列表的会话数据
      */
     val sessionList = MutableLiveData<List<ItemViewModelSession>>()
+
+    private val itemViewModelNetwork = ItemViewModelNetwork(this)
+
+    private val itemViewModelMultiport = ItemViewModelMultiport(this)
 
     /**
      * 会话列表所有数据
@@ -43,6 +49,8 @@ class ViewModelSession @Inject constructor(
     val items: LiveData<List<Any>> =
         Transformations.map<List<ItemViewModelSession>, List<Any>>(sessionList) { input ->
             val list = ArrayList<Any>()
+            list.add(itemViewModelNetwork)
+            list.add(itemViewModelMultiport)
             list.addAll(input)
             list
         }
@@ -52,6 +60,8 @@ class ViewModelSession @Inject constructor(
      */
     val itemBinding = OnItemBindClass<Any>().apply {
         map<ItemViewModelSession>(BR.item, R.layout.item_session)
+        map<ItemViewModelNetwork>(BR.item, R.layout.item_network)
+        map<ItemViewModelMultiport>(BR.item, R.layout.item_multiport)
     }
 
     /**
@@ -87,7 +97,6 @@ class ViewModelSession @Inject constructor(
      */
     fun loadSessionList() {
         useCaseGetSessionList.execute(Unit)
-            .autoLoading(this)
             .autoDispose(this)
             .subscribe(
                 {
@@ -146,4 +155,25 @@ class ViewModelSession @Inject constructor(
             sessionList.value = it - session
         }
     }
+
+    fun setNetWorkText(@StringRes textId: Int) {
+        itemViewModelNetwork.title.value = textId
+    }
+
+    fun showNetWorkBar(isShown: Boolean) {
+        itemViewModelNetwork.state.value = if (isShown) 0 else 1
+    }
+
+    fun setMultiportText(text: String) {
+        itemViewModelMultiport.title.value = text
+    }
+
+    fun showMultiportBar(isShown: Boolean) {
+        itemViewModelMultiport.state.value = if (isShown) 0 else 1
+    }
+
+    fun updateMultiportCommand(command: BindingCommand<Any>) {
+        itemViewModelMultiport.onClickCommand.value = command
+    }
+
 }

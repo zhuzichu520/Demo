@@ -82,6 +82,22 @@
     <string name="other">其他</string>
     <string name="contact_info">联系人资料</string>
     <string name="logout_info">确定要退出吗？</string>
+    <string name="kickout_info">您的账号在另一个设备登录，您被迫下线。如果这不是您本人的操作，您的密码很可能已经泄露，建议您修改密码。</string>
     <string name="confirm">确认</string>
+
+    <string name="net_broken">当前网络不可用,请检查你的网络设置</string>
+    <string name="nim_status_unlogin">未登录</string>
+    <string name="nim_status_connecting">连接中…</string>
+    <string name="nim_status_logining">登录中…</string>
+
+    <!-- 多端登录 -->
+    <string name="multiport_manager">多端登录管理</string>
+    <string name="multiport_logout">下线</string>
+    <string name="computer_version">云信电脑版</string>
+    <string name="web_version">云信网页版</string>
+    <string name="mobile_version">云信移动版</string>
+    <string name="multiport_logging">正在使用</string>
+    <string name="kickout_notify">下线通知</string>
+    <string name="kickout_content">你的帐号被%1$s踢出下线，请确定帐号信息安全</string>
 
 </resources>

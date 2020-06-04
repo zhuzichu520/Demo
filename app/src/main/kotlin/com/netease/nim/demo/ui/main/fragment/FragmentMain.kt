@@ -16,6 +16,7 @@ import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
 import com.netease.nim.demo.databinding.FragmentMainBinding
+import com.netease.nim.demo.nim.event.LoginSyncDataStatusObserver
 import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.nim.event.NimEventManager
 import com.netease.nim.demo.ui.avchat.ActivityAvchat
@@ -49,6 +50,7 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
     override fun bindVariableId(): Int = BR.viewModel
 
     override fun initView() {
+        observerSyncDataComplete()
         //初始化红点
         val badge = bottom.plusBadge(0)
         badge.setOnDragStateChangedListener { dragState, _, _ ->
@@ -109,5 +111,17 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
             startActivity(ActivityAvchat::class.java, arg = ArgAvchat(it.data))
         })
     }
+
+    private fun observerSyncDataComplete() {
+        val syncCompleted: Boolean = LoginSyncDataStatusObserver.getInstance()
+            .observeSyncDataCompletedEvent {
+                hideLoading()
+            }
+        //如果数据没有同步完成，弹个进度Dialog
+        if (!syncCompleted) {
+            showLoading()
+        }
+    }
+
 
 }

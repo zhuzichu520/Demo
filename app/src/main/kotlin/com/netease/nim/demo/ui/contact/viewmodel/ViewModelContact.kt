@@ -1,7 +1,9 @@
 package com.netease.nim.demo.ui.contact.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.DiffUtil
 import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.shared.ext.diffEquals
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.global.AppGlobal.context
 import com.netease.nim.demo.BR
@@ -31,11 +33,28 @@ class ViewModelContact @Inject constructor(
         map<ItemViewModelContactIndex>(BR.item, R.layout.item_contact_index)
     }
 
+    val diff = object : DiffUtil.ItemCallback<Any>() {
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is ItemViewModelContact && newItem is ItemViewModelContact) {
+                return oldItem.account == newItem.account &&
+                        oldItem.avatar.value == newItem.avatar.value &&
+                        oldItem.title.value == oldItem.title.value
+            }
+            if (oldItem is ItemViewModelContactIndex && newItem is ItemViewModelContactIndex) {
+                return oldItem.letter == newItem.letter
+            }
+            return false
+        }
+
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean =
+            oldItem.diffEquals(newItem)
+    }
+
     val letter = MutableLiveData<String>()
 
     val showLetter = MutableLiveData<Boolean>(false)
 
-    fun loadFriends() {
+    fun updateFriends() {
         useCaseGetFriendInfoList.execute(Unit)
             .map {
                 convertItemViewModel(it)

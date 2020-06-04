@@ -4,6 +4,7 @@ import com.hiwitech.android.shared.ext.createFlowable
 import com.netease.nim.demo.nim.NimRequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
+import com.netease.nimlib.sdk.auth.OnlineClient
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
@@ -72,6 +73,11 @@ interface NimRepository {
      * 获取所有好友用户资料
      */
     fun getFriendInfoList(): Flowable<List<NimUserInfo>>
+
+    /**
+     * 多端踢下线
+     */
+    fun kickOtherOut(client: OnlineClient): Flowable<Void>
 
 }
 
@@ -151,6 +157,12 @@ class NimRepositoryImpl(
         return createFlowable {
             onNext(userService.getUserInfoList(friendService.friendAccounts))
             onComplete()
+        }
+    }
+
+    override fun kickOtherOut(client: OnlineClient): Flowable<Void> {
+        return createFlowable {
+            authService.kickOtherClient(client).setCallback(NimRequestCallback(this))
         }
     }
 

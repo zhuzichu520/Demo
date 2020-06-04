@@ -47,9 +47,7 @@ object NimEventManager {
      */
     private val observeOnlineClient =
         Observer { onlineClients: List<OnlineClient>? ->
-            onlineClients?.let {
-                LiveDataBus.post(NimEvent.OnLienClientEvent(it))
-            }
+            LiveDataBus.post(NimEvent.OnLienClientEvent(onlineClients))
         }
 
     /**
@@ -102,11 +100,9 @@ object NimEventManager {
      */
     private val observerFriendChangedNotify =
         Observer { friendChangedNotify: FriendChangedNotify ->
-            val addedOrUpdatedFriends =
-                friendChangedNotify.addedOrUpdatedFriends
-            val deletedFriends =
-                friendChangedNotify.deletedFriends
-            if (addedOrUpdatedFriends.isNullOrEmpty()) {
+            val addedOrUpdatedFriends = friendChangedNotify.addedOrUpdatedFriends
+            val deletedFriends = friendChangedNotify.deletedFriends
+            if (!addedOrUpdatedFriends.isNullOrEmpty()) {
                 LiveDataBus.post(NimEvent.OnAddedOrUpdatedFriendsEvent(addedOrUpdatedFriends))
             }
             if (!deletedFriends.isNullOrEmpty()) {
@@ -141,6 +137,7 @@ object NimEventManager {
         }
 
     fun registerObserves(register: Boolean) {
+
         NIMClient.getService(MsgServiceObserve::class.java)
             .observeAttachmentProgress(observerAttachmentProgress, register)
 
@@ -173,6 +170,7 @@ object NimEventManager {
             .observeCalleeAckNotification(observeCalleeAckNotification, register)
 
         AVChatManager.getInstance().observeControlNotification(observeControlNotification, register)
+
     }
 
 }

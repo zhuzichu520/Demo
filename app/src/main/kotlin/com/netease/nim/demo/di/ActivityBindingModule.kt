@@ -28,6 +28,8 @@ import com.netease.nim.demo.ui.message.filedownload.ActivityFileDownload
 import com.netease.nim.demo.ui.message.filedownload.module.ModuleFileDownload
 import com.netease.nim.demo.ui.message.main.module.ModuleMessage
 import com.netease.nim.demo.ui.message.more.module.ModuleMore
+import com.netease.nim.demo.ui.multiport.ActivityMultiport
+import com.netease.nim.demo.ui.multiport.module.ModuleMultiport
 import com.netease.nim.demo.ui.permissions.module.ModulePermissions
 import com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowser
 import com.netease.nim.demo.ui.photobrowser.ActivityPhotoBrowserGif
@@ -208,4 +210,12 @@ abstract class ActivityBindingModule {
         ]
     )
     internal abstract fun userInfoActivity(): ActivityUser
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            ModuleMultiport::class
+        ]
+    )
+    internal abstract fun multiportActivity(): ActivityMultiport
 }

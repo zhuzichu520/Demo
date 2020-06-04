@@ -32,7 +32,7 @@ class NimEvent {
     /**
      * 多端登录监听
      */
-    data class OnLienClientEvent(val list: List<OnlineClient>)
+    data class OnLienClientEvent(val list: List<OnlineClient>?)
 
     data class OnMessageStatusEvent(val message: IMMessage)
     data class OnReceiveMessageEvent(val list: List<IMMessage>)
