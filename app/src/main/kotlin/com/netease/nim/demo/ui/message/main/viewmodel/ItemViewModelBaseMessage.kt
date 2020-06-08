@@ -96,9 +96,9 @@ open class ItemViewModelBaseMessage(
      */
     val background = MutableLiveData<Int>().apply {
         value = if (isMine())
-            R.drawable.skin_messages_right_bubble
+            R.drawable.chat_to_bg_selector
         else
-            R.drawable.skin_messages_left_bubble
+            R.drawable.chat_from_bg_selector
     }
 
     /**

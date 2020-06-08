@@ -75,7 +75,9 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
             R.string.me
         )
 
+        content.offscreenPageLimit = titles.size
         content.adapter = DefaultIntFragmentPagerAdapter(childFragmentManager, fragments, titles)
+
         bottom.setupWithViewPager(content)
     }
 

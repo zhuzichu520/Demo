@@ -2,6 +2,8 @@ package com.netease.nim.demo.ui.login.main.fragment
 
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
+import com.hiwitech.android.libs.internal.MainHandler
+import com.hiwitech.android.libs.tool.showKeyboard
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
@@ -24,6 +26,11 @@ class FragmentLogin : FragmentBase<FragmentLoginBinding, ViewModelLogin, ArgLogi
 
     override fun initView() {
         super.initView()
+
+        account.post {
+            account.setSelection(account.length())
+        }
+
         if (arg.isKickOut) {
             val snacker = Snackbar.make(root, R.string.kickout_info, 4000)
             val textView = snacker.view.findViewById<TextView>(R.id.snackbar_text)
@@ -31,6 +38,11 @@ class FragmentLogin : FragmentBase<FragmentLoginBinding, ViewModelLogin, ArgLogi
             snacker.setAction(R.string.confirm) {
 
             }.show()
+        } else {
+            MainHandler.postDelayed(200) {
+                showKeyboard(requireContext(), account)
+            }
         }
+
     }
 }

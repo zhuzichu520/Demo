@@ -1,16 +1,20 @@
 package com.netease.nim.demo.nim.repository
 
+import com.google.common.base.Optional
 import com.hiwitech.android.shared.ext.createFlowable
 import com.netease.nim.demo.nim.NimRequestCallback
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.auth.OnlineClient
 import com.netease.nimlib.sdk.friend.FriendService
+import com.netease.nimlib.sdk.friend.model.Friend
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum
+import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
@@ -42,6 +46,21 @@ interface NimRepository {
      */
     fun getUserInfoById(accid: String): Flowable<NimUserInfo>
 
+
+    /**
+     * 获取最近会话列表
+     */
+    fun getRecentContactList(): Flowable<List<RecentContact>>
+
+    /**
+     * 获取一个最近会话对象
+     * @param contactId 会话id
+     * @param sessionTypeEnum 会话类型
+     */
+    fun getRecentContact(
+        contactId: String,
+        sessionTypeEnum: SessionTypeEnum
+    ): Flowable<Optional<RecentContact>>
 
     /**
      * 获取消息列表
@@ -78,6 +97,11 @@ interface NimRepository {
      * 多端踢下线
      */
     fun kickOtherOut(client: OnlineClient): Flowable<Void>
+
+    /**
+     * 根据账号获取好友对象
+     */
+    fun getFriendByAccount(account: String): Flowable<Friend>
 
 }
 
@@ -118,6 +142,22 @@ class NimRepositoryImpl(
             }
         }.map {
             it[0]
+        }
+    }
+
+    override fun getRecentContactList(): Flowable<List<RecentContact>> {
+        return createFlowable {
+            msgService.queryRecentContacts().setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun getRecentContact(
+        contactId: String,
+        sessionTypeEnum: SessionTypeEnum
+    ): Flowable<Optional<RecentContact>> {
+        return createFlowable {
+            onNext(Optional.fromNullable(msgService.queryRecentContact(contactId, sessionTypeEnum)))
+            onComplete()
         }
     }
 
@@ -163,6 +203,13 @@ class NimRepositoryImpl(
     override fun kickOtherOut(client: OnlineClient): Flowable<Void> {
         return createFlowable {
             authService.kickOtherClient(client).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun getFriendByAccount(account: String): Flowable<Friend> {
+        return createFlowable {
+            onNext(friendService.getFriendByAccount(account))
+            onComplete()
         }
     }
 

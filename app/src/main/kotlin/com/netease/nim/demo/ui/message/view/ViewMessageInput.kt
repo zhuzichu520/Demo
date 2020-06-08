@@ -52,6 +52,11 @@ class ViewMessageInput @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
     /**
+     * 动画时间
+     */
+    private val duration = 150L
+
+    /**
      * 类型
      */
     private var inputType: Int = TYPE_DEFAULT
@@ -189,7 +194,7 @@ class ViewMessageInput @JvmOverloads constructor(
             if (MotionEvent.ACTION_UP == motionEvent.action) {
                 setInputType(TYPE_INPUT)
             }
-            false
+            true
         }
 
         //监听输入框高度变化
@@ -359,7 +364,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - inputHeight)
                         hideView(layout_bottom)
-                        closeKeyboard(center_input)
+                        hideSoftKeyboard()
                         unlockRecyclerViewHeight()
                     }
                 }
@@ -381,7 +386,7 @@ class ViewMessageInput @JvmOverloads constructor(
                         lockRecyclerViewHeight(contentViewHeight - emojiHeight - inputHeight)
                         layout_bottom.layoutParams.height = emojiHeight
                         showView(layout_bottom)
-                        closeKeyboard(center_input)
+                        hideSoftKeyboard()
                         replaceFragment(fragmentEmoji)
                         unlockRecyclerViewHeight()
                     }
@@ -398,7 +403,7 @@ class ViewMessageInput @JvmOverloads constructor(
                         lockRecyclerViewHeight(contentViewHeight - moreHeight - inputHeight)
                         layout_bottom.layoutParams.height = moreHeight
                         showView(layout_bottom)
-                        closeKeyboard(center_input)
+                        hideSoftKeyboard()
                         replaceFragment(fragmentMore)
                         unlockRecyclerViewHeight()
                     }
@@ -409,7 +414,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - inputHeight)
                         hideView(layout_bottom)
-                        closeKeyboard(center_input)
+                        hideSoftKeyboard()
                         unlockRecyclerViewHeight()
                     }
                 }
@@ -436,20 +441,6 @@ class ViewMessageInput @JvmOverloads constructor(
         }
         transaction.commit()
         this.currentFragment = fragment
-    }
-
-    /**
-     * 弹出软键盘
-     */
-    private fun showSoftKeyboard() {
-        showKeyboard(context, center_input)
-        MainHandler.postDelayed(350) {
-            center_input.apply {
-                isFocusable = true
-                isFocusableInTouchMode = true
-                requestFocus()
-            }
-        }
     }
 
     /**
@@ -492,6 +483,32 @@ class ViewMessageInput @JvmOverloads constructor(
         }
     }
 
+    private fun hideSoftKeyboard() {
+        closeKeyboard(center_input)
+    }
+
+    /**
+     * 弹出软键盘
+     */
+    private fun showSoftKeyboard() {
+        center_input.apply {
+            isFocusable = true
+            isFocusableInTouchMode = true
+            requestFocus()
+        }
+        MainHandler.postDelayed(duration) {
+            showKeyboard(context, center_input)
+        }
+    }
+
+    private fun showBottom(isShown: Boolean) {
+        val floatArray = if (isShown) floatArrayOf(0f) else floatArrayOf(0f)
+        alpha(layout_bottom, duration, f = *floatArray)
+        MainHandler.postDelayed(duration) {
+
+        }
+    }
+
     /**
      * 锁定RecyclerView的高度
      */
@@ -504,7 +521,7 @@ class ViewMessageInput @JvmOverloads constructor(
             recyclerView.layoutParams = layoutParams
             scrollToBottom()
         }
-        valueAnimator.duration = 200
+        valueAnimator.duration = duration
         valueAnimator.start()
     }
 
@@ -516,7 +533,7 @@ class ViewMessageInput @JvmOverloads constructor(
      * 释放锁定的RecyclerView的高度
      */
     private fun unlockRecyclerViewHeight() {
-        MainHandler.postDelayed(250) {
+        MainHandler.postDelayed(200) {
             val layoutParams = recyclerView.layoutParams as LinearLayout.LayoutParams
             layoutParams.weight = 1f
         }

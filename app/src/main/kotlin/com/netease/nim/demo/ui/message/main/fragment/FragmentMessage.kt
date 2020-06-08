@@ -16,6 +16,7 @@ import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hiwitech.android.libs.internal.MainHandler
+import com.hiwitech.android.libs.tool.alpha
 import com.hiwitech.android.libs.tool.getFileByPath
 import com.hiwitech.android.libs.tool.md5
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
@@ -235,6 +236,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          */
         viewModel.onScrollBottomEvent.observe(viewLifecycleOwner, Observer {
             scrollToBottom()
+            alpha(recycler, 300, f = *floatArrayOf(0f, 1f))
         })
 
         /**

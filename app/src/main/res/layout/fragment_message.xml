@@ -42,6 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:alpha="0"
                     android:background="@color/color_background_secondary"
                     android:overScrollMode="never"
                     app:itemBinding="@{viewModel.itemBinding}"
@@ -53,7 +54,8 @@
                 <com.netease.nim.demo.ui.message.view.ViewMessageInput
                     android:id="@+id/message_input"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:visibility="gone" />
 
             </LinearLayout>
 

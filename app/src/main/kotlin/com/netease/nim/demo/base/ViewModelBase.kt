@@ -24,9 +24,17 @@ abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>() {
 
     val statusBarHeight = MutableLiveData<Int>(getStatusBarHeight(context = context))
 
+    /**
+     * 注册事件 重复注册 新的事件会覆盖旧的事件
+     */
     fun <T : Any> toObservable(eventType: Class<T>, observer: Observer<T>) {
-        observers[eventType.toCast()] = observer.toCast()
+        val key: Class<Any> = eventType.toCast()
+        val value = observers[key]
+        if (value != null) {
+            LiveEventBus.get(eventType.simpleName, eventType).removeObserver(value.toCast())
+        }
         LiveEventBus.get(eventType.simpleName, eventType).observeForever(observer)
+        observers[key] = observer.toCast()
     }
 
 
@@ -41,6 +49,7 @@ abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>() {
 
     override fun onCleared() {
         super.onCleared()
+        //清理当前所有事件
         observers.forEach {
             LiveEventBus.get(it.key.simpleName, it.key).removeObserver(it.value)
         }

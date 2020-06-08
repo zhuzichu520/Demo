@@ -11,7 +11,7 @@ import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
 
 /**
- * desc 个人中心ViewModel
+ * desc
  * author: 朱子楚
  * time: 2020/4/5 7:48 PM
  * since: v 1.0.0

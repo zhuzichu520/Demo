@@ -100,4 +100,11 @@
     <string name="kickout_notify">下线通知</string>
     <string name="kickout_content">你的帐号被%1$s踢出下线，请确定帐号信息安全</string>
 
+    <string name="alias">备注名</string>
+    <string name="no_setting">未设置</string>
+
+    <string name="black_list">黑名单</string>
+    <string name="message_sticky">消息置顶</string>
+    <string name="message_notice">消息提醒</string>
+
 </resources>
