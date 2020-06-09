@@ -136,6 +136,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
 
     override fun initView() {
         super.initView()
+        //todo 优化AudioRecorder
         audioRecorder = AudioRecorder(context, RecordType.AAC, 60, object : IAudioRecordCallback {
             override fun onRecordSuccess(
                 audioFile: File,
@@ -236,7 +237,7 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
          */
         viewModel.onScrollBottomEvent.observe(viewLifecycleOwner, Observer {
             scrollToBottom()
-            alpha(recycler, 300, f = *floatArrayOf(0f, 1f))
+            alpha(layout_content, 300, f = *floatArrayOf(0f, 1f))
         })
 
         /**
@@ -484,6 +485,10 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             itemViewModel.progress.value = String.format(Locale.US, "%d%%", (percent * 100).toInt())
         })
 
+        viewModel.toObservable(NimEvent.OnAudioPlayEvent::class.java, Observer {
+            it.itemViewModelAudioMessage.updateAudioIcon(it.type)
+        })
+
     }
 
     /**
@@ -691,6 +696,8 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
     override fun onDestroy() {
         super.onDestroy()
         releaseRecordAnima()
+        audioRecorder.destroyAudioRecorder()
+        viewModel.stopAudioPlay()
     }
 
     /**

@@ -205,6 +205,15 @@ class ViewModelMessage @Inject constructor(
      */
     fun addMessage(list: List<IMMessage>, isEvent: Boolean) {
         val data = handleMessageList(list)
+        addItemViewModel(data, isEvent)
+    }
+
+    /**
+     * 添加新消息
+     * @param data itemViewModel集合
+     * @param isEvent 是否开启添加完成事件
+     */
+    fun addItemViewModel(data: List<ItemViewModelBaseMessage>, isEvent: Boolean) {
         data.forEach { item ->
             val index = messageList.indexOf(item)
             if (index != -1) {
@@ -309,6 +318,13 @@ class ViewModelMessage @Inject constructor(
             return null
         }
         return messageList[index].toCast()
+    }
+
+    /**
+     * 停止语音播放
+     */
+    fun stopAudioPlay() {
+        nimAudioManager.stopAudio()
     }
 
 }

@@ -35,6 +35,7 @@
                 android:id="@+id/layout_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:alpha="0"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -42,7 +43,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:alpha="0"
                     android:background="@color/color_background_secondary"
                     android:overScrollMode="never"
                     app:itemBinding="@{viewModel.itemBinding}"

@@ -363,7 +363,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     hideView(start_keyboard, center_keyboard, center_audio)
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - inputHeight)
-                        hideView(layout_bottom)
+                        showBottom(false)
                         hideSoftKeyboard()
                         unlockRecyclerViewHeight()
                     }
@@ -373,7 +373,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     showView(start_voice, center_emoji, center_input)
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - getSoftKeyboardHeightLocalValue() - inputHeight)
-                        hideView(layout_bottom)
+                        showBottom(false)
                         showSoftKeyboard()
                         unlockRecyclerViewHeight()
                     }
@@ -385,7 +385,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - emojiHeight - inputHeight)
                         layout_bottom.layoutParams.height = emojiHeight
-                        showView(layout_bottom)
+                        showBottom(true)
                         hideSoftKeyboard()
                         replaceFragment(fragmentEmoji)
                         unlockRecyclerViewHeight()
@@ -402,7 +402,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - moreHeight - inputHeight)
                         layout_bottom.layoutParams.height = moreHeight
-                        showView(layout_bottom)
+                        showBottom(true)
                         hideSoftKeyboard()
                         replaceFragment(fragmentMore)
                         unlockRecyclerViewHeight()
@@ -413,7 +413,7 @@ class ViewMessageInput @JvmOverloads constructor(
                     hideView(start_voice, center_keyboard, center_input)
                     layout_input.post {
                         lockRecyclerViewHeight(contentViewHeight - inputHeight)
-                        hideView(layout_bottom)
+                        showBottom(false)
                         hideSoftKeyboard()
                         unlockRecyclerViewHeight()
                     }
@@ -502,10 +502,14 @@ class ViewMessageInput @JvmOverloads constructor(
     }
 
     private fun showBottom(isShown: Boolean) {
-        val floatArray = if (isShown) floatArrayOf(0f) else floatArrayOf(0f)
+        val floatArray = if (isShown) floatArrayOf(0f, 1f) else floatArrayOf(1f, 0f)
         alpha(layout_bottom, duration, f = *floatArray)
         MainHandler.postDelayed(duration) {
-
+            if (isShown) {
+                showView(layout_bottom)
+            } else {
+                hideView(layout_bottom)
+            }
         }
     }
 

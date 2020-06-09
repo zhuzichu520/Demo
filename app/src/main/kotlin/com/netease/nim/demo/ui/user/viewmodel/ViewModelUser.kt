@@ -67,7 +67,7 @@ class ViewModelUser @Inject constructor(
                     ItemViewModelProfileEdit(this, R.string.alias, alias),
                     ItemViewModelUserSwitch(this, R.string.black_list, isBlack),
                     ItemViewModelUserSwitch(this, R.string.message_notice, isNotice),
-                    ItemViewModelUserSwitch(this, R.string.message, isSticky)
+                    ItemViewModelUserSwitch(this, R.string.message_sticky, isSticky)
                 )
             }
         ).autoLoading(this).autoDispose(this).subscribe(

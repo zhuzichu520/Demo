@@ -1,6 +1,7 @@
 package com.hiwitech.android.shared.databinding.imageview
 
 import android.graphics.Bitmap
+import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.ColorInt
@@ -69,6 +70,11 @@ fun bindImageViewSrcResource(
 ) {
     resId?.let {
         imageView.setImageResource(resId)
+        (imageView.drawable as? AnimationDrawable)?.let {animationDrawable ->
+            imageView.post {
+                animationDrawable.start()
+            }
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.netease.nim.demo.nim.event
 
+import com.netease.nim.demo.ui.message.main.viewmodel.ItemViewModelAudioMessage
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.OnlineClient
 import com.netease.nimlib.sdk.avchat.model.AVChatCalleeAckEvent
@@ -45,4 +46,9 @@ class NimEvent {
     data class OnHangUpNotificationEvent(val event: AVChatCommonEvent)
     data class OnCalleeAckNotificationEvent(val event: AVChatCalleeAckEvent)
     data class OnControlNotificationEvent(val event: AVChatControlEvent)
+
+    data class OnAudioPlayEvent(
+        val itemViewModelAudioMessage: ItemViewModelAudioMessage,
+        val type: Int
+    )
 }
