@@ -1,8 +1,9 @@
 package com.netease.nim.demo.ui.profile.fragment
 
+import android.view.View
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.hiwitech.android.mvvm.base.ArgDefault
+import com.hiwitech.android.shared.ext.showSnackbar
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
@@ -36,10 +37,14 @@ class FragmentProfile : FragmentBase<FragmentProfileBinding, ViewModelProfile, A
     }
 
     private fun showSnackbar() {
-        Snackbar.make(root, R.string.logout_info, 1000)
-            .setAction(R.string.confirm) {
+        root.showSnackbar(
+            resId = R.string.logout_info,
+            duration = 3000,
+            actionId = R.string.confirm,
+            onClickListener = View.OnClickListener {
                 ActivityMain.logout(requireActivity())
-            }.show()
+            }
+        )
     }
 
 }

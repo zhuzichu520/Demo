@@ -3,6 +3,7 @@
     <string name="retry">Retry</string>
     <string name="no_more_data">No more data</string>
     <string name="loading_finish">Loading finish</string>
+    <string name="ok">Ok</string>
 
     <string name="error_activity_error_occurred_explanation">An unexpected error occurred.\nSorry for the inconvenience.</string>
     <string name="error_activity_restart_app">Restart app</string>

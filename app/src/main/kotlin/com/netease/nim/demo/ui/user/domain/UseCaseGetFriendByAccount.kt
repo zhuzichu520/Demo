@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.user.domain
 
+import com.google.common.base.Optional
 import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
@@ -16,9 +17,9 @@ import javax.inject.Inject
  */
 class UseCaseGetFriendByAccount @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<String, Flowable<Friend>>() {
+) : UseCase<String, Flowable<Optional<Friend>>>() {
 
-    override fun execute(parameters: String): Flowable<Friend> {
+    override fun execute(parameters: String): Flowable<Optional<Friend>> {
         return nimRepository.getFriendByAccount(
             parameters
         ).bindToSchedulers().bindToException()

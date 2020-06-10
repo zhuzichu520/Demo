@@ -1,9 +1,8 @@
 package com.netease.nim.demo.ui.login.main.fragment
 
-import android.widget.TextView
-import com.google.android.material.snackbar.Snackbar
 import com.hiwitech.android.libs.internal.MainHandler
 import com.hiwitech.android.libs.tool.showKeyboard
+import com.hiwitech.android.shared.ext.showSnackbar
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
@@ -32,12 +31,12 @@ class FragmentLogin : FragmentBase<FragmentLoginBinding, ViewModelLogin, ArgLogi
         }
 
         if (arg.isKickOut) {
-            val snacker = Snackbar.make(root, R.string.kickout_info, 4000)
-            val textView = snacker.view.findViewById<TextView>(R.id.snackbar_text)
-            textView.maxLines = 3
-            snacker.setAction(R.string.confirm) {
-
-            }.show()
+            root.showSnackbar(
+                resId = R.string.kickout_info,
+                duration = 4000,
+                maxLines = 3,
+                actionId = R.string.confirm
+            )
         } else {
             MainHandler.postDelayed(200) {
                 showKeyboard(requireContext(), account)

@@ -7,6 +7,8 @@ import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.auth.OnlineClient
 import com.netease.nimlib.sdk.friend.FriendService
+import com.netease.nimlib.sdk.friend.constant.VerifyType
+import com.netease.nimlib.sdk.friend.model.AddFriendData
 import com.netease.nimlib.sdk.friend.model.Friend
 import com.netease.nimlib.sdk.msg.MessageBuilder
 import com.netease.nimlib.sdk.msg.MsgService
@@ -101,8 +103,17 @@ interface NimRepository {
     /**
      * 根据账号获取好友对象
      */
-    fun getFriendByAccount(account: String): Flowable<Friend>
+    fun getFriendByAccount(account: String): Flowable<Optional<Friend>>
 
+    /**
+     * 根据账号删除好友
+     */
+    fun deleteFriend(account: String): Flowable<Void>
+
+    /**
+     * 根据账号添加好友
+     */
+    fun addFriend(account: String, verifyType: VerifyType, msg: String?): Flowable<Void>
 }
 
 class NimRepositoryImpl(
@@ -206,10 +217,25 @@ class NimRepositoryImpl(
         }
     }
 
-    override fun getFriendByAccount(account: String): Flowable<Friend> {
+    override fun getFriendByAccount(account: String): Flowable<Optional<Friend>> {
         return createFlowable {
-            onNext(friendService.getFriendByAccount(account))
+            onNext(Optional.fromNullable(friendService.getFriendByAccount(account)))
             onComplete()
+        }
+    }
+
+    override fun deleteFriend(account: String): Flowable<Void> {
+        return createFlowable {
+            friendService.deleteFriend(account).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun addFriend(
+        account: String, verifyType: VerifyType, msg: String?
+    ): Flowable<Void> {
+        return createFlowable {
+            friendService.addFriend(AddFriendData(account, VerifyType.DIRECT_ADD, msg))
+                .setCallback(NimRequestCallback(this))
         }
     }
 

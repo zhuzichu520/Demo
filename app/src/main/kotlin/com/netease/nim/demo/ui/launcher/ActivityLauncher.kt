@@ -40,14 +40,13 @@ class ActivityLauncher : ActivityBase() {
         }.bindToSchedulers()
             .autoDispose(this)
             .subscribe {
-                "初始化总耗时:".plus(it).toast()
             }
     }
 
     override fun finish() {
         super.finish()
         overridePendingTransition(
-            R.anim.no_anim,
+            R.anim.fade_in,
             R.anim.no_anim
         )
     }

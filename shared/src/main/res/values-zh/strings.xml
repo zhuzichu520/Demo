@@ -4,6 +4,7 @@
     <string name="retry">重试</string>
     <string name="no_more_data">没有更多数据</string>
     <string name="loading_finish">加载完成</string>
+    <string name="ok">确认</string>
 
     <string name="error_activity_error_occurred_explanation">发生意外错误。\n不便之处，敬请原谅。</string>
     <string name="error_activity_restart_app">重启应用</string>

@@ -2,7 +2,6 @@ package com.hiwitech.android.shared.ext
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
@@ -10,8 +9,10 @@ import android.view.*
 import android.view.View.*
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.forEachIndexed
@@ -21,8 +22,10 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.hiwitech.android.libs.tool.showKeyboard
 import com.hiwitech.android.libs.tool.toCast
+import com.hiwitech.android.shared.R
 import com.hiwitech.android.shared.global.AppGlobal.context
 import com.hiwitech.android.shared.tools.MainExecutor
 import com.hiwitech.android.widget.badge.Badge
@@ -225,4 +228,19 @@ fun Context.mainExecutor(): Executor = if (Build.VERSION.SDK_INT >= Build.VERSIO
     mainExecutor
 } else {
     MainExecutor()
+}
+
+fun View.showSnackbar(
+    @StringRes resId: Int,
+    duration: Int? = null,
+    maxLines: Int? = null,
+    @StringRes actionId: Int? = null,
+    onClickListener: OnClickListener? = null
+) {
+    val snacker = Snackbar.make(this, resId, duration ?: 3000)
+    val textView = snacker.view.findViewById<TextView>(R.id.snackbar_text)
+    textView.maxLines = maxLines ?: 3
+    snacker.setAction(actionId ?: R.string.ok, onClickListener ?: OnClickListener {
+
+    }).show()
 }
