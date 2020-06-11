@@ -111,4 +111,7 @@
     <string name="delete_friend">删除好友</string>
     <string name="add_friend">添加好友</string>
     <string name="delete_friend_info">删除好友后，将同时解除双方的好友关系，确定要删除该好友吗?</string>
+
+    <string name="alias_info">请输入备注名</string>
+
 </resources>

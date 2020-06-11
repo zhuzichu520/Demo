@@ -2,12 +2,15 @@ package com.netease.nim.demo.ui.user.fragment
 
 import android.view.View
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.hiwitech.android.shared.ext.showSnackbar
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentUserBinding
 import com.netease.nim.demo.nim.event.NimEvent
+import com.netease.nim.demo.ui.profile.viewmodel.ItemViewModelProfileEdit
 import com.netease.nim.demo.ui.user.arg.ArgUser
 import com.netease.nim.demo.ui.user.viewmodel.ViewModelUser
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -51,7 +54,28 @@ class FragmentUser : FragmentBase<FragmentUserBinding, ViewModelUser, ArgUser>()
             viewModel.updateUserInfo()
         })
 
+        viewModel.onClickAliasEvent.observe(viewLifecycleOwner, Observer {
+            showAliasDialog(it)
+        })
+
     }
+
+    /**
+     * 编辑别名
+     */
+    private fun showAliasDialog(itemViewModel: ItemViewModelProfileEdit) {
+        MaterialDialog(requireContext()).show {
+            title(res = R.string.alias_info)
+            input(maxLength = 8, prefill = itemViewModel.text ?: "") { _, text ->
+                viewModel.updateAlias(text.toString()) {
+                    itemViewModel.content.value = it
+                }
+            }.negativeButton(res = R.string.cancel) {
+
+            }
+        }
+    }
+
 
     private fun showSnackbar() {
         root.showSnackbar(

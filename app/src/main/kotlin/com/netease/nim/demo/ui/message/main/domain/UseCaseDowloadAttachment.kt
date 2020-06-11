@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.message.main.domain
 
+import com.google.common.base.Optional
 import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
@@ -16,9 +17,9 @@ import javax.inject.Inject
  */
 class UseCaseDowloadAttachment @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<UseCaseDowloadAttachment.Parameters, Flowable<Void>>() {
+) : UseCase<UseCaseDowloadAttachment.Parameters, Flowable<Optional<Void>>>() {
 
-    override fun execute(parameters: Parameters): Flowable<Void> {
+    override fun execute(parameters: Parameters): Flowable<Optional<Void>> {
         return nimRepository.downloadAttachment(
             parameters.message,
             parameters.thumb

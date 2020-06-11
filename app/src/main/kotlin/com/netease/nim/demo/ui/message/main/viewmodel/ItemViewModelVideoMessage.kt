@@ -7,7 +7,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.ActivityNavigator
 import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.createTypeCommand
@@ -102,7 +101,7 @@ open class ItemViewModelVideoMessage(
                     )
                 startActivity(
                     ActivityPhotoBrowser::class.java,
-                    arg = ArgPhotoBrowser(message, it),
+                    arg = ArgPhotoBrowser(message, it.get()),
                     options = optionsCompat.toBundle()
                 )
             }

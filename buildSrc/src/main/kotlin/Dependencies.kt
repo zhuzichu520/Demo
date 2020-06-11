@@ -88,6 +88,8 @@ object Versions {
     const val AMAP = "latest.integration"
 
     const val TINYPINYIN = "2.0.3"
+
+    const val DIALOG = "3.3.0"
 }
 
 /**
@@ -261,6 +263,12 @@ object Libs {
     const val AGENTWEB_DOWNLOADER = "com.download.library:Downloader:${Versions.AGENTWEB}"
 
     const val RECYCLICAL = "com.afollestad:recyclical:${Versions.RECYCLICAL}"
+
+
+    const val DIALOG_CORE = "com.afollestad.material-dialogs:core:${Versions.DIALOG}"
+    const val DIALOG_INPUT = "com.afollestad.material-dialogs:input:${Versions.DIALOG}"
+    const val DIALOG_DATETIME = "com.afollestad.material-dialogs:datetime:${Versions.DIALOG}"
+    const val DIALOG_LIFECYCLE = "com.afollestad.material-dialogs:lifecycle:${Versions.DIALOG}"
 
     const val TINYPINYIN = "com.github.promeg:tinypinyin:${Versions.TINYPINYIN}"
 }

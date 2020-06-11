@@ -63,6 +63,13 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
     override fun initViewObservable() {
         super.initViewObservable()
 
+        //用户资料发生变化更新列表
+        viewModel.toObservable(NimEvent.OnAddedOrUpdatedFriendsEvent::class.java, Observer {
+            viewModel.refresh(it.list.map { friend ->
+                friend.account
+            })
+        })
+
         viewModel.sessionList.observe(viewLifecycleOwner, Observer {
             var number = 0
             it.forEach { item ->
@@ -115,7 +122,7 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
                         viewModel.setNetWorkText(R.string.net_broken)
                     }
                     StatusCode.UNLOGIN -> {
-                        viewModel.showNetWorkBar(true)
+                        viewModel.showNetWorkBar(false)
                         viewModel.setNetWorkText(R.string.nim_status_unlogin)
                     }
                     StatusCode.CONNECTING -> {
@@ -123,7 +130,7 @@ class FragmentSession : FragmentBase<FragmentSessionBinding, ViewModelSession, A
                         viewModel.setNetWorkText(R.string.nim_status_connecting)
                     }
                     StatusCode.LOGINING -> {
-                        viewModel.showNetWorkBar(true)
+                        viewModel.showNetWorkBar(false)
                         viewModel.setNetWorkText(R.string.nim_status_logining)
                     }
                     else -> {

@@ -136,7 +136,7 @@ class ViewModelMessage @Inject constructor(
             .autoDispose(this)
             .subscribe(
                 {
-                    title.value = it.name
+                    title.value = it.get().name
                 },
                 {
                     handleThrowable(it)
@@ -184,7 +184,7 @@ class ViewModelMessage @Inject constructor(
             .autoDispose(this)
             .subscribe(
                 {
-                    val list = handleMessageList(it)
+                    val list = handleMessageList(it.get())
                     pageHelper.add(list, true)
                     if (true == isFirst) {
                         onScrollBottomEvent.call()

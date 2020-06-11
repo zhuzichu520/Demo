@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.login.main.domain
 
+import com.google.common.base.Optional
 import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
@@ -7,6 +8,7 @@ import com.netease.nim.demo.nim.repository.NimRepository
 import com.netease.nimlib.sdk.auth.LoginInfo
 import io.reactivex.Flowable
 import javax.inject.Inject
+
 
 /**
  * desc 登录UseCase
@@ -16,9 +18,9 @@ import javax.inject.Inject
  */
 class UseCaseLogin @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<LoginInfo, Flowable<LoginInfo>>() {
+) : UseCase<LoginInfo, Flowable<Optional<LoginInfo>>>() {
 
-    override fun execute(parameters: LoginInfo): Flowable<LoginInfo> {
+    override fun execute(parameters: LoginInfo): Flowable<Optional<LoginInfo>> {
         return nimRepository.login(parameters).bindToSchedulers().bindToException()
     }
 

@@ -29,6 +29,8 @@ class ViewModelProfile @Inject constructor(
 
     val onLogOutEvent = SingleLiveEvent<Unit>()
 
+    val onClickEditEvent = SingleLiveEvent<ItemViewModelProfileEdit>()
+
     /**
      * 多布局注册
      */
@@ -43,11 +45,17 @@ class ViewModelProfile @Inject constructor(
         useCaseGetUserInfo.execute(NimUserStorage.account.toString())
             .autoDispose(this)
             .subscribe {
+                val userInfo = it.orNull() ?: return@subscribe
                 items.value = listOf(
-                    ItemViewModelProfileHeader(this, it.avatar),
-                    ItemViewModelProfileEdit(this, R.string.nickname, it.name),
+                    ItemViewModelProfileHeader(this, userInfo.avatar),
                     ItemViewModelProfileEdit(
-                        this, R.string.gender, when (it.genderEnum) {
+                        this,
+                        R.string.nickname,
+                        userInfo.name,
+                        onClickEditEvent
+                    ),
+                    ItemViewModelProfileEdit(
+                        this, R.string.gender, when (userInfo.genderEnum) {
                             GenderEnum.MALE -> {
                                 R.string.male.toStringByResId()
                             }
@@ -56,11 +64,32 @@ class ViewModelProfile @Inject constructor(
                             }
                             else -> R.string.other.toStringByResId()
                         }
+                        , onClickEditEvent
                     ),
-                    ItemViewModelProfileEdit(this, R.string.birthday, it.birthday),
-                    ItemViewModelProfileEdit(this, R.string.phone, it.mobile),
-                    ItemViewModelProfileEdit(this, R.string.email, it.email),
-                    ItemViewModelProfileEdit(this, R.string.signature, it.signature),
+                    ItemViewModelProfileEdit(
+                        this,
+                        R.string.birthday,
+                        userInfo.birthday,
+                        onClickEditEvent
+                    ),
+                    ItemViewModelProfileEdit(
+                        this,
+                        R.string.phone,
+                        userInfo.mobile,
+                        onClickEditEvent
+                    ),
+                    ItemViewModelProfileEdit(
+                        this,
+                        R.string.email,
+                        userInfo.email,
+                        onClickEditEvent
+                    ),
+                    ItemViewModelProfileEdit(
+                        this,
+                        R.string.signature,
+                        userInfo.signature,
+                        onClickEditEvent
+                    ),
                     ItemViewModelProfileLogout(this)
                 )
             }

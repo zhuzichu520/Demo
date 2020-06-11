@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.session.domain
 
+import com.google.common.base.Optional
 import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
@@ -16,11 +17,10 @@ import javax.inject.Inject
  */
 class UseCaseGetSessionList @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<Unit, Flowable<List<RecentContact>>>() {
+) : UseCase<Unit, Flowable<Optional<List<RecentContact>>>>() {
 
-    override fun execute(parameters: Unit): Flowable<List<RecentContact>> {
-
+    override fun execute(parameters: Unit): Flowable<Optional<List<RecentContact>>> {
         return nimRepository.getRecentContactList().bindToSchedulers().bindToException()
-
     }
+
 }

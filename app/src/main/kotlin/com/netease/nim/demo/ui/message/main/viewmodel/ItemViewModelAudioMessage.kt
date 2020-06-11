@@ -14,6 +14,7 @@ import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.message.main.domain.UseCaseDowloadAttachment
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment
 import com.netease.nimlib.sdk.msg.model.IMMessage
+import com.uber.autodispose.autoDispose
 
 /**
  * desc
@@ -91,5 +92,11 @@ class ItemViewModelAudioMessage(
             }
         }
     }
+
+    val onClickAttachFailedCommand = createCommand {
+        useCaseDowloadAttachment.execute(UseCaseDowloadAttachment.Parameters(message, true))
+            .autoDispose(viewModel).subscribe { }
+    }
+
 
 }

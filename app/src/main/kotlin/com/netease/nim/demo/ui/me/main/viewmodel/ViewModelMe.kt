@@ -68,9 +68,11 @@ class ViewModelMe @Inject constructor(
     fun loadUserInfo() {
         useCaseGetUserInfo.execute(NimUserStorage.account.toString()).autoDispose(this)
             .subscribe {
-                avatar.value = it.avatar
-                nickname.value = it.name
-                account.value = "账号：".plus(it.account)
+                it.orNull()?.let { userInfo ->
+                    avatar.value = userInfo.avatar
+                    nickname.value = userInfo.name
+                    account.value = "账号：".plus(userInfo.account)
+                }
             }
     }
 

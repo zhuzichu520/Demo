@@ -1,5 +1,6 @@
 package com.netease.nim.demo.nim
 
+import com.google.common.base.Optional
 import com.hiwitech.android.shared.ext.logi
 import com.hiwitech.android.shared.http.exception.NimError
 import com.hiwitech.android.shared.http.exception.NimThrowable
@@ -13,16 +14,12 @@ import io.reactivex.FlowableEmitter
  * since: v 1.0.0
  */
 class NimRequestCallback<T>(
-    private val emitter: FlowableEmitter<T>
+    private val emitter: FlowableEmitter<Optional<T>>
 ) : RequestCallback<T> {
 
     override fun onSuccess(any: T?) {
-        if (any == null) {
-            emitter.onComplete()
-        } else {
-            emitter.onNext(any)
-            emitter.onComplete()
-        }
+        emitter.onNext(Optional.fromNullable(any))
+        emitter.onComplete()
     }
 
     override fun onFailed(code: Int) {

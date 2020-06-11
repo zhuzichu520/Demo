@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.common.primitives.Longs
 import com.hiwitech.android.libs.tool.replaceAt
-import com.hiwitech.android.libs.tool.toCast
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.mvvm.databinding.BindingCommand
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
@@ -14,7 +13,7 @@ import com.hiwitech.android.shared.ext.map
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
-import com.netease.nim.demo.ui.session.Constants.SESSION_ON_TOP
+import com.netease.nim.demo.nim.tools.ToolSticky
 import com.netease.nim.demo.ui.session.domain.UseCaseGetSessionList
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.model.RecentContact
@@ -69,19 +68,12 @@ class ViewModelSession @Inject constructor(
      */
     val onLongClickItemEvent = SingleLiveEvent<ItemViewModelSession>()
 
-//    val diff = itemDiffOf<ItemViewModelSession> { oldItem, newItem ->
-//        oldItem.contactId == newItem.contactId && oldItem.messageId == newItem.messageId
-//                && oldItem.number.value == newItem.number.value
-//    }
-
     /**
      * 比较器
      */
     private val comparator: Comparator<ItemViewModelSession> = Comparator { left, right ->
-        val mapRight = right.contact.extension ?: mapOf()
-        val mapLeft = left.contact.extension ?: mapOf()
-        val longRight: Long = (mapRight[SESSION_ON_TOP] ?: Long.MIN_VALUE).toCast()
-        val longLeft: Long = (mapLeft[SESSION_ON_TOP] ?: Long.MIN_VALUE).toCast()
+        val longRight: Long = ToolSticky.getStickyLong(right.contact)
+        val longLeft: Long = ToolSticky.getStickyLong(left.contact)
         //先比较置顶 后 比较时间
         if (longLeft != Long.MIN_VALUE && longRight == Long.MIN_VALUE) {
             -1
@@ -100,7 +92,7 @@ class ViewModelSession @Inject constructor(
             .autoDispose(this)
             .subscribe(
                 {
-                    parseSessionList(it)
+                    parseSessionList(it.get())
                 },
                 {
                     handleThrowable(it)
@@ -113,34 +105,19 @@ class ViewModelSession @Inject constructor(
      * @param list 最近会话数据
      */
     fun parseSessionList(list: List<RecentContact>) {
-        sessionList.value?.apply {
-            var data = this
-            list.forEach { item ->
-                val session = ItemViewModelSession(this@ViewModelSession, item)
-                val position = data.indexOf(session)
-                data = if (position == -1) {
-                    data.plus(session)
-                } else {
-                    data.replaceAt(position) {
-                        it.copy(viewModel = this@ViewModelSession, contact = item)
-                    }
+        var data = sessionList.value ?: listOf()
+        list.forEach { item ->
+            val session = ItemViewModelSession(this, item)
+            val position = data.indexOf(session)
+            data = if (position == -1) {
+                data + session
+            } else {
+                data.replaceAt(position) {
+                    session
                 }
             }
-            sessionList.value = data.sortedWith(comparator)
-        } ?: apply {
-            sessionList.value = list.map { item ->
-                ItemViewModelSession(this@ViewModelSession, item)
-            }.sortedWith(comparator)
         }
-    }
-
-    /**
-     * 重新刷新会话列表
-     */
-    fun refresh() {
-        sessionList.value?.let {
-            sessionList.value = it.sortedWith(comparator)
-        }
+        sessionList.value = data.sortedWith(comparator)
     }
 
     /**
@@ -174,6 +151,28 @@ class ViewModelSession @Inject constructor(
 
     fun updateMultiportCommand(command: BindingCommand<Any>) {
         itemViewModelMultiport.onClickCommand.value = command
+    }
+
+    /**
+     * 重新刷新会话列表
+     */
+    fun refresh(accounts: List<String>) {
+        accounts.forEach { account ->
+            var position = -1
+            val list = sessionList.value ?: listOf()
+            list.forEachIndexed { index, item ->
+                if (item.contactId == account) {
+                    position = index
+                    return@forEachIndexed
+                }
+            }
+            if (position != -1) {
+                sessionList.value = list.replaceAt(position) {
+                    it.copy(viewModel = this)
+                }
+            }
+        }
+
     }
 
 }

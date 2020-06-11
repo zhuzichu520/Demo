@@ -3,7 +3,6 @@ package com.netease.nim.demo.ui.session.viewmodel
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.AnimBuilder
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.createTypeCommand
 import com.hiwitech.android.shared.tools.ToolDate
@@ -11,11 +10,11 @@ import com.hiwitech.android.widget.badge.Badge
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ItemViewModelBase
 import com.netease.nim.demo.nim.attachment.StickerAttachment
+import com.netease.nim.demo.nim.tools.ToolSticky
 import com.netease.nim.demo.nim.tools.ToolTeam
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.ui.message.ActivityMessage
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
-import com.netease.nim.demo.ui.session.Constants.SESSION_ON_TOP
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.P2P
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.Team
 import com.netease.nimlib.sdk.msg.model.RecentContact
@@ -58,7 +57,7 @@ data class ItemViewModelSession(
         value = if (attachment is StickerAttachment) {
             "[贴图]"
         } else {
-            contact.content
+            contact.content ?: ""
         }
     }
     /**
@@ -71,7 +70,7 @@ data class ItemViewModelSession(
      * 置顶标记
      */
     val isTop = MutableLiveData<Boolean>().apply {
-        value = isOnTop()
+        value = ToolSticky.isStickyTagSet(contact)
     }
     /**
      * 会话未读书
@@ -89,7 +88,7 @@ data class ItemViewModelSession(
         when (contact.sessionType) {
             P2P -> {
                 val userInfo = ToolUserInfo.getUserInfo(contactId)
-                name.value = userInfo.name
+                name.value = ToolUserInfo.getUserDisplayName(contactId)
                 avatar.value = userInfo.avatar
                 error.value = R.mipmap.nim_avatar_default
                 placeholder.value = R.mipmap.nim_avatar_default
@@ -115,6 +114,9 @@ data class ItemViewModelSession(
         }
     }
 
+    /**
+     * 记录手指点击位置
+     */
     val onTouchCommmand = createTypeCommand<MotionEvent> {
         if (this.action == MotionEvent.ACTION_DOWN) {
             touchPostionArr[0] = this.rawX
@@ -143,34 +145,18 @@ data class ItemViewModelSession(
      * 置顶
      */
     fun top() {
-        val extension = contact.extension ?: mutableMapOf()
-        extension[SESSION_ON_TOP] = System.currentTimeMillis()
-        contact.extension = extension
-        viewModel.msgService.updateRecent(contact)
-        isTop.value = true
-        viewModel.refresh()
+        ToolSticky.addStickyTag(contact)
+        viewModel.msgService.updateRecentAndNotify(contact)
     }
 
     /**
      * 取消置顶
      */
     fun unTop() {
-        val extension = contact.extension ?: mutableMapOf()
-        extension[SESSION_ON_TOP] = null
-        contact.extension = extension
-        viewModel.msgService.updateRecent(contact)
-        isTop.value = false
-        viewModel.refresh()
+        ToolSticky.removeStickTag(contact)
+        viewModel.msgService.updateRecentAndNotify(contact)
     }
 
-    /**
-     * 判断是否置顶
-     */
-    private fun isOnTop(): Boolean {
-        val extension = contact.extension ?: return false
-        extension[SESSION_ON_TOP] ?: return false
-        return true
-    }
 
     /**
      * 判断是否是通一条消息

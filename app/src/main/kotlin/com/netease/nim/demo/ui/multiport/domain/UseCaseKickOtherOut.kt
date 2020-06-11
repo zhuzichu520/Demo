@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.multiport.domain
 
+import com.google.common.base.Optional
 import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
@@ -16,9 +17,9 @@ import javax.inject.Inject
  */
 class UseCaseKickOtherOut @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<OnlineClient, Flowable<Void>>() {
+) : UseCase<OnlineClient, Flowable<Optional<Void>>>() {
 
-    override fun execute(parameters: OnlineClient): Flowable<Void> {
+    override fun execute(parameters: OnlineClient): Flowable<Optional<Void>> {
         return nimRepository.kickOtherOut(
             parameters
         ).bindToSchedulers().bindToException()

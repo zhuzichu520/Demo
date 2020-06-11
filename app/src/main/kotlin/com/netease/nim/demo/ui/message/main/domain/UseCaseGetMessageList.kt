@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.message.main.domain
 
+import com.google.common.base.Optional
 import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
@@ -16,9 +17,9 @@ import javax.inject.Inject
  */
 class UseCaseGetMessageList @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<UseCaseGetMessageList.Parameters, Flowable<List<IMMessage>>>() {
+) : UseCase<UseCaseGetMessageList.Parameters, Flowable<Optional<List<IMMessage>>>>() {
 
-    override fun execute(parameters: Parameters): Flowable<List<IMMessage>> {
+    override fun execute(parameters: Parameters): Flowable<Optional<List<IMMessage>>> {
         return nimRepository.getMessageList(parameters.anchor, parameters.pageSize)
             .bindToSchedulers()
             .bindToException()

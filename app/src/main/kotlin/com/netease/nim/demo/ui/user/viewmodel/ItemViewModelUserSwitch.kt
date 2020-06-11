@@ -3,6 +3,7 @@ package com.netease.nim.demo.ui.user.viewmodel
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.BaseViewModel
+import com.hiwitech.android.shared.ext.createCommand
 import com.netease.nim.demo.base.ItemViewModelBase
 
 /**
@@ -14,11 +15,16 @@ import com.netease.nim.demo.base.ItemViewModelBase
 class ItemViewModelUserSwitch(
     viewModel: BaseViewModel<*>,
     @StringRes title: Int,
-    checked: Boolean
+    checked: Boolean,
+    onClickSwitchEvent: ItemViewModelUserSwitch.() -> Unit
 ) : ItemViewModelBase(viewModel) {
 
     val title = MutableLiveData<Int>(title)
 
     val checked = MutableLiveData<Boolean>(checked)
+
+    val onClickSwitchCommand = createCommand {
+        onClickSwitchEvent.invoke(this)
+    }
 
 }

@@ -148,6 +148,11 @@ dependencies {
     api(AmapLibs.AMAP_LOCATION)
     api(AmapLibs.AMAP_SEARCH)
 
+    api(Libs.DIALOG_CORE)
+    api(Libs.DIALOG_DATETIME)
+    api(Libs.DIALOG_INPUT)
+    api(Libs.DIALOG_LIFECYCLE)
+
     api(Libs.TINYPINYIN)
 
     api(MyLibs.DEVELOPER_LIBS)

@@ -6,6 +6,7 @@ import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.createCommand
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ItemViewModelBase
+import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.ui.user.ActivityUser
 import com.netease.nim.demo.ui.user.arg.ArgUser
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
@@ -46,7 +47,7 @@ class ItemViewModelContact(
      *
      */
     val title = MutableLiveData<String>().apply {
-        value = nimUserInfo.name
+        value = ToolUserInfo.getUserDisplayName(nimUserInfo.account)
     }
 
     val onClickCommand = createCommand {

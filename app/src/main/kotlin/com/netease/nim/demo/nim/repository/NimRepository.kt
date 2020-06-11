@@ -7,6 +7,7 @@ import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.auth.OnlineClient
 import com.netease.nimlib.sdk.friend.FriendService
+import com.netease.nimlib.sdk.friend.constant.FriendFieldEnum
 import com.netease.nimlib.sdk.friend.constant.VerifyType
 import com.netease.nimlib.sdk.friend.model.AddFriendData
 import com.netease.nimlib.sdk.friend.model.Friend
@@ -34,7 +35,7 @@ interface NimRepository {
      * 登录
      * @param loginInfo
      */
-    fun login(loginInfo: LoginInfo): Flowable<LoginInfo>
+    fun login(loginInfo: LoginInfo): Flowable<Optional<LoginInfo>>
 
     /**
      * 获取群组
@@ -46,13 +47,13 @@ interface NimRepository {
      * 获取用户资料
      * @param accid
      */
-    fun getUserInfoById(accid: String): Flowable<NimUserInfo>
+    fun getUserInfoById(accid: String): Flowable<Optional<NimUserInfo>>
 
 
     /**
      * 获取最近会话列表
      */
-    fun getRecentContactList(): Flowable<List<RecentContact>>
+    fun getRecentContactList(): Flowable<Optional<List<RecentContact>>>
 
     /**
      * 获取一个最近会话对象
@@ -68,27 +69,27 @@ interface NimRepository {
      * 获取消息列表
      * @param anchor
      */
-    fun getMessageList(anchor: IMMessage, pageSize: Int): Flowable<List<IMMessage>>
+    fun getMessageList(anchor: IMMessage, pageSize: Int): Flowable<Optional<List<IMMessage>>>
 
     /**
      * 发送消息
      * @param message 消息
      * @param resend 是否重发
      */
-    fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Void>
+    fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Optional<Void>>
 
     /**
      * 下载附件
      * @param message 附件所在的消息体
      * @param thumb 下载缩略图还是原文件。为true时，仅下载缩略图,该参数仅对图片和视频类消息有效
      */
-    fun downloadAttachment(message: IMMessage, thumb: Boolean): Flowable<Void>
+    fun downloadAttachment(message: IMMessage, thumb: Boolean): Flowable<Optional<Void>>
 
     /**
      * 获取该消息的会话中所有图片和视频消息
      * @param message 消息
      */
-    fun getImageAndVideoMessage(message: IMMessage): Flowable<List<IMMessage>>
+    fun getImageAndVideoMessage(message: IMMessage): Flowable<Optional<List<IMMessage>>>
 
     /**
      * 获取所有好友用户资料
@@ -98,7 +99,7 @@ interface NimRepository {
     /**
      * 多端踢下线
      */
-    fun kickOtherOut(client: OnlineClient): Flowable<Void>
+    fun kickOtherOut(client: OnlineClient): Flowable<Optional<Void>>
 
     /**
      * 根据账号获取好友对象
@@ -108,12 +109,35 @@ interface NimRepository {
     /**
      * 根据账号删除好友
      */
-    fun deleteFriend(account: String): Flowable<Void>
+    fun deleteFriend(account: String): Flowable<Optional<Void>>
 
     /**
      * 根据账号添加好友
      */
-    fun addFriend(account: String, verifyType: VerifyType, msg: String?): Flowable<Void>
+    fun addFriend(account: String, verifyType: VerifyType, msg: String?): Flowable<Optional<Void>>
+
+    /**
+     * 添加黑名单
+     */
+    fun addToBlackList(account: String): Flowable<Optional<Void>>
+
+    /**
+     * 移除黑名单
+     */
+    fun removeFromBlackList(account: String): Flowable<Optional<Void>>
+
+    /**
+     * p2p消息提醒
+     */
+    fun setMessageNotify(account: String, isNotify: Boolean): Flowable<Optional<Void>>
+
+    /**
+     * 修改好友资料
+     */
+    fun updateFriendFields(
+        account: String,
+        fields: Map<FriendFieldEnum, Any>
+    ): Flowable<Optional<Void>>
 }
 
 class NimRepositoryImpl(
@@ -124,7 +148,7 @@ class NimRepositoryImpl(
     private val friendService: FriendService
 ) : NimRepository {
 
-    override fun login(loginInfo: LoginInfo): Flowable<LoginInfo> {
+    override fun login(loginInfo: LoginInfo): Flowable<Optional<LoginInfo>> {
         return createFlowable {
             authService.login(loginInfo).setCallback(NimRequestCallback(this))
         }
@@ -142,21 +166,21 @@ class NimRepositoryImpl(
         }
     }
 
-    override fun getUserInfoById(accid: String): Flowable<NimUserInfo> {
-        return createFlowable<List<NimUserInfo>> {
+    override fun getUserInfoById(accid: String): Flowable<Optional<NimUserInfo>> {
+        return createFlowable<Optional<List<NimUserInfo>>> {
             val userInfo = userService.getUserInfo(accid)
             userInfo?.let {
-                onNext(listOf<NimUserInfo>(userInfo))
+                onNext(Optional.fromNullable(listOf<NimUserInfo>(userInfo)))
                 onComplete()
             } ?: let {
                 userService.fetchUserInfo(listOf(accid)).setCallback(NimRequestCallback(it))
             }
         }.map {
-            it[0]
+            Optional.fromNullable(it.get()[0])
         }
     }
 
-    override fun getRecentContactList(): Flowable<List<RecentContact>> {
+    override fun getRecentContactList(): Flowable<Optional<List<RecentContact>>> {
         return createFlowable {
             msgService.queryRecentContacts().setCallback(NimRequestCallback(this))
         }
@@ -172,26 +196,29 @@ class NimRepositoryImpl(
         }
     }
 
-    override fun getMessageList(anchor: IMMessage, pageSize: Int): Flowable<List<IMMessage>> {
+    override fun getMessageList(
+        anchor: IMMessage,
+        pageSize: Int
+    ): Flowable<Optional<List<IMMessage>>> {
         return createFlowable {
             msgService.queryMessageListEx(anchor, QueryDirectionEnum.QUERY_OLD, pageSize, true)
                 .setCallback(NimRequestCallback(this))
         }
     }
 
-    override fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Void> {
+    override fun sendMessage(message: IMMessage, resend: Boolean): Flowable<Optional<Void>> {
         return createFlowable {
             msgService.sendMessage(message, resend).setCallback(NimRequestCallback(this))
         }
     }
 
-    override fun downloadAttachment(message: IMMessage, thumb: Boolean): Flowable<Void> {
+    override fun downloadAttachment(message: IMMessage, thumb: Boolean): Flowable<Optional<Void>> {
         return createFlowable {
             msgService.downloadAttachment(message, thumb).setCallback(NimRequestCallback(this))
         }
     }
 
-    override fun getImageAndVideoMessage(message: IMMessage): Flowable<List<IMMessage>> {
+    override fun getImageAndVideoMessage(message: IMMessage): Flowable<Optional<List<IMMessage>>> {
         return createFlowable {
             msgService.queryMessageListByTypes(
                 listOf(MsgTypeEnum.image, MsgTypeEnum.video),
@@ -211,7 +238,7 @@ class NimRepositoryImpl(
         }
     }
 
-    override fun kickOtherOut(client: OnlineClient): Flowable<Void> {
+    override fun kickOtherOut(client: OnlineClient): Flowable<Optional<Void>> {
         return createFlowable {
             authService.kickOtherClient(client).setCallback(NimRequestCallback(this))
         }
@@ -224,7 +251,7 @@ class NimRepositoryImpl(
         }
     }
 
-    override fun deleteFriend(account: String): Flowable<Void> {
+    override fun deleteFriend(account: String): Flowable<Optional<Void>> {
         return createFlowable {
             friendService.deleteFriend(account).setCallback(NimRequestCallback(this))
         }
@@ -232,10 +259,37 @@ class NimRepositoryImpl(
 
     override fun addFriend(
         account: String, verifyType: VerifyType, msg: String?
-    ): Flowable<Void> {
+    ): Flowable<Optional<Void>> {
         return createFlowable {
             friendService.addFriend(AddFriendData(account, VerifyType.DIRECT_ADD, msg))
                 .setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun addToBlackList(account: String): Flowable<Optional<Void>> {
+        return createFlowable {
+            friendService.addToBlackList(account).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun removeFromBlackList(account: String): Flowable<Optional<Void>> {
+        return createFlowable {
+            friendService.removeFromBlackList(account).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun setMessageNotify(account: String, isNotify: Boolean): Flowable<Optional<Void>> {
+        return createFlowable {
+            friendService.setMessageNotify(account, isNotify).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun updateFriendFields(
+        account: String,
+        fields: Map<FriendFieldEnum, Any>
+    ): Flowable<Optional<Void>> {
+        return createFlowable {
+            friendService.updateFriendFields(account, fields).setCallback(NimRequestCallback(this))
         }
     }
 

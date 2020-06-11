@@ -54,7 +54,7 @@ class ViewModelLogin @Inject constructor(
             .autoDispose(this)
             .subscribe(
                 {
-                    NimUserStorage.login(it)
+                    NimUserStorage.login(it.get())
                     showMainPage()
                 },
                 {

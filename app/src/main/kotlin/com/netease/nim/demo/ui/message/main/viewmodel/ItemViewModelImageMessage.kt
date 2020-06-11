@@ -95,7 +95,7 @@ open class ItemViewModelImageMessage(
                     )
                 startActivity(
                     ActivityPhotoBrowser::class.java,
-                    arg = ArgPhotoBrowser(message, it),
+                    arg = ArgPhotoBrowser(message, it.get()),
                     options = optionsCompat.toBundle()
                 )
             }

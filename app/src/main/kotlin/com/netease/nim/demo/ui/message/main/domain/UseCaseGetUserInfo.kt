@@ -1,5 +1,6 @@
 package com.netease.nim.demo.ui.message.main.domain
 
+import com.google.common.base.Optional
 import com.hiwitech.android.mvvm.domain.UseCase
 import com.hiwitech.android.shared.ext.bindToException
 import com.hiwitech.android.shared.ext.bindToSchedulers
@@ -16,9 +17,9 @@ import javax.inject.Inject
  */
 class UseCaseGetUserInfo @Inject constructor(
     private val nimRepository: NimRepository
-) : UseCase<String, Flowable<NimUserInfo>>() {
+) : UseCase<String, Flowable<Optional<NimUserInfo>>>() {
 
-    override fun execute(parameters: String): Flowable<NimUserInfo> {
+    override fun execute(parameters: String): Flowable<Optional<NimUserInfo>> {
         return nimRepository.getUserInfoById(parameters).bindToSchedulers().bindToException()
     }
 }

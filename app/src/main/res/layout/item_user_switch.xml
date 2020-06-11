@@ -12,7 +12,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/color_background_primary">
+        android:background="@color/color_background_primary"
+        app:onClickCommand="@{item.onClickSwitchCommand}">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"

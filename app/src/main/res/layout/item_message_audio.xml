@@ -51,14 +51,15 @@
             app:background="@{item.background}"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            app:onClickCommand="@{item.onClickAudioCommand}">
+            app:onClickCommand="@{item.onClickAudioCommand}"
+            tools:background="@drawable/chat_from_bg_selector">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                app:src="@{item.audioIcon}"
                 android:layout_marginEnd="7dp"
+                app:src="@{item.audioIcon}"
                 tools:src="@drawable/audio_animation_list_left_3" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -76,6 +77,53 @@
                 app:layoutWidth="@{item.width}" />
 
         </LinearLayout>
+
+        <com.hiwitech.android.widget.qmui.layout.QMUIFrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:displayChild="@{item.attachStatus}"
+            app:layout_constraintBottom_toBottomOf="@+id/content"
+            app:layout_constraintEnd_toEndOf="@+id/content"
+            app:layout_constraintStart_toStartOf="@+id/content"
+            app:layout_constraintTop_toTopOf="@+id/content"
+            app:qmui_radius="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80000000"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:text="@{item.progress}"
+                    android:textAppearance="?attr/textAppearanceCaption"
+                    android:textColor="@color/white"
+                    tools:text="80%" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/reload"
+                android:textColor="@color/color_font_primary"
+                android:visibility="gone"
+                app:onClickCommand="@{item.onClickAttachFailedCommand}" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+        </com.hiwitech.android.widget.qmui.layout.QMUIFrameLayout>
+
 
         <FrameLayout
             android:layout_width="wrap_content"
