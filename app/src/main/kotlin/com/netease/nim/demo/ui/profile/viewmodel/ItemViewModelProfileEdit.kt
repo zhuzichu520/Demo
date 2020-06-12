@@ -8,6 +8,7 @@ import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.toStringByResId
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ItemViewModelBase
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum
 
 /**
  * desc
@@ -19,7 +20,8 @@ class ItemViewModelProfileEdit(
     viewModel: BaseViewModel<*>,
     @StringRes title: Int,
     val text: String?,
-    onClickEvent: SingleLiveEvent<ItemViewModelProfileEdit>
+    onClickEvent: SingleLiveEvent<ItemViewModelProfileEdit>,
+    val userInfoFieldEnum: UserInfoFieldEnum? = null
 ) : ItemViewModelBase(viewModel) {
 
     val title = MutableLiveData<Int>(title)

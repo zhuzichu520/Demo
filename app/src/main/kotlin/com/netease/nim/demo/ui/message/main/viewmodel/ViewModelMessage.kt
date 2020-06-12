@@ -121,6 +121,8 @@ class ViewModelMessage @Inject constructor(
         map<ItemViewModelUnknownMessage>(BR.item, R.layout.item_message_unknown)
         map<ItemViewModelFileMessage>(BR.item, R.layout.item_message_file)
         map<ItemViewModelLocationMessage>(BR.item, R.layout.item_message_location)
+        map<ItemViewModelTipMessage>(BR.item, R.layout.item_message_tip)
+        map<ItemViewModelNotificationMessage>(BR.item, R.layout.item_message_notification)
     }
 
     /**
@@ -152,9 +154,12 @@ class ViewModelMessage @Inject constructor(
         addMessage(listOf(message), true)
         useCaseSendMessage.execute(UseCaseSendMessage.Parameters(message, resend))
             .autoDispose(this)
-            .subscribe {
-
-            }
+            .subscribe(
+                {},
+                {
+                    handleThrowable(it)
+                }
+            )
     }
 
     /**
@@ -213,7 +218,7 @@ class ViewModelMessage @Inject constructor(
      * @param data itemViewModel集合
      * @param isEvent 是否开启添加完成事件
      */
-    fun addItemViewModel(data: List<ItemViewModelBaseMessage>, isEvent: Boolean) {
+    private fun addItemViewModel(data: List<ItemViewModelBaseMessage>, isEvent: Boolean) {
         data.forEach { item ->
             val index = messageList.indexOf(item)
             if (index != -1) {
@@ -250,6 +255,9 @@ class ViewModelMessage @Inject constructor(
                 }
                 MsgTypeEnum.file -> {
                     ItemViewModelFileMessage(this, item, useCaseDowloadAttachment)
+                }
+                MsgTypeEnum.notification -> {
+                    ItemViewModelNotificationMessage(this, item, arg.contactId,arg.sessionType)
                 }
                 MsgTypeEnum.video -> {
                     ItemViewModelVideoMessage(

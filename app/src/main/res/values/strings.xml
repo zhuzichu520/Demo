@@ -113,5 +113,13 @@
     <string name="delete_friend_info">删除好友后，将同时解除双方的好友关系，确定要删除该好友吗?</string>
 
     <string name="alias_info">请输入备注名</string>
+    <string name="input_name_info" >请输入昵称</string>
+    <string name="input_mobile_info">请输入手机</string>
+    <string name="input_emial_info" >请输入邮箱</string>
+    <string name="input_signature_info" >请输入签名</string>
+
+    <string name="team_need_authentication">需要身份验证</string>
+    <string name="team_allow_anyone_join">允许任何人加入</string>
+    <string name="team_not_allow_anyone_join">不允许任何人申请加入</string>
 
 </resources>

@@ -65,7 +65,7 @@ class ViewModelMe @Inject constructor(
         onClickThemeEvent.call()
     }
 
-    fun loadUserInfo() {
+    fun updateUserInfo() {
         useCaseGetUserInfo.execute(NimUserStorage.account.toString()).autoDispose(this)
             .subscribe {
                 it.orNull()?.let { userInfo ->

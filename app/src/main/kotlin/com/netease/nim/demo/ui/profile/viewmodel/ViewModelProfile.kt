@@ -3,6 +3,7 @@ package com.netease.nim.demo.ui.profile.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.mvvm.event.SingleLiveEvent
+import com.hiwitech.android.shared.ext.autoLoading
 import com.hiwitech.android.shared.ext.map
 import com.hiwitech.android.shared.ext.toStringByResId
 import com.netease.nim.demo.BR
@@ -10,7 +11,9 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
 import com.netease.nim.demo.storage.NimUserStorage
 import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
+import com.netease.nim.demo.ui.profile.domain.UseCaseUpdateUserInfo
 import com.netease.nimlib.sdk.uinfo.constant.GenderEnum
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum
 import com.uber.autodispose.autoDispose
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
@@ -22,7 +25,8 @@ import javax.inject.Inject
  * since: v 1.0.0
  */
 class ViewModelProfile @Inject constructor(
-    private val useCaseGetUserInfo: UseCaseGetUserInfo
+    private val useCaseGetUserInfo: UseCaseGetUserInfo,
+    private val useCaseUpdateUserInfo: UseCaseUpdateUserInfo
 ) : ViewModelBase<ArgDefault>() {
 
     val items = MutableLiveData<List<Any>>()
@@ -40,6 +44,19 @@ class ViewModelProfile @Inject constructor(
         map<ItemViewModelProfileLogout>(BR.item, R.layout.item_profile_logout)
     }
 
+    fun updateUserInfo(key: UserInfoFieldEnum, value: String, success: (String) -> Unit) {
+        useCaseUpdateUserInfo.execute(mapOf(key to value))
+            .autoLoading(this)
+            .autoDispose(this)
+            .subscribe(
+                {
+                    success.invoke(value)
+                },
+                {
+                    handleThrowable(it)
+                }
+            )
+    }
 
     fun loadUserInfo() {
         useCaseGetUserInfo.execute(NimUserStorage.account.toString())
@@ -52,10 +69,13 @@ class ViewModelProfile @Inject constructor(
                         this,
                         R.string.nickname,
                         userInfo.name,
-                        onClickEditEvent
+                        onClickEditEvent,
+                        UserInfoFieldEnum.Name
                     ),
                     ItemViewModelProfileEdit(
-                        this, R.string.gender, when (userInfo.genderEnum) {
+                        this,
+                        R.string.gender,
+                        when (userInfo.genderEnum) {
                             GenderEnum.MALE -> {
                                 R.string.male.toStringByResId()
                             }
@@ -64,31 +84,36 @@ class ViewModelProfile @Inject constructor(
                             }
                             else -> R.string.other.toStringByResId()
                         }
-                        , onClickEditEvent
+                        , onClickEditEvent,
+                        UserInfoFieldEnum.GENDER
                     ),
                     ItemViewModelProfileEdit(
                         this,
                         R.string.birthday,
                         userInfo.birthday,
-                        onClickEditEvent
+                        onClickEditEvent,
+                        UserInfoFieldEnum.BIRTHDAY
                     ),
                     ItemViewModelProfileEdit(
                         this,
                         R.string.phone,
                         userInfo.mobile,
-                        onClickEditEvent
+                        onClickEditEvent,
+                        UserInfoFieldEnum.MOBILE
                     ),
                     ItemViewModelProfileEdit(
                         this,
                         R.string.email,
                         userInfo.email,
-                        onClickEditEvent
+                        onClickEditEvent,
+                        UserInfoFieldEnum.EMAIL
                     ),
                     ItemViewModelProfileEdit(
                         this,
                         R.string.signature,
                         userInfo.signature,
-                        onClickEditEvent
+                        onClickEditEvent,
+                        UserInfoFieldEnum.SIGNATURE
                     ),
                     ItemViewModelProfileLogout(this)
                 )

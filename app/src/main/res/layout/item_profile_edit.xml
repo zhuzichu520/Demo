@@ -11,8 +11,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@color/color_background_primary"
+        android:minHeight="50dp"
         app:onClickCommand="@{item.onClickCommand}">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -32,15 +33,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="end"
-            android:singleLine="true"
             android:text="@{item.content}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/icon"
             app:layout_constraintStart_toEndOf="@+id/title"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" />
+            tools:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon"

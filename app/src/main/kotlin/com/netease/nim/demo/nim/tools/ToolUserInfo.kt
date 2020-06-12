@@ -7,15 +7,23 @@ import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 
 object ToolUserInfo {
 
-    fun getUserInfo(contactId: String): NimUserInfo {
-        return NIMClient.getService(UserService::class.java).getUserInfo(contactId)
+    fun getUserInfo(account: String): NimUserInfo {
+        return NIMClient.getService(UserService::class.java).getUserInfo(account)
+    }
+
+    fun getUserName(account: String): String {
+        return getUserInfo(account).name
+    }
+
+    fun getAlias(account: String): String? {
+        val friend = NIMClient.getService(FriendService::class.java).getFriendByAccount(account)
+            ?: return null
+        return friend.alias
     }
 
     fun getUserDisplayName(account: String): String {
         val name = getUserInfo(account).name
-        val friend = NIMClient.getService(FriendService::class.java).getFriendByAccount(account)
-            ?: return name
-        val alias: String? = friend.alias
+        val alias: String? = getAlias(account)
         if (alias.isNullOrEmpty())
             return name
         return alias

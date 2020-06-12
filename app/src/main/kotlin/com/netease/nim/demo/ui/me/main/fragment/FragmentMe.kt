@@ -7,6 +7,7 @@ import com.netease.nim.demo.R
 import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentMeBinding
 import com.netease.nim.demo.ui.me.main.viewmodel.ViewModelMe
+import com.netease.nim.demo.ui.profile.event.EventProfile
 import com.netease.nim.demo.ui.theme.fragment.FragmentTheme
 
 /**
@@ -28,13 +29,16 @@ class FragmentMe : FragmentBase<FragmentMeBinding, ViewModelMe, ArgDefault>() {
             FragmentTheme().show(childFragmentManager)
         })
 
+        viewModel.toObservable(EventProfile.OnUpdateUserInfoEvent::class.java, Observer {
+            viewModel.updateUserInfo()
+        })
+
     }
 
     override fun initOneData() {
         super.initOneData()
-        viewModel.loadUserInfo()
+        viewModel.updateUserInfo()
     }
-
 
 
 }

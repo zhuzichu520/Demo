@@ -21,6 +21,7 @@ import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.uinfo.UserService
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import io.reactivex.Flowable
 
@@ -138,6 +139,11 @@ interface NimRepository {
         account: String,
         fields: Map<FriendFieldEnum, Any>
     ): Flowable<Optional<Void>>
+
+    /**
+     * 修改个人资料
+     */
+    fun updateUserInfo(fields: Map<UserInfoFieldEnum, Any>): Flowable<Optional<Void>>
 }
 
 class NimRepositoryImpl(
@@ -290,6 +296,12 @@ class NimRepositoryImpl(
     ): Flowable<Optional<Void>> {
         return createFlowable {
             friendService.updateFriendFields(account, fields).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun updateUserInfo(fields: Map<UserInfoFieldEnum, Any>): Flowable<Optional<Void>> {
+        return createFlowable {
+            userService.updateUserInfo(fields).setCallback(NimRequestCallback(this))
         }
     }
 

@@ -191,10 +191,10 @@ class ViewMessageInput @JvmOverloads constructor(
 
 
         center_input.setOnTouchListener { _, motionEvent ->
-            if (MotionEvent.ACTION_UP == motionEvent.action) {
+            if (MotionEvent.ACTION_DOWN == motionEvent.action) {
                 setInputType(TYPE_INPUT)
             }
-            true
+            false
         }
 
         //监听输入框高度变化
