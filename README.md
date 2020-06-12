@@ -4,6 +4,9 @@
 
 ![download](https://www.pgyer.com/app/qrcode/cAAF?sign=&auSign=&code=)
 
+[https://www.pgyer.com/cAAF](https://www.pgyer.com/cAAF)
+
 #### 所用技术
 
 Kotlin+buildSrc+MVVM+DataBinding+Navigation+ViewModel+LiveData+Lifecycle+Material+RxJava+Dagger2等等。
+
