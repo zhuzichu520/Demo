@@ -19,7 +19,7 @@ import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum
 class ItemViewModelProfileEdit(
     viewModel: BaseViewModel<*>,
     @StringRes title: Int,
-    val text: String?,
+    var text: String?,
     onClickEvent: SingleLiveEvent<ItemViewModelProfileEdit>,
     val userInfoFieldEnum: UserInfoFieldEnum? = null
 ) : ItemViewModelBase(viewModel) {
