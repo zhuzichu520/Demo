@@ -14,6 +14,7 @@ import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
 import com.netease.nim.demo.ui.profile.domain.UseCaseUpdateUserInfo
 import com.netease.nimlib.sdk.uinfo.constant.GenderEnum
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import com.uber.autodispose.autoDispose
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import javax.inject.Inject
@@ -35,6 +36,8 @@ class ViewModelProfile @Inject constructor(
 
     val onClickEditEvent = SingleLiveEvent<ItemViewModelProfileEdit>()
 
+    val userInfo = MutableLiveData<NimUserInfo>()
+
     /**
      * 多布局注册
      */
@@ -44,13 +47,13 @@ class ViewModelProfile @Inject constructor(
         map<ItemViewModelProfileLogout>(BR.item, R.layout.item_profile_logout)
     }
 
-    fun updateUserInfo(key: UserInfoFieldEnum, value: String, success: (String) -> Unit) {
+    fun updateUserInfo(key: UserInfoFieldEnum, value: Any, success: (String) -> Unit) {
         useCaseUpdateUserInfo.execute(mapOf(key to value))
             .autoLoading(this)
             .autoDispose(this)
             .subscribe(
                 {
-                    success.invoke(value)
+                    success.invoke(value.toString())
                 },
                 {
                     handleThrowable(it)
@@ -58,11 +61,21 @@ class ViewModelProfile @Inject constructor(
             )
     }
 
+    fun getIndexByGender(): Int {
+        val userInfo = userInfo.value ?: return 2
+        return when (userInfo.genderEnum) {
+            GenderEnum.MALE -> 0
+            GenderEnum.FEMALE -> 1
+            else -> 2
+        }
+    }
+
     fun loadUserInfo() {
         useCaseGetUserInfo.execute(NimUserStorage.account.toString())
             .autoDispose(this)
             .subscribe {
-                val userInfo = it.orNull() ?: return@subscribe
+                userInfo.value = it.get()
+                val userInfo = userInfo.value ?: return@subscribe
                 items.value = listOf(
                     ItemViewModelProfileHeader(this, userInfo.avatar),
                     ItemViewModelProfileEdit(

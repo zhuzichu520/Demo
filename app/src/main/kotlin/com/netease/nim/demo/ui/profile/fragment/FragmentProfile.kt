@@ -7,12 +7,16 @@ import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.setActionButtonEnabled
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import com.hiwitech.android.libs.tool.getFormatDate
 import com.hiwitech.android.libs.tool.isEmail
 import com.hiwitech.android.mvvm.base.ArgDefault
 import com.hiwitech.android.shared.bus.LiveDataBus
 import com.hiwitech.android.shared.ext.showSnackbar
+import com.hiwitech.android.shared.ext.toStringByResId
 import com.hiwitech.android.shared.tools.ToolRegex
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
@@ -22,6 +26,7 @@ import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nim.demo.ui.profile.event.EventProfile
 import com.netease.nim.demo.ui.profile.viewmodel.ItemViewModelProfileEdit
 import com.netease.nim.demo.ui.profile.viewmodel.ViewModelProfile
+import com.netease.nimlib.sdk.uinfo.constant.GenderEnum
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum
 import kotlinx.android.synthetic.main.fragment_profile.*
 
@@ -75,11 +80,51 @@ class FragmentProfile : FragmentBase<FragmentProfileBinding, ViewModelProfile, A
                     R.string.input_signature_info,
                     maxLength = 100
                 )
+                UserInfoFieldEnum.BIRTHDAY -> showTimeDialog(it.userInfoFieldEnum)
+                UserInfoFieldEnum.GENDER -> showGenderDialog(it.userInfoFieldEnum)
                 else -> {
 
                 }
             }
         })
+
+    }
+
+    private fun showGenderDialog(userInfoFieldEnum: UserInfoFieldEnum) {
+        MaterialDialog(requireContext()).show {
+            listItemsSingleChoice(
+                R.array.gender,
+                initialSelection = viewModel.getIndexByGender()
+            ) { _, index, _ ->
+                val value = when (index) {
+                    0 -> GenderEnum.MALE.value
+                    1 -> GenderEnum.FEMALE.value
+                    else -> GenderEnum.UNKNOWN.value
+                }
+                viewModel.updateUserInfo(userInfoFieldEnum, value) {
+                    postEvent()
+                    viewModel.loadUserInfo()
+                }
+            }
+        }
+    }
+
+    private fun postEvent() {
+        viewModel.loadUserInfo()
+        LiveDataBus.post(EventProfile.OnUpdateUserInfoEvent())
+    }
+
+    private fun showTimeDialog(userInfoFieldEnum: UserInfoFieldEnum) {
+        MaterialDialog(requireContext()).show {
+            datePicker { _, datetime ->
+                val text = getFormatDate(datetime.time, "yyyy-MM-dd")
+                viewModel.updateUserInfo(userInfoFieldEnum, text) {
+                    postEvent()
+                    viewModel.loadUserInfo()
+                }
+            }
+        }
+
     }
 
     private fun showInputDialog(
@@ -102,9 +147,7 @@ class FragmentProfile : FragmentBase<FragmentProfileBinding, ViewModelProfile, A
                 checkInput(editText, userInfoFieldEnum, dialog)
             }.positiveButton(res = R.string.confirm) {
                 viewModel.updateUserInfo(userInfoFieldEnum, editText) {
-                    itemViewModel.text = it
-                    itemViewModel.content.value = itemViewModel.text
-                    LiveDataBus.post(EventProfile.OnUpdateUserInfoEvent())
+                    postEvent()
                 }
             }.negativeButton(res = R.string.cancel) {
 
@@ -119,11 +162,11 @@ class FragmentProfile : FragmentBase<FragmentProfileBinding, ViewModelProfile, A
         when (fieldEnum) {
             UserInfoFieldEnum.EMAIL -> {
                 isValid = isEmail(editText)
-                error = "请输入正确邮箱"
+                error = R.string.input_emial_tip.toStringByResId(requireContext())
             }
             UserInfoFieldEnum.MOBILE -> {
                 isValid = ToolRegex.isMobile(editText)
-                error = "请输入正确的手机号"
+                error = R.string.input_mobile_tip.toStringByResId(requireContext())
             }
             else -> {
                 isValid = true
