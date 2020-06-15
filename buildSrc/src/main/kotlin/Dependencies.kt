@@ -14,14 +14,14 @@ object Versions {
     const val APPCOMPAT = "1.1.0"
     const val EXIFINTERFACE = "1.2.0"
     const val RECYCLERVIEW = "1.1.0"
-    const val CORE_KTX = "1.2.0"
+    const val CORE_KTX = "1.3.0"
     const val ESPRESSO_CORE = "3.2.0"
     const val JUNIT = "4.13"
     const val KTLINT = "0.36.0"
 
-    const val DAGGER = "2.27"
+    const val DAGGER = "2.28"
 
-    const val OKHTTP = "4.6.0"
+    const val OKHTTP = "4.7.2"
 
     const val RXJAVA = "2.2.19"
     const val RXANDROID = "2.1.1"
@@ -50,7 +50,7 @@ object Versions {
     const val FLEXBOX = "2.0.1"
     const val CONSTRAINTLAYOUT = "2.0.0-beta4"
 
-    const val MMKV = "1.1.1"
+    const val MMKV = "1.1.2"
     const val MULTIDEX = "2.0.1"
     const val ONCE = "1.3.0"
     const val AUTOSIZE = "1.2.1"
@@ -61,9 +61,9 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.3"
 
-    const val DEVELOPER = "1.2.6"
+    const val DEVELOPER = "1.2.7"
 
-    const val LIVEEVENTBUS = "1.6.1"
+    const val LIVEEVENTBUS = "1.7.2"
 
     const val MATISSE = "0.5.3-beta3"
     const val LUBAN = "1.1.8"
@@ -75,19 +75,19 @@ object Versions {
     const val CAMERAX_EXTENSIONS = "1.0.0-alpha10"
     const val CAMERAVIEW = "2.6.2"
 
-    const val EXOPLAYER = "2.10.4"
+    const val EXOPLAYER = "2.11.5"
 
     const val GSYVIDEOPLAYER = "7.1.4"
 
-    const val TBS = "43903"
+    const val TBS = "43903.0"
     const val SONIC = "3.1.0"
     const val RECYCLICAL = "1.1.1"
 
-    const val NIM = "7.7.1"
+    const val NIM = "7.7.2"
 
     const val AMAP = "latest.integration"
 
-    const val TINYPINYIN = "2.0.3"
+    const val TINYPINYIN = "3.0.0"
 
     const val DIALOG = "3.3.0"
 }
@@ -96,7 +96,7 @@ object Versions {
  * 插件版本
  */
 object BuildPluginsVersion {
-    const val AGP = "3.6.3"
+    const val AGP = "4.0.0"
     const val DETEKT = "1.7.4"
     const val KOTLIN = "1.3.72"
     const val KTLINT = "9.2.1"

@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.graphics.drawable.DrawableCompat
 import com.hiwitech.android.shared.R
 
 /**
@@ -34,11 +35,11 @@ class CheckRadioView @JvmOverloads constructor(
 
     fun setChecked(enable: Boolean) {
         if (enable) {
-            setImageResource(com.zhihu.matisse.R.drawable.ic_preview_radio_on)
+            setImageResource(R.drawable.ic_preview_radio_on)
             radioDrawable = drawable
             radioDrawable.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
         } else {
-            setImageResource(com.zhihu.matisse.R.drawable.ic_preview_radio_off)
+            setImageResource(R.drawable.ic_preview_radio_off)
             radioDrawable = drawable
             radioDrawable.setColorFilter(unSelectedColor, PorterDuff.Mode.SRC_IN)
         }
