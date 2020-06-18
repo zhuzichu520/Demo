@@ -1,11 +1,16 @@
 package com.netease.nim.demo.di
 
 import android.content.Context
+import com.hiwitech.android.shared.global.AppGlobal.context
 import com.netease.nim.demo.nim.audio.NimAudioManager
+import com.netease.nim.demo.nim.config.AVChatConfigs
+import com.netease.nim.demo.nim.event.NimEventManager
 import com.netease.nim.demo.nim.repository.NimRepository
 import com.netease.nim.demo.nim.repository.NimRepositoryImpl
+import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthService
+import com.netease.nimlib.sdk.avchat.AVChatManager
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.team.TeamService
@@ -50,13 +55,14 @@ class NimModule {
 
     @Singleton
     @Provides
-    fun providesNimRepository(
-        teamService: TeamService,
-        userService: UserService,
-        authService: AuthService,
-        msgService: MsgService,
-        friendService: FriendService
-    ): NimRepository =
-        NimRepositoryImpl(teamService, userService, authService, msgService, friendService)
+    fun providesAvChatManager(): AVChatManager = AVChatManager.getInstance()
+
+    @Singleton
+    @Provides
+    fun providesAvChatConfigs(context: Context): AVChatConfigs = AVChatConfigs(context)
+
+    @Singleton
+    @Provides
+    fun providesNimRepository(): NimRepository = NimRepositoryImpl()
 
 }

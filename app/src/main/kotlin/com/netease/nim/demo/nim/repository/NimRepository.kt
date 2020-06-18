@@ -2,10 +2,19 @@ package com.netease.nim.demo.nim.repository
 
 import com.google.common.base.Optional
 import com.hiwitech.android.shared.ext.createFlowable
+import com.hiwitech.android.shared.http.exception.NimError
+import com.hiwitech.android.shared.http.exception.NimThrowable
+import com.netease.nim.demo.nim.NimAvChatCallback
 import com.netease.nim.demo.nim.NimRequestCallback
+import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.auth.OnlineClient
+import com.netease.nimlib.sdk.avchat.AVChatCallback
+import com.netease.nimlib.sdk.avchat.AVChatManager
+import com.netease.nimlib.sdk.avchat.constant.AVChatType
+import com.netease.nimlib.sdk.avchat.model.AVChatData
+import com.netease.nimlib.sdk.avchat.model.AVChatNotifyOption
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.friend.constant.FriendFieldEnum
 import com.netease.nimlib.sdk.friend.constant.VerifyType
@@ -144,14 +153,29 @@ interface NimRepository {
      * 修改个人资料
      */
     fun updateUserInfo(fields: Map<UserInfoFieldEnum, Any>): Flowable<Optional<Void>>
+
+    /**
+     * 拨打音视频
+     */
+    fun doCalling(
+        account: String,
+        chatType: AVChatType,
+        option: AVChatNotifyOption
+    ): Flowable<Optional<AVChatData>>
+
+    /**
+     * 挂断会话
+     */
+    fun hangUp(chatId: Long): Flowable<Optional<Void>>
 }
 
 class NimRepositoryImpl(
-    private val teamService: TeamService,
-    private val userService: UserService,
-    private val authService: AuthService,
-    private val msgService: MsgService,
-    private val friendService: FriendService
+    private val teamService: TeamService = NIMClient.getService(TeamService::class.java),
+    private val userService: UserService = NIMClient.getService(UserService::class.java),
+    private val authService: AuthService = NIMClient.getService(AuthService::class.java),
+    private val msgService: MsgService = NIMClient.getService(MsgService::class.java),
+    private val friendService: FriendService = NIMClient.getService(FriendService::class.java),
+    private val chatManager: AVChatManager = AVChatManager.getInstance()
 ) : NimRepository {
 
     override fun login(loginInfo: LoginInfo): Flowable<Optional<LoginInfo>> {
@@ -302,6 +326,22 @@ class NimRepositoryImpl(
     override fun updateUserInfo(fields: Map<UserInfoFieldEnum, Any>): Flowable<Optional<Void>> {
         return createFlowable {
             userService.updateUserInfo(fields).setCallback(NimRequestCallback(this))
+        }
+    }
+
+    override fun doCalling(
+        account: String,
+        chatType: AVChatType,
+        option: AVChatNotifyOption
+    ): Flowable<Optional<AVChatData>> {
+        return createFlowable {
+            chatManager.call2(account, chatType, option, NimAvChatCallback(this))
+        }
+    }
+
+    override fun hangUp(chatId: Long): Flowable<Optional<Void>> {
+        return createFlowable {
+            chatManager.hangUp2(chatId, NimAvChatCallback(this))
         }
     }
 

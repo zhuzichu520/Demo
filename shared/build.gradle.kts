@@ -155,6 +155,8 @@ dependencies {
 
     api(Libs.TINYPINYIN)
 
+    api(Libs.EASYFLOAT)
+
     api(MyLibs.DEVELOPER_LIBS)
     api(MyLibs.DEVELOPER_MVVM)
     api(MyLibs.DEVELOPER_WIDGET)

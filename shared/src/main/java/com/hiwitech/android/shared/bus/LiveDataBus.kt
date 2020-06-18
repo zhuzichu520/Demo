@@ -22,4 +22,8 @@ object LiveDataBus {
         return LiveEventBus.get(eventType.simpleName, eventType)
     }
 
+    fun <T> removeObserver(eventType: Class<T>, observer: Observer<T>) {
+        LiveEventBus.get(eventType.simpleName, eventType).removeObserver(observer)
+    }
+
 }

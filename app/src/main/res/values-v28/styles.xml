@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ThemePhotoBrowser" parent="AppTheme">
+    <style name="ThemePhotoBrowser" parent="Base.MyTheme">
         <item name="android:immersive">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -12,7 +12,7 @@
     </style>
 
 
-    <style name="ThemeCamera" parent="AppTheme">
+    <style name="ThemeCamera" parent="Base.MyTheme">
         <item name="android:immersive">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>

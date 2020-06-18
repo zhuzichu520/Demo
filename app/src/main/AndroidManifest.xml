@@ -8,6 +8,8 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.location.gps" />
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
     <!-- 加入应用需要的权限 -->
     <!-- 网络相关 -->
@@ -133,6 +135,7 @@
         <activity
             android:name=".ui.camera.ActivityCamera"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="fullUser"
             android:theme="@style/ThemeCamera" />
 
         <activity android:name=".ui.message.ActivityMessage" />
@@ -141,7 +144,10 @@
 
         <activity android:name=".ui.file.ActivityFile" />
 
-        <activity android:name=".ui.avchat.ActivityAvchat" />
+        <activity
+            android:name=".ui.avchat.ActivityAvchat"
+            android:launchMode="singleTop"
+            android:theme="@style/ThemeCamera" />
 
         <activity
             android:name=".ui.main.ActivityMain"
@@ -179,6 +185,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provide_file_paths" />
         </provider>
+
+        <service android:name=".service.DemoService" />
 
         <!-- 声明云信后台服务 -->
         <service

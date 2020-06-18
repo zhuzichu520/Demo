@@ -31,12 +31,12 @@ class ViewModelMe @Inject constructor(
     /**
      * 头像错误图片
      */
-    val error = MutableLiveData<Int>(R.mipmap.nim_avatar_default)
+    val error = MutableLiveData(R.mipmap.nim_avatar_default)
 
     /**
      * 头像占位图
      */
-    val placeholder = MutableLiveData<Int>(R.mipmap.nim_avatar_default)
+    val placeholder = MutableLiveData(R.mipmap.nim_avatar_default)
 
     /**
      *

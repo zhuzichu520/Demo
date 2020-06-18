@@ -113,15 +113,53 @@
     <string name="delete_friend_info">删除好友后，将同时解除双方的好友关系，确定要删除该好友吗?</string>
 
     <string name="alias_info">请输入备注名</string>
-    <string name="input_name_info" >请输入昵称</string>
+    <string name="input_name_info">请输入昵称</string>
     <string name="input_mobile_info">请输入手机</string>
-    <string name="input_emial_info" >请输入邮箱</string>
+    <string name="input_emial_info">请输入邮箱</string>
     <string name="input_mobile_tip">请输入正确的手机号</string>
-    <string name="input_emial_tip" >请输入正确邮箱</string>
-    <string name="input_signature_info" >请输入签名</string>
+    <string name="input_emial_tip">请输入正确邮箱</string>
+    <string name="input_signature_info">请输入签名</string>
 
     <string name="team_need_authentication">需要身份验证</string>
     <string name="team_allow_anyone_join">允许任何人加入</string>
     <string name="team_not_allow_anyone_join">不允许任何人申请加入</string>
+
+    <string name="avchat_audio_call_request">请求语音聊天…</string>
+    <string name="avchat_wait_recieve">等待对方接听…</string>
+    <string name="avchat_video_call_request">请求视频聊天…</string>
+
+    <string name="nrtc_setting_other_device_default_rotation_key">nrtc_setting_other_device_default_rotation_key</string>
+    <string name="nrtc_setting_other_device_default_rotation">设备默认旋转角度(特殊设备使用)</string>
+    <string name="nrtc_setting_other_device_rotation_fixed_offset_key">nrtc_setting_other_device_rotation_fixed_offset_key</string>
+    <string name="nrtc_setting_other_device_rotation_fixed_offset">设备旋转角度修正偏移量(特殊设备使用)</string>
+    <string name="nrtc_setting_vie_rotation_key">nrtc_setting_vie_rotation_key</string>
+    <string name="nrtc_setting_vie_rotation">画面旋转</string>
+    <string name="nrtc_setting_vie_default_front_camera_key">nrtc_setting_vie_default_front_camera_key</string>
+    <string name="nrtc_setting_vie_default_front_camera">默认前置摄像头</string>
+    <string name="nrtc_setting_vie_hw_encoder_key">nrtc_setting_vie_hw_encoder_key</string>
+    <string name="nrtc_setting_vie_hw_encoder">硬件编码(仅部分设备支持)</string>
+    <string name="nrtc_setting_vie_hw_decoder_key">nrtc_setting_vie_hw_decoder_key</string>
+    <string name="nrtc_setting_vie_hw_decoder">硬件解码(仅部分设备支持)</string>
+    <string name="nrtc_setting_other_server_record_audio_key">nrtc_setting_other_server_record_audio_key</string>
+    <string name="nrtc_setting_other_server_record_audio">音频服务器录制</string>
+    <string name="nrtc_setting_other_server_record_video_key">nrtc_setting_other_server_record_video_key</string>
+    <string name="nrtc_setting_other_server_record_video">视频服务器录制</string>
+    <string name="nrtc_setting_voe_call_proximity_key">nrtc_setting_voe_call_proximity_key</string>
+    <string name="nrtc_setting_voe_call_proximity">通话期间关闭屏幕</string>
+    <string name="nrtc_setting_vie_fps_reported_key">nrtc_setting_vie_fps_reported_key</string>
+    <string name="nrtc_setting_vie_fps_reported">帧率汇报</string>
+    <string name="nrtc_setting_vie_max_bitrate_key">nrtc_setting_vie_max_bitrate_key</string>
+    <string name="nrtc_setting_vie_max_bitrate">码率(Kbps)</string>
+    <string name="nrtc_setting_voe_audio_aec_key">nrtc_setting_voe_audio_aec_key</string>
+    <string name="nrtc_setting_voe_audio_aec">回音消除</string>
+    <string name="nrtc_setting_voe_audio_ns_key">nrtc_setting_voe_audio_ns_key</string>
+    <string name="nrtc_setting_voe_audio_ns">降噪</string>
+    <string name="nrtc_setting_voe_high_quality_key">nrtc_setting_voe_high_quality_key</string>
+    <string name="nrtc_setting_voe_high_quality">高清语音</string>
+    <string name="nrtc_setting_vie_crop_ratio_key">nrtc_setting_vie_crop_ratio_key</string>
+    <string name="nrtc_setting_vie_crop_ratio">画面裁剪比例</string>
+    <string name="nrtc_setting_vie_quality_key">nrtc_setting_vie_quality_key</string>
+    <string name="nrtc_setting_vie_quality">视频清晰度</string>
+
 
 </resources>

@@ -2,6 +2,7 @@ package com.netease.nim.demo.di
 
 import com.hiwitech.android.mvvm.di.ViewModelModule
 import com.netease.nim.demo.ApplicationDemo
+import com.netease.nim.demo.nim.event.NimEventManager
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector

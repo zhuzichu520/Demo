@@ -105,7 +105,6 @@ class FragmentFile : FragmentBase<FragmentFileBinding, ViewModelFile, ArgFile>()
         }
     }
 
-    @Suppress("DEPRECATION")
     override fun initViewObservable() {
         super.initViewObservable()
 
@@ -150,10 +149,10 @@ class FragmentFile : FragmentBase<FragmentFileBinding, ViewModelFile, ArgFile>()
                     CacheGlobal.getDownloadDir()
                 }
                 TYPE_OPTION_WEIXIN -> {
-                    Environment.getExternalStorageDirectory().absolutePath + "/tencent/MicroMsg/Download"
+                    getWeiXinFilePath()
                 }
                 TYPE_OPTION_PHONE -> {
-                    Environment.getExternalStorageDirectory().absolutePath
+                    getRootFilePath()
                 }
                 else -> {
                     null
@@ -161,13 +160,31 @@ class FragmentFile : FragmentBase<FragmentFileBinding, ViewModelFile, ArgFile>()
             }?.let { path ->
                 viewModel.loadFileList(File(path))
             }
-            viewModel.menuTitle.value=it.titleId.toStringByResId(requireContext())
+            viewModel.menuTitle.value = it.titleId.toStringByResId(requireContext())
         })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         LiveDataBus.post(onSelectFileEvent)
+    }
+
+    @Suppress("DEPRECATION")
+    fun getWeiXinFilePath(): String {
+        var file =
+            File(getRootFilePath() + "/tencent/MicroMsg/Download")
+        if (!file.exists()) {
+            file = File(getRootFilePath() + "/Android/data/com.tencent.mm/MicroMsg/Download")
+        }
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        return file.absolutePath
+    }
+
+    @Suppress("DEPRECATION")
+    fun getRootFilePath(): String {
+        return Environment.getExternalStorageDirectory().absolutePath
     }
 
 }

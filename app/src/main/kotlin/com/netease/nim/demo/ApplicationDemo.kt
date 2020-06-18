@@ -1,6 +1,7 @@
 package com.netease.nim.demo
 
 import android.content.Context
+import android.content.Intent
 import androidx.camera.camera2.Camera2Config
 import androidx.camera.core.CameraXConfig
 import androidx.multidex.MultiDex
@@ -9,10 +10,14 @@ import com.hiwitech.android.mvvm.Mvvm
 import com.hiwitech.android.shared.crash.CrashConfig
 import com.hiwitech.android.shared.global.AppGlobal
 import com.netease.nim.demo.di.DaggerAppComponent
+import com.netease.nim.demo.manager.ManagerActivity
 import com.netease.nim.demo.nim.attachment.NimAttachParser
 import com.netease.nim.demo.nim.config.NimSDKOptionConfig
 import com.netease.nim.demo.nim.event.LoginSyncDataStatusObserver
+import com.netease.nim.demo.nim.event.NimEventManager
+import com.netease.nim.demo.service.DemoService
 import com.netease.nim.demo.storage.NimUserStorage
+import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.msg.MsgService
@@ -27,6 +32,7 @@ import rxhttp.wrapper.ssl.SSLSocketFactoryImpl
 import rxhttp.wrapper.ssl.X509TrustManagerImpl
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 /**
@@ -36,6 +42,7 @@ import java.util.concurrent.TimeUnit
  * since: v 1.0.0
  */
 class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider {
+
 
     override fun onCreate() {
         super.onCreate()
@@ -56,13 +63,22 @@ class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider {
         NIMClient.init(this, loginInfo(), NimSDKOptionConfig.getSDKOptions(this))
 
         if (NIMUtil.isMainProcess(this)) {
+            startDemoService()
             //开启数据同步监听
+            ManagerActivity.INST.init(this)
             NIMClient.toggleNotification(NimUserStorage.notifyToggle)
             // 注册自定义消息附件解析器
             NIMClient.getService(MsgService::class.java)
                 .registerCustomAttachmentParser(NimAttachParser())
             LoginSyncDataStatusObserver.getInstance().registerLoginSyncDataStatus(true)
+            NimEventManager.init(this)
         }
+
+    }
+
+    private fun startDemoService() {
+        val intent = Intent(this, DemoService::class.java)
+        startService(intent)
     }
 
     /**

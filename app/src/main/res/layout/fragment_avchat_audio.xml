@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.netease.nim.demo.ui.avchat.viewmodel.ViewModelAvchatAudio" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black">
+
+
+        <com.hiwitech.android.widget.qmui.QMUIRadiusImageView
+            android:id="@+id/avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="80dp"
+            app:error="@{viewModel.error}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholder="@{viewModel.placeholder}"
+            app:qmui_is_circle="true"
+            app:url="@{viewModel.avatar}"
+            tools:src="@mipmap/ic_launcher" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{viewModel.title}"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/avatar"
+            tools:text="@string/avchat_audio_call_request" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/outgoing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isShown="@{viewModel.showOutgoging}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/outgoing_hangup"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:onClickCommand="@{viewModel.onHangeUpCommand}"
+                app:srcCompat="@drawable/selector_call_close" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/outgoing_hangup"
+                app:layout_constraintEnd_toStartOf="@+id/outgoing_hangup"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/outgoing_hangup"
+                app:srcCompat="@drawable/selector_mute" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/outgoing_hangup"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/outgoing_hangup"
+                app:layout_constraintTop_toTopOf="@+id/outgoing_hangup"
+                app:srcCompat="@drawable/selector_speaker" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/incoming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isShown="@{viewModel.showIncoming}"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/incoming_hangup"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/incoming_call"
+                app:layout_constraintStart_toStartOf="parent"
+                app:onClickCommand="@{viewModel.onHangeUpCommand}"
+                app:srcCompat="@drawable/selector_call_close" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/incoming_call"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/incoming_hangup"
+                app:srcCompat="@drawable/selector_call_answer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

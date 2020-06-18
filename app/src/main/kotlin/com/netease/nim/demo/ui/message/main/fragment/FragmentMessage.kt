@@ -57,6 +57,7 @@ import com.netease.nim.demo.ui.message.view.ViewMessageInput.Companion.TYPE_MORE
 import com.netease.nim.demo.ui.permissions.fragment.FragmentPermissions
 import com.netease.nim.demo.ui.photobrowser.event.EventPhotoBrowser
 import com.netease.nim.demo.ui.photobrowser.fragment.FragmentPhotoBrowser.Companion.TRANSITION_NAME
+import com.netease.nimlib.sdk.avchat.constant.AVChatType
 import com.netease.nimlib.sdk.media.record.AudioRecorder
 import com.netease.nimlib.sdk.media.record.IAudioRecordCallback
 import com.netease.nimlib.sdk.media.record.RecordType
@@ -259,11 +260,27 @@ class FragmentMessage : FragmentBase<FragmentMessageBinding, ViewModelMessage, A
             when (it.option) {
                 //视频呼叫
                 OPTIONS_CALL_VIDEO -> {
-                    startActivity(ActivityAvchat::class.java, arg = ArgAvchat(null))
+                    startActivity(
+                        ActivityAvchat::class.java,
+                        arg = ArgAvchat(
+                            ArgAvchat.TYPE_OUTGOING,
+                            arg.contactId,
+                            AVChatType.VIDEO,
+                            null
+                        )
+                    )
                 }
                 //语音呼叫
                 OPTIONS_CALL_VOICE -> {
-                    startActivity(ActivityAvchat::class.java, arg = ArgAvchat(null))
+                    startActivity(
+                        ActivityAvchat::class.java,
+                        arg = ArgAvchat(
+                            ArgAvchat.TYPE_OUTGOING,
+                            arg.contactId,
+                            AVChatType.AUDIO,
+                            null
+                        )
+                    )
                 }
             }
         })

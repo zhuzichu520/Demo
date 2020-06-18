@@ -15,7 +15,9 @@ import com.hiwitech.android.widget.badge.Badge
 import com.netease.nim.demo.BR
 import com.netease.nim.demo.R
 import com.netease.nim.demo.SharedViewModel
+import com.netease.nim.demo.base.ActivityBase
 import com.netease.nim.demo.databinding.FragmentMainBinding
+import com.netease.nim.demo.manager.ManagerActivity
 import com.netease.nim.demo.nim.event.LoginSyncDataStatusObserver
 import com.netease.nim.demo.nim.event.NimEvent
 import com.netease.nim.demo.nim.event.NimEventManager
@@ -81,15 +83,15 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
         bottom.setupWithViewPager(content)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        NimEventManager.registerObserves(true)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        NimEventManager.registerObserves(false)
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        NimEventManager.registerObserves(true)
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        NimEventManager.registerObserves(false)
+//    }
 
     /**
      * 双击退出
@@ -106,13 +108,21 @@ class FragmentMain : BaseFragment<FragmentMainBinding, ViewModelMain, ArgDefault
         }
     }
 
-    override fun initViewObservable() {
-        super.initViewObservable()
-        viewModel.toObservable(NimEvent.OnInComingCallEvent::class.java, Observer {
-            it.data.toString().toast()
-            startActivity(ActivityAvchat::class.java, arg = ArgAvchat(it.data))
-        })
-    }
+//    override fun initViewObservable() {
+//        super.initViewObservable()
+//        viewModel.toObservable(NimEvent.OnInComingCallEvent::class.java, Observer {
+//            (requireActivity() as? ActivityBase)?.startActivity(
+//                ActivityAvchat::class.java,
+//                arg = ArgAvchat(
+//                    ArgAvchat.TYPE_INCOMING,
+//                    it.data.account,
+//                    it.data.chatType,
+//                    it.data
+//                ),
+//                context = ManagerActivity.INST.getTopActivity()
+//            )
+//        })
+//    }
 
     private fun observerSyncDataComplete() {
         val syncCompleted: Boolean = LoginSyncDataStatusObserver.getInstance()

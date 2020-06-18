@@ -1,7 +1,6 @@
 package com.netease.nim.demo.di
 
 import android.content.Context
-import com.hiwitech.android.widget.notify.NotifyManager
 import com.netease.nim.demo.ApplicationDemo
 import com.netease.nim.demo.repository.RemoteRepository
 import com.netease.nim.demo.repository.RemoteRepositoryImpl
@@ -22,10 +21,6 @@ class AppModule {
     fun provideContext(application: ApplicationDemo): Context {
         return application.applicationContext
     }
-
-    @Singleton
-    @Provides
-    fun providesNotifyManager(context: Context): NotifyManager = NotifyManager(context)
 
     @Singleton
     @Provides

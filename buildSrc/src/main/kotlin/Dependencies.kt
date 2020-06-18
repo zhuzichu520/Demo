@@ -9,6 +9,7 @@
  * 依赖版本
  */
 object Versions {
+
     const val ANDROIDX_TEST_EXT = "1.1.1"
     const val ANDROIDX_TEST = "1.2.0"
     const val APPCOMPAT = "1.1.0"
@@ -61,7 +62,7 @@ object Versions {
 
     const val POPUPWINDOW = "2.2.3"
 
-    const val DEVELOPER = "1.2.7"
+    const val DEVELOPER = "1.3.2"
 
     const val LIVEEVENTBUS = "1.7.2"
 
@@ -90,6 +91,8 @@ object Versions {
     const val TINYPINYIN = "3.0.0"
 
     const val DIALOG = "3.3.0"
+
+    const val EASYFLOAT = "1.3.3"
 }
 
 /**
@@ -132,6 +135,7 @@ object NimLibs {
 object SupportLibs {
     const val ANDROIDX_APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
     const val ANDROIDX_CORE_KTX = "androidx.core:core-ktx:${Versions.CORE_KTX}"
+
     //exifinterface
     const val ANDROIDX_EXIFINTERFACE =
         "androidx.exifinterface:exifinterface:${Versions.EXIFINTERFACE}"
@@ -224,23 +228,31 @@ object Libs {
 
     //autosize
     const val AUTOSZIE = "me.jessyan:autosize:${Versions.AUTOSIZE}"
+
     //once
     const val ONCE = "com.jonathanfinerty.once:once:${Versions.ONCE}"
+
     //multidex
     const val MULTIDEX = "androidx.multidex:multidex:${Versions.MULTIDEX}"
+
     //mmkv
     const val MMKV = "com.tencent:mmkv-static:${Versions.MMKV}"
 
     //guava
     const val GUAVA = "com.google.guava:guava:${Versions.GUAVA}"
+
     //popupWindow
     const val POPUPWINDOW = "com.github.razerdp:BasePopup:${Versions.POPUPWINDOW}"
+
     //LiveEventBus
     const val LIVEEVENTBUS = "com.jeremyliao:live-event-bus-x:${Versions.LIVEEVENTBUS}"
+
     //matisse
     const val MATISSE = "com.zhihu.android:matisse:${Versions.MATISSE}"
+
     //Luban
     const val LUBAN = "top.zibin:Luban:${Versions.LUBAN}"
+
     //PhotoView
     const val PHOTOVIEW = "com.github.chrisbanes:PhotoView:${Versions.PHOTOVIEW}"
 
@@ -258,6 +270,7 @@ object Libs {
 
     const val TBS = "com.tencent.tbs.tbssdk:sdk:${Versions.TBS}"
     const val SONIC = "com.tencent.sonic:sdk:${Versions.SONIC}"
+
     //agentweb
     const val AGENTWEB = "com.just.agentweb:agentweb:${Versions.AGENTWEB}"
     const val AGENTWEB_DOWNLOADER = "com.download.library:Downloader:${Versions.AGENTWEB}"
@@ -271,6 +284,8 @@ object Libs {
     const val DIALOG_LIFECYCLE = "com.afollestad.material-dialogs:lifecycle:${Versions.DIALOG}"
 
     const val TINYPINYIN = "com.github.promeg:tinypinyin:${Versions.TINYPINYIN}"
+
+    const val EASYFLOAT = "com.github.princekin-f:EasyFloat:${Versions.EASYFLOAT}"
 }
 
 
@@ -284,6 +299,7 @@ object Kapts {
 
     //glide
     const val GLIDE_COMPILER = "com.github.bumptech.glide:compiler:${Versions.GLIDE}"
+
     //rx
     const val RXHTTP_COMPILER = "com.rxjava.rxhttp:rxhttp-compiler:${Versions.RXHTTP}"
 }

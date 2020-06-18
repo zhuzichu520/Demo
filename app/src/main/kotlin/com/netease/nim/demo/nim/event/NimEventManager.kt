@@ -1,8 +1,10 @@
 package com.netease.nim.demo.nim.event
 
+import android.app.ActivityManager
+import android.content.Context
 import com.hiwitech.android.shared.bus.LiveDataBus
+import com.netease.nim.demo.base.IBus
 import com.netease.nimlib.sdk.NIMClient
-import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.OnlineClient
@@ -19,8 +21,165 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.netease.nimlib.sdk.uinfo.UserServiceObserve
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.view.Gravity
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.app.NotificationCompat
+import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer as XObserver
+import com.hiwitech.android.libs.tool.isAppOnForeground
+import com.hiwitech.android.mvvm.Mvvm.KEY_ARG
+import com.hiwitech.android.shared.databinding.imageview.bindImageViewGlide
+import com.hiwitech.android.shared.ext.toast
+import com.hiwitech.android.widget.notify.Notify
+import com.hiwitech.android.widget.qmui.QMUIRadiusImageView
+import com.jakewharton.rxbinding3.view.clicks
+import com.lzf.easyfloat.EasyFloat
+import com.lzf.easyfloat.enums.ShowPattern
+import com.lzf.easyfloat.interfaces.OnInvokeView
+import com.lzf.easyfloat.permission.PermissionUtils
+import com.netease.nim.demo.R
+import com.netease.nim.demo.manager.ManagerActivity
+import com.netease.nim.demo.nim.repository.NimRepositoryImpl
+import com.netease.nim.demo.nim.tools.ToolUserInfo
+import com.netease.nim.demo.ui.avchat.ActivityAvchat
+import com.netease.nim.demo.ui.avchat.arg.ArgAvchat
+import com.netease.nim.demo.ui.avchat.domain.UseCaseHangUp
+import com.netease.nim.demo.ui.main.ActivityMain
+import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
+import com.netease.nimlib.sdk.Observer
+import com.netease.nimlib.sdk.avchat.constant.AVChatType
+import com.uber.autodispose.android.autoDispose
 
-object NimEventManager {
+object NimEventManager : IBus {
+
+    private lateinit var context: Context
+
+    private var useCaseHangUp: UseCaseHangUp = UseCaseHangUp(NimRepositoryImpl())
+
+    private var notifyId = -1
+
+    override val observers: HashMap<Class<Any>, XObserver<Any>> get() = hashMapOf()
+
+    fun init(context: Context) {
+        this.context = context
+        registerObserves(true)
+        initViewObservable()
+    }
+
+    private fun initViewObservable() {
+        toObservable(NimEvent.OnInComingCallEvent::class.java, XObserver {
+            if (context.isAppOnForeground()) {
+                startChatActivity(it.data)
+            } else {
+                if (PermissionUtils.checkPermission(context)) {
+                    showFloatChat(true, it.data)
+                } else {
+                    showNotifyChat(true)
+                }
+            }
+        })
+
+        toObservable(NimEvent.OnHangUpNotificationEvent::class.java, XObserver {
+            showNotifyChat(false)
+            showFloatChat(false)
+        })
+    }
+
+    private fun startChatActivity(data: AVChatData) {
+        val intent = Intent(context, ActivityAvchat::class.java)
+        intent.putExtras(
+            bundleOf(
+                KEY_ARG to ArgAvchat(
+                    ArgAvchat.TYPE_INCOMING,
+                    data.account,
+                    data.chatType,
+                    data
+                )
+            )
+        )
+        intent.flags = FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+    }
+
+
+    private fun showFloatChat(isShown: Boolean, data: AVChatData? = null) {
+        if (isShown) {
+            EasyFloat.with(context)
+                .setMatchParent(widthMatch = true, heightMatch = false)
+                .setShowPattern(ShowPattern.ALL_TIME)
+                .setGravity(Gravity.TOP)
+                .setLayout(R.layout.layout_float_chat, OnInvokeView {
+                    updateChatView(it, data!!)
+                })
+                .show()
+        } else {
+            EasyFloat.dismissAppFloat()
+        }
+    }
+
+    private fun updateChatView(
+        view: View,
+        data: AVChatData
+    ) {
+        val root = view.findViewById<View>(R.id.root)
+        val avatar = view.findViewById<QMUIRadiusImageView>(R.id.avatar)
+        val name = view.findViewById<TextView>(R.id.name)
+        val close = view.findViewById<ImageView>(R.id.close)
+        val call = view.findViewById<ImageView>(R.id.call)
+        val content = view.findViewById<TextView>(R.id.content)
+        name.text = ToolUserInfo.getUserDisplayName(data.account)
+        when (data.chatType) {
+            AVChatType.AUDIO -> {
+                content.setText(R.string.avchat_audio_call_request)
+            }
+            AVChatType.VIDEO -> {
+                content.setText(R.string.avchat_video_call_request)
+            }
+            else -> {
+            }
+        }
+        bindImageViewGlide(
+            avatar,
+            ToolUserInfo.getUserInfo(data.account).avatar,
+            R.mipmap.nim_avatar_default,
+            R.mipmap.nim_avatar_default
+        )
+
+        root.clicks().autoDispose(view).subscribe {
+            val context = ManagerActivity.INST.getTopActivity() ?: this.context
+            ActivityMain.avchat(context, data)
+        }
+
+        call.clicks().autoDispose(view).subscribe {
+
+        }
+
+        close.clicks().autoDispose(view).subscribe {
+            useCaseHangUp.execute(data.chatId).autoDispose(view).subscribe {
+                EasyFloat.dismissAppFloat()
+            }
+        }
+    }
+
+    private fun showNotifyChat(isShown: Boolean) {
+        if (isShown) {
+            notifyId = Notify.with(context).meta {
+                this.sticky = true
+            }.alerting("key") {
+                lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+            }.content {
+                title = "有人呼叫你"
+                text = "有人呼叫你有人呼叫你有人呼叫你!"
+            }.show()
+        } else {
+            Notify.cancelNotification(context, notifyId)
+        }
+    }
+
 
     /**
      * 联系人监听

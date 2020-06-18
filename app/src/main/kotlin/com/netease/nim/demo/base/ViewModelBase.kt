@@ -18,25 +18,11 @@ import com.jeremyliao.liveeventbus.LiveEventBus
  * time: 2020/4/5 7:48 PM
  * since: v 1.0.0
  */
-abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>() {
+abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>(), IBus {
 
-    private val observers = hashMapOf<Class<Any>, Observer<Any>>()
+    override val observers: HashMap<Class<Any>, Observer<Any>> get() = hashMapOf()
 
-    val statusBarHeight = MutableLiveData<Int>(getStatusBarHeight(context = context))
-
-    /**
-     * 注册事件 重复注册 新的事件会覆盖旧的事件
-     */
-    fun <T : Any> toObservable(eventType: Class<T>, observer: Observer<T>) {
-        val key: Class<Any> = eventType.toCast()
-        val value = observers[key]
-        if (value != null) {
-            LiveEventBus.get(eventType.simpleName, eventType).removeObserver(value.toCast())
-        }
-        LiveEventBus.get(eventType.simpleName, eventType).observeForever(observer)
-        observers[key] = observer.toCast()
-    }
-
+    val statusBarHeight = MutableLiveData(getStatusBarHeight(context = context))
 
     fun handleThrowable(throwable: Throwable) {
         throwable.printStackTrace()
@@ -50,9 +36,7 @@ abstract class ViewModelBase<TArg : BaseArg> : BaseViewModel<TArg>() {
     override fun onCleared() {
         super.onCleared()
         //清理当前所有事件
-        observers.forEach {
-            LiveEventBus.get(it.key.simpleName, it.key).removeObserver(it.value)
-        }
+        removeObserables()
     }
 
     fun dividerNone(): Int = SuperOffsetDecoration.SHOW_DIVIDER_NONE

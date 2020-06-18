@@ -4,6 +4,8 @@ package com.netease.nim.demo.di
 import com.hiwitech.android.mvvm.di.ActivityScoped
 import com.netease.nim.demo.ui.avchat.ActivityAvchat
 import com.netease.nim.demo.ui.avchat.module.ModuleAvchat
+import com.netease.nim.demo.ui.avchat.module.ModuleAvchatAudio
+import com.netease.nim.demo.ui.avchat.module.ModuleAvchatVideo
 import com.netease.nim.demo.ui.camera.ActivityCamera
 import com.netease.nim.demo.ui.camera.module.ModuleCamera
 import com.netease.nim.demo.ui.contact.module.ModuleContact
@@ -182,7 +184,9 @@ abstract class ActivityBindingModule {
         modules = [
             ModuleAvchat::class,
             ModulePermissions::class,
-            ModuleOptions::class
+            ModuleOptions::class,
+            ModuleAvchatAudio::class,
+            ModuleAvchatVideo::class
         ]
     )
     internal abstract fun avchatActivity(): ActivityAvchat

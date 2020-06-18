@@ -9,6 +9,25 @@
         android:id="@+id/fragmentAvchat"
         android:name="com.netease.nim.demo.ui.avchat.fragment.FragmentAvchat"
         android:label="FragmentAvchat"
-        tools:layout="@layout/fragment_avchat" />
+        tools:layout="@layout/fragment_avchat">
+        <action
+            android:id="@+id/action_fragmentAvchat_to_fragmentAvchatAudio"
+            app:destination="@id/fragmentAvchatAudio" />
+        <action
+            android:id="@+id/action_fragmentAvchat_to_fragmentAvchatVideo"
+            app:destination="@id/fragmentAvchatVideo" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentAvchatAudio"
+        android:name="com.netease.nim.demo.ui.avchat.fragment.FragmentAvchatAudio"
+        android:label="FragmentAvchatAudio"
+        tools:layout="@layout/fragment_avchat_audio" />
+
+    <fragment
+        android:id="@+id/fragmentAvchatVideo"
+        android:name="com.netease.nim.demo.ui.avchat.fragment.FragmentAvchatVideo"
+        android:label="FragmentAvchatVideo"
+        tools:layout="@layout/fragment_avchat_video" />
 
 </navigation>

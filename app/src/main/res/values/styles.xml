@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ThemePhotoBrowser" parent="AppTheme">
+    <style name="ThemePhotoBrowser" parent="Base.MyTheme">
         <item name="android:immersive">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -17,7 +17,7 @@
         <item name="android:windowSharedElementExitTransition">@transition/photo_exit</item>
     </style>
 
-    <style name="ThemeCamera" parent="AppTheme">
+    <style name="ThemeCamera" parent="Base.MyTheme">
         <item name="android:immersive">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>

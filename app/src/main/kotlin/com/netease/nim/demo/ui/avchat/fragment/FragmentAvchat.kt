@@ -6,6 +6,7 @@ import com.netease.nim.demo.base.FragmentBase
 import com.netease.nim.demo.databinding.FragmentAvchatBinding
 import com.netease.nim.demo.ui.avchat.arg.ArgAvchat
 import com.netease.nim.demo.ui.avchat.viewmodel.ViewModelAvchat
+import com.netease.nimlib.sdk.avchat.constant.AVChatType
 
 /**
  * desc
@@ -18,5 +19,17 @@ class FragmentAvchat : FragmentBase<FragmentAvchatBinding, ViewModelAvchat, ArgA
     override fun bindVariableId(): Int = BR.viewModel
 
     override fun setLayoutId(): Int = R.layout.fragment_avchat
+
+    override fun initLazyData() {
+        super.initLazyData()
+        when (arg.chatType) {
+            AVChatType.AUDIO -> {
+                start(R.id.action_fragmentAvchat_to_fragmentAvchatAudio, arg)
+            }
+            AVChatType.VIDEO -> {
+                start(R.id.action_fragmentAvchat_to_fragmentAvchatVideo, arg)
+            }
+        }
+    }
 
 }
