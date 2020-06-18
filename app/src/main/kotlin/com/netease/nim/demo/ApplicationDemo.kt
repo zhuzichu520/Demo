@@ -71,7 +71,7 @@ class ApplicationDemo : DaggerApplication(), CameraXConfig.Provider {
             NIMClient.getService(MsgService::class.java)
                 .registerCustomAttachmentParser(NimAttachParser())
             LoginSyncDataStatusObserver.getInstance().registerLoginSyncDataStatus(true)
-            NimEventManager.init(this)
+            NimEventManager.initEvent()
         }
 
     }

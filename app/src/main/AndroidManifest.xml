@@ -9,7 +9,7 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+    <uses-permission android:name="android.permission.STOP_APP_SWITCHES" />
 
     <!-- 加入应用需要的权限 -->
     <!-- 网络相关 -->

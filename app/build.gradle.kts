@@ -105,6 +105,11 @@ android {
             java.srcDir("src/main/kotlin")
         }
     }
+
+    lintOptions {
+        isCheckReleaseBuilds = false
+        isAbortOnError = false
+    }
 }
 
 dependencies {

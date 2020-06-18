@@ -2,6 +2,7 @@ package com.netease.nim.demo.ui.avchat.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.shared.ext.createCommand
+import com.hiwitech.android.shared.ext.logi
 import com.hiwitech.android.shared.ext.toast
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase

@@ -1,7 +1,6 @@
 package com.netease.nim.demo.ui.avchat.arg
 
 import com.hiwitech.android.mvvm.base.BaseArg
-import com.netease.nim.demo.R
 import com.netease.nimlib.sdk.avchat.constant.AVChatType
 import com.netease.nimlib.sdk.avchat.model.AVChatData
 import kotlinx.android.parcel.Parcelize
@@ -17,7 +16,7 @@ class ArgAvchat(
     val type: Int,
     val account: String,
     val chatType: AVChatType,
-    var data: AVChatData? = null
+    var data: AVChatData?
 ) : BaseArg(true) {
 
     companion object {
@@ -27,6 +26,10 @@ class ArgAvchat(
 
         //接听电话
         const val TYPE_INCOMING = 1
+
+        fun fromAvCahtData(type: Int, data: AVChatData): ArgAvchat {
+            return ArgAvchat(type, data.account, data.chatType, data)
+        }
 
     }
 

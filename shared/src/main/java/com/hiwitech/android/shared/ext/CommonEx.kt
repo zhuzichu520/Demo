@@ -1,6 +1,9 @@
 package com.hiwitech.android.shared.ext
 
+import android.content.ContentResolver
+import android.net.Uri
 import android.text.Editable
+import com.hiwitech.android.shared.global.AppGlobal.context
 
 /**
  * desc
@@ -10,4 +13,8 @@ import android.text.Editable
  */
 fun String?.toEditable(): Editable {
     return Editable.Factory.getInstance().newEditable(this)
+}
+
+fun Int.toUri(): Uri {
+    return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + this)
 }

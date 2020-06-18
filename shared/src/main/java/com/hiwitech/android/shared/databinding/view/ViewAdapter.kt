@@ -88,7 +88,6 @@ fun bindViewGroup(
 ) {
 
     displayChild?.let {
-        it.toString().logi()
         viewGroup.forEachIndexed { index, view ->
             if (it == index) {
                 view.visibility = View.VISIBLE

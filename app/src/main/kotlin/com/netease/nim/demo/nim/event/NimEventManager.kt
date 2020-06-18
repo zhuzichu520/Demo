@@ -1,6 +1,6 @@
 package com.netease.nim.demo.nim.event
 
-import android.app.ActivityManager
+import android.app.PendingIntent
 import android.content.Context
 import com.hiwitech.android.shared.bus.LiveDataBus
 import com.netease.nim.demo.base.IBus
@@ -27,45 +27,36 @@ import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer as XObserver
 import com.hiwitech.android.libs.tool.isAppOnForeground
 import com.hiwitech.android.mvvm.Mvvm.KEY_ARG
 import com.hiwitech.android.shared.databinding.imageview.bindImageViewGlide
-import com.hiwitech.android.shared.ext.toast
-import com.hiwitech.android.widget.notify.Notify
+import com.hiwitech.android.shared.ext.logi
+import com.hiwitech.android.shared.global.AppGlobal.context
 import com.hiwitech.android.widget.qmui.QMUIRadiusImageView
 import com.jakewharton.rxbinding3.view.clicks
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
 import com.lzf.easyfloat.interfaces.OnInvokeView
-import com.lzf.easyfloat.permission.PermissionUtils
 import com.netease.nim.demo.R
-import com.netease.nim.demo.manager.ManagerActivity
+import com.netease.nim.demo.helper.HelperNotify
 import com.netease.nim.demo.nim.repository.NimRepositoryImpl
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.ui.avchat.ActivityAvchat
 import com.netease.nim.demo.ui.avchat.arg.ArgAvchat
 import com.netease.nim.demo.ui.avchat.domain.UseCaseHangUp
 import com.netease.nim.demo.ui.main.ActivityMain
-import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
 import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.avchat.constant.AVChatType
 import com.uber.autodispose.android.autoDispose
 
 object NimEventManager : IBus {
 
-    private lateinit var context: Context
+    override val observers: HashMap<Class<Any>, XObserver<Any>>
+        get() = hashMapOf()
 
-    private var useCaseHangUp: UseCaseHangUp = UseCaseHangUp(NimRepositoryImpl())
-
-    private var notifyId = -1
-
-    override val observers: HashMap<Class<Any>, XObserver<Any>> get() = hashMapOf()
-
-    fun init(context: Context) {
-        this.context = context
+    fun initEvent() {
         registerObserves(true)
         initViewObservable()
     }
@@ -75,11 +66,8 @@ object NimEventManager : IBus {
             if (context.isAppOnForeground()) {
                 startChatActivity(it.data)
             } else {
-                if (PermissionUtils.checkPermission(context)) {
-                    showFloatChat(true, it.data)
-                } else {
-                    showNotifyChat(true)
-                }
+                it.data.chatId.toString().logi()
+                showNotifyChat(true, ActivityMain.getAvchatPendingIntent(context, it.data))
             }
         })
 
@@ -89,16 +77,15 @@ object NimEventManager : IBus {
         })
     }
 
+    private fun showNotifyChat(isShown: Boolean, intent: PendingIntent? = null) {
+        HelperNotify().notifyAvChat(isShown, intent)
+    }
+
     private fun startChatActivity(data: AVChatData) {
         val intent = Intent(context, ActivityAvchat::class.java)
         intent.putExtras(
             bundleOf(
-                KEY_ARG to ArgAvchat(
-                    ArgAvchat.TYPE_INCOMING,
-                    data.account,
-                    data.chatType,
-                    data
-                )
+                KEY_ARG to ArgAvchat.fromAvCahtData(ArgAvchat.TYPE_INCOMING, data)
             )
         )
         intent.flags = FLAG_ACTIVITY_NEW_TASK
@@ -150,7 +137,6 @@ object NimEventManager : IBus {
         )
 
         root.clicks().autoDispose(view).subscribe {
-            val context = ManagerActivity.INST.getTopActivity() ?: this.context
             ActivityMain.avchat(context, data)
         }
 
@@ -159,24 +145,9 @@ object NimEventManager : IBus {
         }
 
         close.clicks().autoDispose(view).subscribe {
-            useCaseHangUp.execute(data.chatId).autoDispose(view).subscribe {
+            UseCaseHangUp(NimRepositoryImpl()).execute(data.chatId).autoDispose(view).subscribe {
                 EasyFloat.dismissAppFloat()
             }
-        }
-    }
-
-    private fun showNotifyChat(isShown: Boolean) {
-        if (isShown) {
-            notifyId = Notify.with(context).meta {
-                this.sticky = true
-            }.alerting("key") {
-                lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-            }.content {
-                title = "有人呼叫你"
-                text = "有人呼叫你有人呼叫你有人呼叫你!"
-            }.show()
-        } else {
-            Notify.cancelNotification(context, notifyId)
         }
     }
 

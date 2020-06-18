@@ -123,6 +123,7 @@ class ViewModelMessage @Inject constructor(
         map<ItemViewModelLocationMessage>(BR.item, R.layout.item_message_location)
         map<ItemViewModelTipMessage>(BR.item, R.layout.item_message_tip)
         map<ItemViewModelNotificationMessage>(BR.item, R.layout.item_message_notification)
+        map<ItemViewModelAvchatMessage>(BR.item, R.layout.item_message_avchat)
     }
 
     /**
@@ -257,7 +258,10 @@ class ViewModelMessage @Inject constructor(
                     ItemViewModelFileMessage(this, item, useCaseDowloadAttachment)
                 }
                 MsgTypeEnum.notification -> {
-                    ItemViewModelNotificationMessage(this, item, arg.contactId,arg.sessionType)
+                    ItemViewModelNotificationMessage(this, item, arg.contactId, arg.sessionType)
+                }
+                MsgTypeEnum.avchat -> {
+                    ItemViewModelAvchatMessage(this, item)
                 }
                 MsgTypeEnum.video -> {
                     ItemViewModelVideoMessage(

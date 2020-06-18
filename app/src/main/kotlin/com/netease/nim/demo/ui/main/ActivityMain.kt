@@ -1,12 +1,11 @@
 package com.netease.nim.demo.ui.main
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.hiwitech.android.libs.tool.jumpEmail
 import com.hiwitech.android.libs.tool.toCast
+import com.hiwitech.android.shared.ext.logi
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ActivityBase
 import com.netease.nim.demo.storage.NimUserStorage
@@ -26,7 +25,7 @@ class ActivityMain : ActivityBase() {
 
     companion object {
 
-        private const val TYPE = "type"
+        const val TYPE = "type"
 
         private const val TYPE_LOGOUT = 1
         private const val LOGOUT_KICKOUT = "logout_kickout"
@@ -43,16 +42,16 @@ class ActivityMain : ActivityBase() {
         }
 
         fun avchat(context: Context, data: AVChatData) {
-            val intent = Intent(context, ActivityMain::class.java)
-            if (context !is Activity) {
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            intent.putExtra(TYPE, TYPE_AVCHAT)
-            intent.putExtra(AVCHAT_DATA, data)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-            pendingIntent.send()
+            getAvchatPendingIntent(context, data).send()
         }
 
+        fun getAvchatPendingIntent(context: Context, data: AVChatData): PendingIntent {
+            val intent = Intent(context, ActivityMain::class.java)
+            intent.putExtra(TYPE, TYPE_AVCHAT)
+            intent.putExtra(AVCHAT_DATA, data)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,12 +82,7 @@ class ActivityMain : ActivityBase() {
                 val data: AVChatData = intent.getSerializableExtra(AVCHAT_DATA)?.toCast() ?: return
                 startActivity(
                     ActivityAvchat::class.java,
-                    arg = ArgAvchat(
-                        ArgAvchat.TYPE_INCOMING,
-                        data.account,
-                        data.chatType,
-                        data
-                    )
+                    arg = ArgAvchat.fromAvCahtData(ArgAvchat.TYPE_INCOMING, data)
                 )
             }
         }
