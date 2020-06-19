@@ -15,6 +15,7 @@ import com.netease.nim.demo.nim.tools.ToolImage
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
 import com.netease.nim.demo.ui.message.main.domain.*
 import com.netease.nim.demo.ui.photobrowser.domain.UseCaseGetImageAndVideoMessage
+import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage

@@ -9,10 +9,6 @@ import com.netease.nimlib.sdk.StatusCode
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.OnlineClient
 import com.netease.nimlib.sdk.avchat.AVChatManager
-import com.netease.nimlib.sdk.avchat.model.AVChatCalleeAckEvent
-import com.netease.nimlib.sdk.avchat.model.AVChatCommonEvent
-import com.netease.nimlib.sdk.avchat.model.AVChatControlEvent
-import com.netease.nimlib.sdk.avchat.model.AVChatData
 import com.netease.nimlib.sdk.friend.FriendServiceObserve
 import com.netease.nimlib.sdk.friend.model.FriendChangedNotify
 import com.netease.nimlib.sdk.msg.MsgServiceObserve
@@ -28,11 +24,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import com.hiwitech.android.libs.internal.MainHandler
 import androidx.lifecycle.Observer as XObserver
 import com.hiwitech.android.libs.tool.isAppOnForeground
 import com.hiwitech.android.mvvm.Mvvm.KEY_ARG
 import com.hiwitech.android.shared.databinding.imageview.bindImageViewGlide
 import com.hiwitech.android.shared.ext.logi
+import com.hiwitech.android.shared.ext.toast
 import com.hiwitech.android.shared.global.AppGlobal.context
 import com.hiwitech.android.widget.qmui.QMUIRadiusImageView
 import com.jakewharton.rxbinding3.view.clicks
@@ -49,6 +47,9 @@ import com.netease.nim.demo.ui.avchat.domain.UseCaseHangUp
 import com.netease.nim.demo.ui.main.ActivityMain
 import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.avchat.constant.AVChatType
+import com.netease.nimlib.sdk.avchat.model.*
+import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.uber.autodispose.android.autoDispose
 
 object NimEventManager : IBus {

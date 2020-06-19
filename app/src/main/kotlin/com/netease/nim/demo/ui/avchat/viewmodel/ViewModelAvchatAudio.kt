@@ -3,10 +3,12 @@ package com.netease.nim.demo.ui.avchat.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.logi
+import com.hiwitech.android.shared.ext.toStringByResId
 import com.hiwitech.android.shared.ext.toast
 import com.netease.nim.demo.R
 import com.netease.nim.demo.base.ViewModelBase
 import com.netease.nim.demo.ui.avchat.arg.ArgAvchat
+import com.netease.nim.demo.ui.avchat.domain.UseCaseAccept
 import com.netease.nim.demo.ui.avchat.domain.UseCaseAudioCalling
 import com.netease.nim.demo.ui.avchat.domain.UseCaseHangUp
 import com.netease.nim.demo.ui.message.main.domain.UseCaseGetUserInfo
@@ -23,12 +25,13 @@ import javax.inject.Inject
 class ViewModelAvchatAudio @Inject constructor(
     private val useCaseGetUserInfo: UseCaseGetUserInfo,
     private val useCaseAudioCalling: UseCaseAudioCalling,
-    private val useCaseHangUp: UseCaseHangUp
+    private val useCaseHangUp: UseCaseHangUp,
+    private val useCaseAccept: UseCaseAccept
 ) : ViewModelBase<ArgAvchat>() {
 
     val avatar = MutableLiveData<String>()
 
-    val title = MutableLiveData<String>()
+    val title = MutableLiveData<Int>()
 
     val showIncoming = MutableLiveData<Boolean>()
 
@@ -62,14 +65,43 @@ class ViewModelAvchatAudio @Inject constructor(
         }
     }
 
+    /**
+     * 接听电话
+     */
+    val onAcceptCommand = createCommand {
+        arg.data?.let { data ->
+            useCaseAccept.execute(data.chatId)
+                .autoDispose(this)
+                .subscribe(
+                    {
+                        showAcceptSuccess()
+                    },
+                    {
+                        handleThrowable(it)
+                    }
+                )
+        }
+    }
+
+    fun showAcceptSuccess() {
+        showIncoming.value = false
+        showOutgoging.value = true
+        title.value = R.string.avchat_connecting
+
+    }
+
     fun showIncoming() {
         showIncoming.value = true
         showOutgoging.value = false
+        title.value = R.string.avchat_audio_call_request
+
     }
 
     fun showOutgoging() {
         showIncoming.value = false
         showOutgoging.value = true
+        title.value = R.string.avchat_wait_recieve
+        doCalling()
     }
 
 

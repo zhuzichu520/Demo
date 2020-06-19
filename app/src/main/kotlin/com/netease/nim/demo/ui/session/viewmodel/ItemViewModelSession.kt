@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.hiwitech.android.shared.ext.createCommand
 import com.hiwitech.android.shared.ext.createTypeCommand
+import com.hiwitech.android.shared.ext.logi
 import com.hiwitech.android.shared.tools.ToolDate
 import com.hiwitech.android.widget.badge.Badge
 import com.netease.nim.demo.R
@@ -15,6 +16,8 @@ import com.netease.nim.demo.nim.tools.ToolTeam
 import com.netease.nim.demo.nim.tools.ToolUserInfo
 import com.netease.nim.demo.ui.message.ActivityMessage
 import com.netease.nim.demo.ui.message.main.arg.ArgMessage
+import com.netease.nimlib.sdk.avchat.constant.AVChatType
+import com.netease.nimlib.sdk.avchat.model.AVChatAttachment
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.P2P
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum.Team
 import com.netease.nimlib.sdk.msg.model.RecentContact
@@ -33,22 +36,27 @@ data class ItemViewModelSession(
     val contactId: String = contact.contactId
 
     val time = contact.time
+
     /**
      * 头像
      */
     val avatar = MutableLiveData<Any>()
+
     /**
      * 会话标题
      */
     val name = MutableLiveData<String>()
+
     /**
      * 头像错误图片
      */
     val error = MutableLiveData<Int>()
+
     /**
      * 头像占位图
      */
     val placeholder = MutableLiveData<Int>()
+
     /**
      * 会话内容
      */
@@ -56,22 +64,42 @@ data class ItemViewModelSession(
         val attachment = contact.attachment
         value = if (attachment is StickerAttachment) {
             "[贴图]"
+        } else if (attachment is AVChatAttachment) {
+            when (attachment.type) {
+                AVChatType.AUDIO -> {
+                    "---------消息接受------------${attachment.duration}".logi("一剑")
+                    "duration:${attachment.duration}".logi("一剑")
+                    "state:${attachment.state.name}".logi("一剑")
+                    "type:${attachment.type.name}".logi("一剑")
+                    "---------------------${attachment.duration}".logi("一剑")
+                    "[语音通话] ${ToolDate.secToTime(attachment.duration)}"
+                }
+                AVChatType.VIDEO -> {
+                    "[视频通话]"
+                }
+                else -> {
+                    "未知通话"
+                }
+            }
         } else {
             contact.content ?: ""
         }
     }
+
     /**
      * 会话时间
      */
     val date = MutableLiveData<String>().apply {
         value = ToolDate.getTimeShowString(contact.time, false)
     }
+
     /**
      * 置顶标记
      */
     val isTop = MutableLiveData<Boolean>().apply {
         value = ToolSticky.isStickyTagSet(contact)
     }
+
     /**
      * 会话未读书
      */

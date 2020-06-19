@@ -41,6 +41,7 @@ import io.reactivex.Flowable
  * since: v 1.0.0
  */
 interface NimRepository {
+
     /**
      * 登录
      * @param loginInfo
@@ -167,6 +168,12 @@ interface NimRepository {
      * 挂断会话
      */
     fun hangUp(chatId: Long): Flowable<Optional<Void>>
+
+    /**
+     * 接听来电
+     */
+    fun accept(chatId: Long): Flowable<Optional<Void>>
+
 }
 
 class NimRepositoryImpl(
@@ -342,6 +349,12 @@ class NimRepositoryImpl(
     override fun hangUp(chatId: Long): Flowable<Optional<Void>> {
         return createFlowable {
             chatManager.hangUp2(chatId, NimAvChatCallback(this))
+        }
+    }
+
+    override fun accept(chatId: Long): Flowable<Optional<Void>> {
+        return createFlowable {
+            chatManager.accept2(chatId, NimAvChatCallback(this))
         }
     }
 

@@ -6,6 +6,7 @@ import com.hiwitech.android.libs.tool.jumpToPhonePanel
 import com.hiwitech.android.mvvm.base.BaseViewModel
 import com.hiwitech.android.shared.ext.createTypeCommand
 import com.hiwitech.android.shared.global.AppGlobal.context
+import com.hiwitech.android.shared.tools.ToolDate
 import com.netease.nim.demo.R
 import com.netease.nim.demo.ui.web.ActivityWeb
 import com.netease.nim.demo.ui.web.arg.ArgWeb
@@ -46,7 +47,7 @@ class ItemViewModelAvchatMessage(
     val text = MutableLiveData<String>().apply {
         val content: String = when (attachment.state) {
             AVChatRecordState.Success -> {
-                "聊天时长"
+                "聊天时长 ${ToolDate.secToTime(attachment.duration)}"
             }
             AVChatRecordState.Missed -> {
                 "对方已取消"

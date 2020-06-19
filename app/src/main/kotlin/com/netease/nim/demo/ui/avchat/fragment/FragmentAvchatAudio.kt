@@ -34,23 +34,12 @@ class FragmentAvchatAudio :
 
         when (arg.type) {
             ArgAvchat.TYPE_OUTGOING -> {
-                handleOutgoing()
+                viewModel.showOutgoging()
             }
             ArgAvchat.TYPE_INCOMING -> {
-                handleIncoming()
+                viewModel.showIncoming()
             }
         }
-    }
-
-    private fun handleIncoming() {
-        viewModel.title.value = R.string.avchat_audio_call_request.toStringByResId(requireContext())
-        viewModel.showIncoming()
-    }
-
-    private fun handleOutgoing() {
-        viewModel.title.value = R.string.avchat_wait_recieve.toStringByResId(requireContext())
-        viewModel.showOutgoging()
-        viewModel.doCalling()
     }
 
     override fun initViewObservable() {
@@ -67,6 +56,7 @@ class FragmentAvchatAudio :
                  */
                 AVChatEventType.CALLEE_ACK_AGREE -> {
                     "被叫方同意通话".logi()
+                    viewModel.showAcceptSuccess()
                 }
                 /**
                  * 被叫方拒绝通话
@@ -114,7 +104,7 @@ class FragmentAvchatAudio :
         })
     }
 
-   private fun finishAndRemoveTask() {
+    private fun finishAndRemoveTask() {
         requireActivity().finishAndRemoveTask()
     }
 
